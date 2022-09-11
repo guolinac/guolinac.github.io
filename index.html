@@ -632,7 +632,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-04 15:42:15" itemprop="dateModified" datetime="2022-09-04T15:42:15+08:00">2022-09-04</time>
+                <time title="修改时间：2022-09-11 14:02:47" itemprop="dateModified" datetime="2022-09-11T14:02:47+08:00">2022-09-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -650,14 +650,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
+              <span>14k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
+              <span>13 分钟</span>
             </span>
 
         </div>
@@ -960,6 +960,18 @@
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config <span class="attr">--global</span> http<span class="selector-class">.sslVerify</span> <span class="string">&quot;false&quot;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="git-log无法退出"><a href="#git-log无法退出" class="headerlink" title="git log无法退出"></a>git log无法退出</h2><p>使用git log之后无法回到主页面,最后只能暴力关闭git bash. 解决方法其实很简单,输入字母Q即可退出</p>
+<h2 id="git-push失败，-提示-rejected-master-＞-master-fetch-first-error-failed-to-push-some-refs"><a href="#git-push失败，-提示-rejected-master-＞-master-fetch-first-error-failed-to-push-some-refs" class="headerlink" title="git push失败， 提示! [rejected] master -＞ master (fetch first)error: failed to push some refs"></a>git push失败， 提示! [rejected] master -＞ master (fetch first)error: failed to push some refs</h2><h3 id="第一次提交项目到一个新的仓库"><a href="#第一次提交项目到一个新的仓库" class="headerlink" title="第一次提交项目到一个新的仓库"></a>第一次提交项目到一个新的仓库</h3><p>我们按照如下的步骤上传了一个项目到仓库的时候，是可以成功的：</p>
+<p>1、git init 初始化</p>
+<p>2、git add .  将当前目录下修改的所有代码从工作区添加到暂存区</p>
+<p>3、git commit -m  [‘注释’]  将缓存区内容添加到本地仓库</p>
+<p>4、git remote add origin 仓库地址  将本地仓库与远程仓库连接起来</p>
+<p>5、git push origin master 将项目推送到远程仓库的master分支上</p>
+<h3 id="第二次将一个新的项目在提交到仓库"><a href="#第二次将一个新的项目在提交到仓库" class="headerlink" title="第二次将一个新的项目在提交到仓库"></a>第二次将一个新的项目在提交到仓库</h3><p>此时，我们继续按照上面的步骤提交项目，第五步的时候就会出现一个错误！！</p>
+<p>git push失败， 提示! [rejected] master -＞ master (fetch first)error: failed to push some refs</p>
+<p><strong>出现错误的主要原因是gitee中的README.md文件不在本地代码目录中</strong></p>
+<p>此时我们要执行<strong>git pull –rebase origin master</strong>命令将README.md拉到本地，</p>
+<p>然后执行git push origin master就可以成功了</p>
+<h2 id="远程仓库已存在"><a href="#远程仓库已存在" class="headerlink" title="远程仓库已存在"></a>远程仓库已存在</h2><p>如果你clone下来一个别人的仓库，在此基础上完成你的代码，推送到自己的仓库可能遇到如下问题：<br>error: remote origin already exists.表示远程仓库已存在。<br>因此你要进行以下操作：<br>1、先输入git remote rm origin 删除关联的origin的远程库<br>2、关联自己的仓库 git remote add origin <a target="_blank" rel="noopener" href="https://gitee.com/xxxxxx.git">https://gitee.com/xxxxxx.git</a><br>3、最后git push origin master，这样就推送到自己的仓库了。</p>
 
       
     </div>
@@ -1617,7 +1629,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">482k</span>
+    <span title="站点总字数">483k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
