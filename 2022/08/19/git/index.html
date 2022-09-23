@@ -46,6 +46,14 @@
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220811193042017.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220811193137630.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220811193224827.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003106450.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003210731.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003731177.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010453537.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010512818.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010545199.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913011148989.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220914225555642.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141238224.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141330416.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141432303.png">
@@ -55,7 +63,7 @@
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141837076.png">
 <meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141814460.png">
 <meta property="article:published_time" content="2022-08-19T14:52:38.000Z">
-<meta property="article:modified_time" content="2022-09-11T06:02:47.009Z">
+<meta property="article:modified_time" content="2022-09-19T09:28:24.000Z">
 <meta property="article:author" content="郭霖">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
@@ -249,7 +257,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-09-11 14:02:47" itemprop="dateModified" datetime="2022-09-11T14:02:47+08:00">2022-09-11</time>
+                <time title="修改时间：2022-09-19 17:28:24" itemprop="dateModified" datetime="2022-09-19T17:28:24+08:00">2022-09-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,14 +275,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>14k</span>
+              <span>17k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>13 分钟</span>
+              <span>15 分钟</span>
             </span>
 
         </div>
@@ -535,6 +543,95 @@
 <p>关联后，使用命令<code>git push -u origin master</code>第一次推送master分支的所有内容；</p>
 <p>此后，每次本地提交后，只要有必要，就可以使用命令<code>git push origin master</code>推送最新修改；</p>
 <p>分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在，也就是有没有联网都可以正常工作，而SVN在没有联网的时候是拒绝干活的！当有网络的时候，再把本地提交推送一下就完成了同步，真是太方便了！</p>
+<h1 id="Git分支，推送，忽略本地变化"><a href="#Git分支，推送，忽略本地变化" class="headerlink" title="Git分支，推送，忽略本地变化"></a>Git分支，推送，忽略本地变化</h1><p>创建和使用git仓库</p>
+<p>git初始化</p>
+<p>.gitignore文件配置：匹配到的文件不推送到git仓库上，也不会检查到本地的变化</p>
+<p>添加更新文件</p>
+<p>推送到远程git仓库</p>
+<p>创建及切换分支</p>
+<p>注：前提是安装git并配置git的ssh，否则在pull和push的时候会提示无权限</p>
+<h2 id="github创建仓库"><a href="#github创建仓库" class="headerlink" title="github创建仓库"></a>github创建仓库</h2><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003106450.png" alt="image-20220913003106450" style="zoom:50%;" />
+
+<img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003210731.png" alt="image-20220913003210731" style="zoom:50%;" />
+
+<h2 id="初始化git"><a href="#初始化git" class="headerlink" title="初始化git"></a>初始化git</h2><p>创建文件type nul&gt;README.md</p>
+<p>写入mmall_learning</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913003731177.png" alt="image-20220913003731177"></p>
+<p>.gitignore文件配置：创建文件type nul&gt;.gitignore</p>
+<p>匹配到的文件不推送到git仓库上，也不会检查到本地的变化</p>
+<p>在里面增加：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">*<span class="string">.class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#package file</span></span><br><span class="line"></span><br><span class="line">*<span class="string">.war</span></span><br><span class="line">*<span class="string">.ear</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#kdiff3 ignore</span></span><br><span class="line">*<span class="string">.orig</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#maven ignore</span></span><br><span class="line">target/</span><br><span class="line"></span><br><span class="line"><span class="comment">#eclipse ignore</span></span><br><span class="line"><span class="string">.settings/</span></span><br><span class="line"><span class="string">.project</span></span><br><span class="line"><span class="string">.classpath</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#idea</span></span><br><span class="line"><span class="string">.idea/</span></span><br><span class="line"><span class="string">/idea/</span></span><br><span class="line">*<span class="string">.ipr</span></span><br><span class="line">*<span class="string">.iml</span></span><br><span class="line">*<span class="string">.iws</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#temp file</span></span><br><span class="line"></span><br><span class="line">*<span class="string">.log</span></span><br><span class="line">*<span class="string">.cache</span></span><br><span class="line">*<span class="string">.diff</span></span><br><span class="line">*<span class="string">.patch</span></span><br><span class="line">*<span class="string">.tmp</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#system ignore</span></span><br><span class="line"><span class="string">.DS_Store</span></span><br><span class="line">Thumbs.db</span><br></pre></td></tr></table></figure>
+
+<h2 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h2><p>初始化：git init</p>
+<p>查看变更：git status</p>
+<p>文件添加到仓库：git add .</p>
+<p>文件提交到版本库：git commit -m “first commit init project”</p>
+<h2 id="提交到远程仓库"><a href="#提交到远程仓库" class="headerlink" title="提交到远程仓库"></a>提交到远程仓库</h2><p>绑定到远程仓库：git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#x69;&#116;&#64;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;</a>:guolinac&#x2F;mmall_learning.git</p>
+<p>查看分支：git branch</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\project_git\mmall&gt;git branch</span><br><span class="line"><span class="bullet">* </span>master</span><br></pre></td></tr></table></figure>
+
+<p>把本地改动推送到远程的master上：git push -u origin master</p>
+<p>取回远程主机某个分支的更新，再与本地的指定分支合并：git pull</p>
+<p><strong>强制推送，直接覆盖远程的master</strong>：git push -u -f origin master</p>
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>我们回到github，可以看到上方已经出现“master had recent pushes less than a minute ago”字样</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010453537.png" alt="image-20220913010453537"></p>
+<p>切换分支：点击main的下拉框，查看master分支</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010512818.png" alt="image-20220913010512818"></p>
+<p>已经是最新版：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913010545199.png" alt="image-20220913010545199"></p>
+<h2 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h2><p><strong>分支开发，主干发布</strong></p>
+<p>查看本地分支：git branch</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\project_git\mmall&gt;git branch</span><br><span class="line"><span class="bullet">* </span>master</span><br></pre></td></tr></table></figure>
+
+<p>查看远程分支：git branch -r</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D:\project_git\mmall&gt;git branch -r</span><br><span class="line">  origin/main</span><br><span class="line">  origin/master</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h2><p>在origin&#x2F;master的基础上，生成v1.0的分支</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">git</span> checkout -<span class="keyword">b</span> <span class="built_in">v1</span>.<span class="number">0</span> origin/master</span><br></pre></td></tr></table></figure>
+
+<p>git branch</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D:\project_git\mmall&gt;git branch</span><br><span class="line">  <span class="keyword">master</span></span><br><span class="line"><span class="title">* v1</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>将这个分支推送到远程：git push origin HEAD -u</p>
+<p>此时github上面已经有三个分支了</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220913011148989.png" alt="image-20220913011148989"></p>
+<p>v1.0的代码就是从master这个分支的基础上创建的</p>
+<h2 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout <span class="literal">master</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="拉取分支代码"><a href="#拉取分支代码" class="headerlink" title="拉取分支代码"></a>拉取分支代码</h2><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch <span class="built_in">origin</span> develop #可以使用git fetch <span class="built_in">origin</span> 拉取全部</span><br></pre></td></tr></table></figure>
+
+<p>develop为我的分支名字，根据自己的分支决定。</p>
+<p>有的同学可能会用git pull，git pull &#x3D; git fetch + git merge，因为pull拉取会合并本地文件，可能会导致冲突。</p>
+<h1 id="Github仓库master分支到main分支迁移指南"><a href="#Github仓库master分支到main分支迁移指南" class="headerlink" title="Github仓库master分支到main分支迁移指南"></a>Github仓库master分支到main分支迁移指南</h1><p>2020年10月1日后，<code>Github</code>会将所有新建的仓库的默认分支从<code>master</code>修改为<code>main</code>，这就导致了一些旧仓库主分支是<code>master</code>，新仓库主分支是<code>main</code>的问题，这在有时候会带来一些麻烦，因此这里提供一种方案将旧仓库的<code>master</code>分支迁移到<code>main</code>分支</p>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><p>四步：</p>
+<ul>
+<li>克隆原仓库</li>
+<li>创建并推送<code>main</code>分支</li>
+<li>修改默认分支</li>
+<li>删除<code>master</code>分支</li>
+</ul>
+<h2 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h2><p>首先克隆一份原仓库到本地进行操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> xxxxxxx.git</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建并推送main"><a href="#创建并推送main" class="headerlink" title="创建并推送main"></a>创建并推送<code>main</code></h2><p>创建并切换到<code>main</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b main</span><br></pre></td></tr></table></figure>
+
+<p>推送<code>main</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改默认分支"><a href="#修改默认分支" class="headerlink" title="修改默认分支"></a>修改默认分支</h2><p>这一步需要到<code>Github</code>中进行操作</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220914225555642.png" alt="image-20220914225555642"></p>
+<h2 id="删除master"><a href="#删除master" class="headerlink" title="删除master"></a>删除<code>master</code></h2><p>删除本地<code>master</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d master</span><br></pre></td></tr></table></figure>
+
+<p>删除远程<code>master</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :master</span><br></pre></td></tr></table></figure>
+
+<p>这样就算成功迁移到<code>main</code>分支了</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>在仓库做一些修改后进行提交：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -A </span><br><span class="line">git commit -m <span class="string">&quot;test main branch&quot;</span></span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>Github</code>上会有对应更新</p>
 <h1 id="修改之前的注释"><a href="#修改之前的注释" class="headerlink" title="修改之前的注释"></a>修改之前的注释</h1><h2 id="修改最后一次注释"><a href="#修改最后一次注释" class="headerlink" title="修改最后一次注释"></a>修改最后一次注释</h2><p>如果你只想修改最后一次注释</p>
 <p><code>git commit --amend</code><br>出现有注释的界面（你的注释应该显示在第一行）， 输入<code>i</code>进入修改模式，修改好注释后，按<code>Esc</code>键 退出编辑模式，输入<code>:wq</code>保存并退出。ok，修改完成。</p>
 <h2 id="修改之前的某次注释"><a href="#修改之前的某次注释" class="headerlink" title="修改之前的某次注释"></a>修改之前的某次注释</h2><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819141238224.png" alt="image-20220819141238224"></p>
@@ -589,6 +686,29 @@
 <p>此时我们要执行<strong>git pull –rebase origin master</strong>命令将README.md拉到本地，</p>
 <p>然后执行git push origin master就可以成功了</p>
 <h2 id="远程仓库已存在"><a href="#远程仓库已存在" class="headerlink" title="远程仓库已存在"></a>远程仓库已存在</h2><p>如果你clone下来一个别人的仓库，在此基础上完成你的代码，推送到自己的仓库可能遇到如下问题：<br>error: remote origin already exists.表示远程仓库已存在。<br>因此你要进行以下操作：<br>1、先输入git remote rm origin 删除关联的origin的远程库<br>2、关联自己的仓库 git remote add origin <a target="_blank" rel="noopener" href="https://gitee.com/xxxxxx.git">https://gitee.com/xxxxxx.git</a><br>3、最后git push origin master，这样就推送到自己的仓库了。</p>
+<h2 id="Git问题Everything-up-to-date正确解决方法"><a href="#Git问题Everything-up-to-date正确解决方法" class="headerlink" title="Git问题Everything up-to-date正确解决方法"></a>Git问题Everything up-to-date正确解决方法</h2><p>先说说出现这个问题的原因：git提交改动到缓存，要push的时候不会将本地所有的分支都push掉，所以出现这个问题。那么我们就需要新建分支提交改动然后合并分支。</p>
+<p>1.先创建一个新的分支提交改动</p>
+<p>$ git branch newbranch</p>
+<p>2.检查这条命令是否创建成功</p>
+<p>$ git branch</p>
+<p>这时终端会输出：</p>
+<p>newbranch</p>
+<p>*master</p>
+<p>这样就创建成功了，前面的*代表的是当前你所在的工作分支，接下来就要切换工作分支。</p>
+<p>3.git checkout newbranch</p>
+<p>4.然后将你的改动提交到新的分支上</p>
+<p>$ git add XXX</p>
+<p>$ git commit -m “XXX”</p>
+<p>此时可以$ git status 检查下提交情况。如果提交成功，我们接下来就要回主分支了，$ git checkout master</p>
+<p>5.我们将新分支提交的改动合并到主分支上</p>
+<p>$ git merge newbranch</p>
+<p>合并分支可能产生冲突这是正常的，虽然我们这是新建的分支不会产生冲突，但还是在这里记录下。可以用</p>
+<p>$ git diff 来查看产生冲突的文件，然后做对应的修改再提交一次就可以了。</p>
+<p>6.我们的问题解决了，接下来就可以push代码了</p>
+<p>$ git push -u origin master</p>
+<p>7.最后，新建分支的朋友别忘了删除分支</p>
+<p>$ git branch -D newbranch</p>
+<p>如果想保留分支只是想删除已经合并的部分只要把大写的D改成小写的d就行了。</p>
 
     </div>
 
@@ -701,7 +821,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E9%85%8D%E7%BD%AE"><span class="nav-text">Git配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Windows%E4%B8%8A%E5%AE%89%E8%A3%85Git"><span class="nav-text">在Windows上安装Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%89%88%E6%9C%AC%E5%BA%93"><span class="nav-text">创建版本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E7%89%88%E6%9C%AC%E5%BA%93"><span class="nav-text">文件添加到版本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94"><span class="nav-text">疑难解答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-text">版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="nav-text">版本回退</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-text">工作区和暂存区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E4%BF%AE%E6%94%B9"><span class="nav-text">管理修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9"><span class="nav-text">撤销修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-3"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-text">删除文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-4"><span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">远程仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E4%BB%93%E5%BA%93"><span class="nav-text">推送仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%BB%93%E5%BA%93"><span class="nav-text">删除仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-5"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B9%8B%E5%89%8D%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-text">修改之前的注释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E5%90%8E%E4%B8%80%E6%AC%A1%E6%B3%A8%E9%87%8A"><span class="nav-text">修改最后一次注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B9%8B%E5%89%8D%E7%9A%84%E6%9F%90%E6%AC%A1%E6%B3%A8%E9%87%8A"><span class="nav-text">修改之前的某次注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2%E7%BB%8F%E5%B0%86%E4%BB%A3%E7%A0%81push%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">已经将代码push到远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-text">修改第一次提交的注释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-text">问题解决</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E5%B4%A9%E6%BA%83%EF%BC%8C%E9%94%81%E6%9C%AA%E9%87%8A%E6%94%BE%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-text">Git崩溃，锁未释放怎么办</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#push%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%8A%A5%E9%94%99"><span class="nav-text">push到远程报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-log%E6%97%A0%E6%B3%95%E9%80%80%E5%87%BA"><span class="nav-text">git log无法退出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push%E5%A4%B1%E8%B4%A5%EF%BC%8C-%E6%8F%90%E7%A4%BA-rejected-master-%EF%BC%9E-master-fetch-first-error-failed-to-push-some-refs"><span class="nav-text">git push失败， 提示! [rejected] master -＞ master (fetch first)error: failed to push some refs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E9%A1%B9%E7%9B%AE%E5%88%B0%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E4%BB%93%E5%BA%93"><span class="nav-text">第一次提交项目到一个新的仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%B0%86%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9C%A8%E6%8F%90%E4%BA%A4%E5%88%B0%E4%BB%93%E5%BA%93"><span class="nav-text">第二次将一个新的项目在提交到仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%B7%B2%E5%AD%98%E5%9C%A8"><span class="nav-text">远程仓库已存在</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E9%85%8D%E7%BD%AE"><span class="nav-text">Git配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Windows%E4%B8%8A%E5%AE%89%E8%A3%85Git"><span class="nav-text">在Windows上安装Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%89%88%E6%9C%AC%E5%BA%93"><span class="nav-text">创建版本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%B7%BB%E5%8A%A0%E5%88%B0%E7%89%88%E6%9C%AC%E5%BA%93"><span class="nav-text">文件添加到版本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%96%91%E9%9A%BE%E8%A7%A3%E7%AD%94"><span class="nav-text">疑难解答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-text">版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="nav-text">版本回退</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="nav-text">工作区和暂存区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E4%BF%AE%E6%94%B9"><span class="nav-text">管理修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9"><span class="nav-text">撤销修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-3"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-text">删除文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-4"><span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">远程仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E9%80%81%E4%BB%93%E5%BA%93"><span class="nav-text">推送仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%BB%93%E5%BA%93"><span class="nav-text">删除仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-5"><span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E5%88%86%E6%94%AF%EF%BC%8C%E6%8E%A8%E9%80%81%EF%BC%8C%E5%BF%BD%E7%95%A5%E6%9C%AC%E5%9C%B0%E5%8F%98%E5%8C%96"><span class="nav-text">Git分支，推送，忽略本地变化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-text">github创建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96git"><span class="nav-text">初始化git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4"><span class="nav-text">简单命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">提交到远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github"><span class="nav-text">Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%86%E6%94%AF"><span class="nav-text">查看分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E5%88%86%E6%94%AF"><span class="nav-text">新建分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="nav-text">切换分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E5%88%86%E6%94%AF%E4%BB%A3%E7%A0%81"><span class="nav-text">拉取分支代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Github%E4%BB%93%E5%BA%93master%E5%88%86%E6%94%AF%E5%88%B0main%E5%88%86%E6%94%AF%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97"><span class="nav-text">Github仓库master分支到main分支迁移指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-text">具体步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%8B%E9%9A%86"><span class="nav-text">克隆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E6%8E%A8%E9%80%81main"><span class="nav-text">创建并推送main</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF"><span class="nav-text">修改默认分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4master"><span class="nav-text">删除master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B9%8B%E5%89%8D%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-text">修改之前的注释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E5%90%8E%E4%B8%80%E6%AC%A1%E6%B3%A8%E9%87%8A"><span class="nav-text">修改最后一次注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B9%8B%E5%89%8D%E7%9A%84%E6%9F%90%E6%AC%A1%E6%B3%A8%E9%87%8A"><span class="nav-text">修改之前的某次注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2%E7%BB%8F%E5%B0%86%E4%BB%A3%E7%A0%81push%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">已经将代码push到远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="nav-text">修改第一次提交的注释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-text">问题解决</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E5%B4%A9%E6%BA%83%EF%BC%8C%E9%94%81%E6%9C%AA%E9%87%8A%E6%94%BE%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-text">Git崩溃，锁未释放怎么办</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#push%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%8A%A5%E9%94%99"><span class="nav-text">push到远程报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-log%E6%97%A0%E6%B3%95%E9%80%80%E5%87%BA"><span class="nav-text">git log无法退出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-push%E5%A4%B1%E8%B4%A5%EF%BC%8C-%E6%8F%90%E7%A4%BA-rejected-master-%EF%BC%9E-master-fetch-first-error-failed-to-push-some-refs"><span class="nav-text">git push失败， 提示! [rejected] master -＞ master (fetch first)error: failed to push some refs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E9%A1%B9%E7%9B%AE%E5%88%B0%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E4%BB%93%E5%BA%93"><span class="nav-text">第一次提交项目到一个新的仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%B0%86%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%9C%A8%E6%8F%90%E4%BA%A4%E5%88%B0%E4%BB%93%E5%BA%93"><span class="nav-text">第二次将一个新的项目在提交到仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%B7%B2%E5%AD%98%E5%9C%A8"><span class="nav-text">远程仓库已存在</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E9%97%AE%E9%A2%98Everything-up-to-date%E6%AD%A3%E7%A1%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-text">Git问题Everything up-to-date正确解决方法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -783,13 +903,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">483k</span>
+    <span title="站点总字数">490k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">7:19</span>
+    <span title="站点阅读时长">7:25</span>
 </div>
 
         
