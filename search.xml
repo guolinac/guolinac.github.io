@@ -4572,6 +4572,8 @@
     <content><![CDATA[<p>本机已经有了一个MySQL5.7，再安装一个最新的MySQL8.0。</p>
 <h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p>下载地址：<a href="https://dev.mysql.com/downloads/mysql/">MySQL下载地址</a><br>下载如下版本。</p>
 <h1 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h1><p>将下载好的压缩包解压到C:\DB<br>路径自定义，但是路径中尽量不要带空格或中文。</p>
+<span id="more"></span>
+
 <p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20221024160106170.png" alt="image-20221024160106170"></p>
 <h1 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h1><p>在Path下添加 C:\DB\mysql-8.0.17-winx64\bin<br>这一步的目的是为了避免在CMD窗口下操作时反复切换路径，可以选择不配置。</p>
 <h1 id="配置文件my-ini"><a href="#配置文件my-ini" class="headerlink" title="配置文件my.ini"></a>配置文件my.ini</h1><p>再mysql目录下新建一个配置文件my.ini</p>
@@ -4585,7 +4587,9 @@
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">mysqld  <span class="keyword">install</span>  mysql8</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20221024160602128.png" alt="image-20221024160602128"></p>
-<h2 id="mysql初始化"><a href="#mysql初始化" class="headerlink" title="mysql初始化"></a>mysql初始化</h2><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20221024160739220.png" alt="image-20221024160739220"></p>
+<h2 id="mysql初始化"><a href="#mysql初始化" class="headerlink" title="mysql初始化"></a>mysql初始化</h2><figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">mysqld</span> <span class="literal">--</span><span class="comment">initialize</span> <span class="literal">--</span><span class="comment">console</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20221024160739220.png" alt="image-20221024160739220"></p>
 <p>执行完成以后，输出内容中会有mysql初始默认密码，复制保存，后面会用到。</p>
 <h2 id="启动mysql服务"><a href="#启动mysql服务" class="headerlink" title="启动mysql服务"></a>启动mysql服务</h2><figure class="highlight dos"><table><tr><td class="code"><pre><span class="line"><span class="built_in">net</span> <span class="built_in">start</span> mysql8</span><br></pre></td></tr></table></figure>
 
@@ -4594,7 +4598,6 @@
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line">mysql -u root -<span class="selector-tag">p</span></span><br></pre></td></tr></table></figure>
 
 <p>输入前面记下的密码</p>
-<p>tPQoCliu?2dH</p>
 <p>修改密码：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">WITH</span> mysql_native_password <span class="keyword">BY</span> <span class="string">&#x27;admin&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
@@ -4853,6 +4856,35 @@
       </categories>
       <tags>
         <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安装MySQL8.0出现错误The service already exists!The current server installed</title>
+    <url>/2022/10/30/%E5%AE%89%E8%A3%85MySQL8.0%E5%87%BA%E7%8E%B0%E7%9A%84%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<h1 id="安装MySQL8-0出现错误"><a href="#安装MySQL8-0出现错误" class="headerlink" title="安装MySQL8.0出现错误"></a>安装MySQL8.0出现错误</h1><p>安装MySQL8.0出现的The service already exists!The current server installed：</p>
+<p>这是我在安装MySQL的时候出现的一个服务冲突问题：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">C</span>:\Windows\system32&gt;mysqld  install  mysql8</span><br><span class="line"><span class="attribute">The</span> service already exists!</span><br><span class="line"><span class="attribute">The</span> current server installed: D:\DB\mysql-<span class="number">8</span>.<span class="number">0</span>.<span class="number">17</span>-winx64\bin\mysqld mysql8</span><br></pre></td></tr></table></figure>
+
+<p>这是因为在现在之前的MySQL的时候没有卸载干净（服务未关闭）</p>
+<span id="more"></span>
+
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>管理员方式运行cmd</p>
+<p>查询服务：输入 <code>sc query mysql</code></p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">C:\Windows\system32&gt;sc query mysql8</span><br><span class="line"></span><br><span class="line">SERVICE_NAME: mysql8</span><br><span class="line">        <span class="keyword">TYPE</span>               : <span class="number">10</span>  WIN32_OWN_PROCESS</span><br><span class="line">        STATE              : <span class="number">1</span>  STOPPED</span><br><span class="line">        WIN32_EXIT_CODE    : <span class="number">0</span>  (<span class="number">0x0</span>)</span><br><span class="line">        SERVICE_EXIT_CODE  : <span class="number">0</span>  (<span class="number">0x0</span>)</span><br><span class="line">        <span class="keyword">CHECKPOINT</span>         : <span class="number">0x0</span></span><br><span class="line">        WAIT_HINT          : <span class="number">0x7d0</span></span><br></pre></td></tr></table></figure>
+
+<p>删除服务：输入 <code>sc delete mysql</code></p>
+<figure class="highlight livescript"><table><tr><td class="code"><pre><span class="line">C:<span class="string">\Windows\system32&gt;sc</span> <span class="keyword">delete</span> mysql8</span><br><span class="line">[SC] DeleteService 成功</span><br></pre></td></tr></table></figure>
+
+<p>当出现 Delete Service 成功</p>
+<p>此时，可以重新安装：</p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">C:</span>\Windows\system32&gt;mysqld  install  mysql8</span><br><span class="line">Service successfully installed.</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
       </tags>
   </entry>
 </search>
