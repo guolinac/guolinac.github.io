@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/haon2.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/haon2.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-mac-osx.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guolinac.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Spring IOC&#x2F;DI学习链接：Spring系列教材 （一）- 教程 (how2j.cn) Spring是一个基于IOC和AOP的结构J2EE系统的框架IOC 反转控制 是Spring的基础，Inversion Of Control简单说就是创建对象由以前的程序员自己new 构造方法来调用，变成了交由Spring创建对象DI 依赖注入 Dependency Inject. 简单地说就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring实验">
+<meta property="og:url" content="https://guolinac.github.io/2022/07/19/Spring%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="郭霖的博客">
+<meta property="og:description" content="Spring IOC&#x2F;DI学习链接：Spring系列教材 （一）- 教程 (how2j.cn) Spring是一个基于IOC和AOP的结构J2EE系统的框架IOC 反转控制 是Spring的基础，Inversion Of Control简单说就是创建对象由以前的程序员自己new 构造方法来调用，变成了交由Spring创建对象DI 依赖注入 Dependency Inject. 简单地说就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220416170554792.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417215909535.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417220314797.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417220639017.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220416202451770.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417222005683.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417224349336.png">
+<meta property="article:published_time" content="2022-07-19T14:52:38.000Z">
+<meta property="article:modified_time" content="2022-10-29T20:19:20.962Z">
+<meta property="article:author" content="郭霖">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220416170554792.png">
+
+<link rel="canonical" href="https://guolinac.github.io/2022/07/19/Spring%E5%AE%9E%E9%AA%8C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Spring实验 | 郭霖的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">郭霖的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">好好学习，天天向上！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">20</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guolinac.github.io/2022/07/19/Spring%E5%AE%9E%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/haon1.jpg">
+      <meta itemprop="name" content="郭霖">
+      <meta itemprop="description" content="编程使我快乐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="郭霖的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring实验
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-19 22:52:38" itemprop="dateCreated datePublished" datetime="2022-07-19T22:52:38+08:00">2022-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-30 04:19:20" itemprop="dateModified" datetime="2022-10-30T04:19:20+08:00">2022-10-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+      
+        <h1 id="Spring-IOC-x2F-DI"><a href="#Spring-IOC-x2F-DI" class="headerlink" title="Spring IOC&#x2F;DI"></a>Spring IOC&#x2F;DI</h1><p>学习链接：<a target="_blank" rel="noopener" href="https://how2j.cn/k/spring/spring-ioc-di/87.html#nowhere">Spring系列教材 （一）- 教程 (how2j.cn)</a></p>
+<p>Spring是一个基于IOC和AOP的结构J2EE系统的框架<br>IOC 反转控制 是Spring的基础，Inversion Of Control<br>简单说就是创建对象由以前的程序员自己new 构造方法来调用，变成了交由Spring创建对象<br>DI 依赖注入 Dependency Inject. 简单地说就是拿到的对象的属性，已经被注入好相关值了，直接使用即可。</p>
+<span id="more"></span>
+
+<p><strong>导入实验项目过程：</strong></p>
+<ul>
+<li><p>Import project “src”文件夹即可</p>
+<blockquote>
+<p>C:\Users\hahaha\Desktop\计算机\spring\spring_experiment_HOW2J\springIOC\src</p>
+</blockquote>
+</li>
+<li><p>Project Structure-&gt;SDKs-&gt;导包</p>
+<blockquote>
+<p>C:\Users\hahaha\Desktop\计算机\spring\spring_experiment_HOW2J\spring_lib(HOW2J)</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>原理：</strong></p>
+<p>以获取对象的方式来进行比较</p>
+<p><strong>传统的方式：</strong><br>通过new 关键字主动创建一个对象<br><strong>IOC方式</strong><br>对象的生命周期由Spring来管理，直接从Spring那里去获取一个对象。 IOC是<strong>反转控制</strong> (Inversion Of Control)的缩写，就像控制权从本来在自己手里，交给了Spring。</p>
+<p>打个比喻：<br><strong>传统方式：</strong>相当于你自己去菜市场new 了一只鸡，不过是生鸡，要自己拔毛，去内脏，再上花椒，酱油，烤制，经过各种工序之后，才可以食用。<br><strong>用 IOC：</strong>相当于去馆子(Spring)点了一只鸡，交到你手上的时候，已经五味俱全，你就只管吃就行了。</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220416170554792.png" alt="image-20220416170554792"></p>
+<p><strong>一些解释：</strong></p>
+<p>学习链接：<a target="_blank" rel="noopener" href="https://how2j.cn/k/spring/spring-ioc-di/87.html#nowhere">Spring系列教材 （一）- 教程 (how2j.cn)</a></p>
+<p>1.这里的意思是通过关键字c即可获取com.how2java.pojo.Category对象，并且将”category 1”这个字符串，注入到了com.how2java.pojo.Category这个类的private String name;属性中</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;c&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Category&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;category 1&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2.这里的意思是由Spring创建bean对象，也就是c，也就是com.how2java.pojo.Category这个类对应的对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSpring</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;applicationContext.xml&quot;</span> &#125;);</span><br><span class="line">        <span class="type">Category</span> <span class="variable">c</span> <span class="operator">=</span> (Category) context.getBean(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">        System.out.println(c.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Spring-注入对象"><a href="#Spring-注入对象" class="headerlink" title="Spring 注入对象"></a>Spring 注入对象</h1><p>在上例中，对Category的name属性注入了”category 1”字符串<br>在本例中 ，对Product对象，注入一个Category对象</p>
+<p><strong>Product类中有对Category对象的setter getter</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Product</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Category category;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> Category <span class="title function_">getCategory</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> category;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCategory</span><span class="params">(Category category)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.category = category;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>applicationContext.xml</strong></p>
+<p>在创建Product的时候注入一个Category对象<br>注意，这里要使用ref来注入另一个对象</p>
+<p>我的理解是：</p>
+<p>这里给com.how2java.pojo.Category对象的name属性赋值category 1</p>
+<p>并且可以通过p调用com.how2java.pojo.Product的对象，并且com.how2java.pojo.Product对象的category属性是一个c，也就是com.how2java.pojo.Category对象</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;c&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Category&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;category 1&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;p&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Product&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;product1&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;category&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;c&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>TestSpring</strong></p>
+<p>这里的意思是由Spring创建bean对象，也就是p，也就是com.how2java.pojo.Product对象，然后调用p.getName()得到com.how2java.pojo.Product对象的name属性，也就是字符串”product1”</p>
+<p>然后通过p.getCategory()得到com.how2java.pojo.Category对象，然后再通过getName()得到其name属性，也就是字符串”category 1”</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417215909535.png" alt="image-20220417215909535"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSpring</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;applicationContext.xml&quot;</span> &#125;);</span><br><span class="line">        <span class="type">Product</span> <span class="variable">p</span> <span class="operator">=</span> (Product) context.getBean(<span class="string">&quot;p&quot;</span>);</span><br><span class="line">        System.out.println(p.getName());</span><br><span class="line">        System.out.println(p.getCategory().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Spring-注解方式-IOC-x2F-DI"><a href="#Spring-注解方式-IOC-x2F-DI" class="headerlink" title="Spring 注解方式 IOC&#x2F;DI"></a>Spring 注解方式 IOC&#x2F;DI</h1><p><strong>修改applicationContext.xml</strong></p>
+<p>添加&lt;context:annotation-config&#x2F;&gt; 意思是注解配置，annotation注解</p>
+<p>注释掉&lt;property name&#x3D;”category” ref&#x3D;”c” &#x2F;&gt; 这个行为在后面将使用注解来完成</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--    添加下面这一行--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;c&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Category&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;category 1&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;p&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Product&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;product1&quot;</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        &lt;property name=&quot;category&quot; ref=&quot;c&quot; /&gt;--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>修改Product.java</strong></p>
+<p>在Product.java的category属性前加上@Autowired注解，Autowired自动接线</p>
+<p>我的理解就是，让com.how2java.pojo.Category对象自动接线，赋值到com.how2java.pojo.Product对象的private Category category;属性中</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417220314797.png" alt="image-20220417220314797"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> Category category;</span><br></pre></td></tr></table></figure>
+
+<p>除了前面的 <a target="_blank" rel="noopener" href="https://how2j.cn/k/spring/spring-annotation-ioc-di/1067.html#step4076">在属性前加上@Autowired</a> 这种方式外，也可以在setCategory方法前加上@Autowired，这样来达到相同的效果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCategory</span><span class="params">(Category category)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.category = category;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@Resource</strong></p>
+<p>除了@Autowired之外，@Resource也是常用的手段  @Resource(name&#x3D;”c”)</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417220639017.png" alt="image-20220417220639017"></p>
+<p>Product.java文件添加</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource(name=&quot;c&quot;)</span></span><br><span class="line"><span class="keyword">private</span> Category category;</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource(name=&quot;c&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCategory</span><span class="params">(Category category)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.category = category;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>对Bean的注解</strong></p>
+<p>上述例子是对<strong>注入对象行为</strong>的注解，那么bean对象本身，比如Category,Product可不可以移出</p>
+<p>applicationContext.xml配置文件，也通过注解进行呢？</p>
+<p><strong>接下来就讲解如何对Bean进行注解配置</strong></p>
+<p>修改applicationContext.xml，什么都去掉，只新增：</p>
+<p>其作用是告诉Spring，bean都放在com.how2java.pojo这个包下，让java自动扫描com.how2java.pojo这个包，自己去找bean</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.how2java.pojo&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>为Product类加上@Component注解，即表明此类是bean，也就是再测试类中，可以通过p，来生成一个Product对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;p&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Product</span> &#123;</span><br></pre></td></tr></table></figure>
+
+<p>为Category 类加上@Component注解，即表明此类是bean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;c&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Category</span> &#123;</span><br></pre></td></tr></table></figure>
+
+<p>另外，因为配置从applicationContext.xml中移出来了，所以属性初始化放在属性声明上进行了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Product.java文件中直接定义name字符串是<span class="string">&quot;product 1&quot;</span></span><br><span class="line"><span class="keyword">private</span> String name=<span class="string">&quot;product 1&quot;</span>;</span><br><span class="line">Category.java文件中直接定义name字符串是<span class="string">&quot;category 1&quot;</span></span><br><span class="line"><span class="keyword">private</span> String name=<span class="string">&quot;category 1&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Spring-AOP"><a href="#Spring-AOP" class="headerlink" title="Spring AOP"></a>Spring AOP</h1><p>AOP 即 Aspect Oriented Program 面向切面编程<br>首先，在面向切面编程的思想里面，把功能分为<strong>核心业务功能</strong>，和<strong>周边功能</strong>。<br>所谓的核心业务，比如登陆，增加数据，删除数据都叫核心业务<br>所谓的周边功能，比如性能统计，日志，事务管理等等</p>
+<p>周边功能在Spring的面向切面编程AOP思想里，即被定义为<strong>切面</strong></p>
+<p>在面向切面编程AOP的思想里面，核心业务功能和切面功能分别<strong>独立进行开发</strong><br>然后把切面功能和核心业务功能 <strong>“编织”</strong> 在一起，这就叫AOP</p>
+<p><strong>思路图：</strong></p>
+<p>\1. 功能分两大类，辅助功能和核心业务功能</p>
+<p>\2. 辅助功能和核心业务功能<strong>彼此独立</strong>进行开发</p>
+<p>\3. 比如登陆功能，即便是没有性能统计和日志输出，也可以正常运行</p>
+<p>\4. 如果有需要，就把”日志输出” 功能和 “登陆” 功能 <strong>编织</strong>在一起，这样登陆的时候，就可以看到日志输出了</p>
+<p>\5. 辅助功能，又叫做<strong>切面</strong>，这种能够<strong>选择性的，低耦合的</strong>把切面和核心业务功能结合在一起的编程思想，就叫做切面编程</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220416202451770.png" alt="image-20220416202451770"></p>
+<p><strong>更改applicationContext.xml配置（一）</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.how2java.service&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>准备业务类 ProductService（一）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(&quot;s&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomeService</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSomeService&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>或者更改applicationContext.xml配置（二）</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:annotation-config</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;s&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.service.ProductService&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>或者准备业务类 ProductService（二）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomeService</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSomeService&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>在引入切面之前，调用该业务类</strong></p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417222005683.png" alt="image-20220417222005683"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.how2java.service.ProductService;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSpring</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;applicationContext.xml&quot;</span> &#125;);</span><br><span class="line">        <span class="type">ProductService</span> <span class="variable">s</span> <span class="operator">=</span> (ProductService) context.getBean(<span class="string">&quot;s&quot;</span>);</span><br><span class="line">        s.doSomeService();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>准备日志切面 LoggerAspect</strong></p>
+<p>该日志切面的功能是 在调用核心功能之前和之后分别打印日志，切面就是原理图中讲的那些辅助功能。</p>
+<p><code>Object object = joinPoint.proceed();</code>就是将来与某个核心功能编织之后，用于执行核心功能的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.aspect;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoggerAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">log</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;start log:&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">object</span> <span class="operator">=</span> joinPoint.proceed();</span><br><span class="line">        System.out.println(<span class="string">&quot;end log:&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        <span class="keyword">return</span> object;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>applicationContext.xml</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--    这里声明业务对象，也就是通过s可以得到com.how2java.service.ProductService类--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;s&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.service.ProductService&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--    声明日志切面--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;loggerAspect&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.aspect.LoggerAspect&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--    指定右边的核心业务功能--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--    execution(* com.how2java.service.ProductService.*(..))</span></span><br><span class="line"><span class="comment">        这表示对满足如下条件的方法调用，进行切面操作：</span></span><br><span class="line"><span class="comment">        * 返回任意类型</span></span><br><span class="line"><span class="comment">        com.how2java.service.ProductService.* 包名以 com.how2java.service.ProductService 开头的类的任意方法</span></span><br><span class="line"><span class="comment">        (..) 参数是任意数量和类型    --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">&quot;loggerCutpoint&quot;</span></span></span><br><span class="line"><span class="tag">                      <span class="attr">expression</span>=</span></span><br><span class="line"><span class="tag">                              <span class="string">&quot;execution(* com.how2java.service.ProductService.*(..)) &quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--        指定左边的辅助功能--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">id</span>=<span class="string">&quot;logAspect&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;loggerAspect&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:around</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;loggerCutpoint&quot;</span> <span class="attr">method</span>=<span class="string">&quot;log&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Spring-注解方式-AOP"><a href="#Spring-注解方式-AOP" class="headerlink" title="Spring 注解方式 AOP"></a>Spring 注解方式 AOP</h1><p><strong>注解配置业务类</strong></p>
+<p>使用@Component(“s”) 注解ProductService 类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component(&quot;s&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProductService</span> &#123;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注解配置切面</strong></p>
+<p>@Aspect 注解表示这是一个切面<br>@Component 表示这是一个bean,由Spring进行管理<br>@Around(value &#x3D; “execution(* com.how2java.service.ProductService.*(..))”) 表示对com.how2java.service.ProductService 这个类中的所有方法进行切面操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoggerAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around(value = &quot;execution(* com.how2java.service.ProductService.*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">log</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;start log:&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">object</span> <span class="operator">=</span> joinPoint.proceed();</span><br><span class="line">        System.out.println(<span class="string">&quot;end log:&quot;</span> + joinPoint.getSignature().getName());</span><br><span class="line">        <span class="keyword">return</span> object;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>applicationContext.xml去掉原有信息，添加如下3行</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--    扫描包com.how2java.aspect和com.how2java.service，定位业务类和切面类--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.how2java.aspect&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.how2java.service&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--    找到被注解了的切面类，进行切面配置(切面自动代理)--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>运行</strong></p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Spring%E5%AE%9E%E9%AA%8C.assets/image-20220417224349336.png" alt="image-20220417224349336"></p>
+<h1 id="Spring-注解方式测试"><a href="#Spring-注解方式测试" class="headerlink" title="Spring 注解方式测试"></a>Spring 注解方式测试</h1><p><strong>修改TestSpring, 并运行</strong></p>
+<p><strong>修改前：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.test;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> com.how2java.pojo.Category;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSpring</span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;applicationContext.xml&quot;</span> &#125;);</span><br><span class="line"> </span><br><span class="line">        <span class="type">Category</span> <span class="variable">c</span> <span class="operator">=</span> (Category) context.getBean(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">         </span><br><span class="line">        System.out.println(c.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>修改后：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.how2java.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.ContextConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.how2java.pojo.Category;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 表示这是一个Spring的测试类</span></span><br><span class="line"><span class="meta">@RunWith(SpringJUnit4ClassRunner.class)</span></span><br><span class="line"><span class="comment">// 定位Spring的配置文件</span></span><br><span class="line"><span class="meta">@ContextConfiguration(&quot;classpath:applicationContext.xml&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestSpring</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 给这个测试类装配Category对象</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    Category c;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测试逻辑，打印c对象的名称</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(c.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>applicationContext.xml</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;c&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.how2java.pojo.Category&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;category 1&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>郭霖
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://guolinac.github.io/2022/07/19/Spring%E5%AE%9E%E9%AA%8C/" title="Spring实验">https://guolinac.github.io/2022/07/19/Spring实验/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/19/SpringMVC%E5%AE%9E%E9%AA%8C/" rel="prev" title="Spring MVC实验">
+      <i class="fa fa-chevron-left"></i> Spring MVC实验
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/06/Go%E8%AF%AD%E8%A8%80/" rel="next" title="Go语言">
+      Go语言 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC-x2F-DI"><span class="nav-text">Spring IOC&#x2F;DI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-%E6%B3%A8%E5%85%A5%E5%AF%B9%E8%B1%A1"><span class="nav-text">Spring 注入对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F-IOC-x2F-DI"><span class="nav-text">Spring 注解方式 IOC&#x2F;DI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-AOP"><span class="nav-text">Spring AOP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F-AOP"><span class="nav-text">Spring 注解方式 AOP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="nav-text">Spring 注解方式测试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="郭霖"
+      src="/images/haon1.jpg">
+  <p class="site-author-name" itemprop="name">郭霖</p>
+  <div class="site-description" itemprop="description">编程使我快乐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guolinac" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guolinac" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fab fa-google"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">郭霖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">579k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">8:47</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
