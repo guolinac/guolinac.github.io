@@ -22,23 +22,23 @@
     var CONFIG = {"hostname":"guolinac.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具">
+  <meta name="description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具 Maven 主要用处一：相同的项目结构 使用Maven管理的Java 项目都有着相同的项目结构  有一个pom.xml 用于维护当前项目都用了哪些jar包 所有的java代码都放在 src&#x2F;main&#x2F;java 下面 所有的测试代码都放在src&#x2F;test&#x2F;java 下面  Maven 主要用处二：统一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven下载">
 <meta property="og:url" content="https://guolinac.github.io/2022/08/20/Maven/index.html">
 <meta property="og:site_name" content="郭霖的博客">
-<meta property="og:description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具">
+<meta property="og:description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具 Maven 主要用处一：相同的项目结构 使用Maven管理的Java 项目都有着相同的项目结构  有一个pom.xml 用于维护当前项目都用了哪些jar包 所有的java代码都放在 src&#x2F;main&#x2F;java 下面 所有的测试代码都放在src&#x2F;test&#x2F;java 下面  Maven 主要用处二：统一">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819103949883.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819104036178.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220825131211524.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220825133125007.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819104036178.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825131211524.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825133125007.png">
 <meta property="article:published_time" content="2022-08-20T14:52:38.000Z">
-<meta property="article:modified_time" content="2022-10-16T06:05:06.811Z">
+<meta property="article:modified_time" content="2022-10-29T20:00:48.481Z">
 <meta property="article:author" content="郭霖">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819103949883.png">
+<meta name="twitter:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png">
 
 <link rel="canonical" href="https://guolinac.github.io/2022/08/20/Maven/">
 
@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-16 14:05:06" itemprop="dateModified" datetime="2022-10-16T14:05:06+08:00">2022-10-16</time>
+                <time title="修改时间：2022-10-30 04:00:48" itemprop="dateModified" datetime="2022-10-30T04:00:48+08:00">2022-10-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -265,8 +265,6 @@
     <div class="post-body" itemprop="articleBody">
       
         <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Maven 是专门用于构建和管理Java相关项目的工具</p>
-<span id="more"></span>
-
 <p>Maven 主要用处一：相同的项目结构</p>
 <p>使用Maven管理的Java 项目都有着相同的项目结构</p>
 <ol>
@@ -278,11 +276,11 @@
 <p>比如说有3个Java 项目，这些项目都不是maven风格。那么这3个项目，就会各自维护一套jar包。 而其中有些jar包是相同的。</p>
 <p>而maven风格的项目，首先把所有的jar包都放在“仓库”里，然后哪个项目需要用到这个jar包，只需要给出jar包的名称和版本号就行了。 这样<strong>jar包就实现了共享</strong></p>
 <h1 id="下载与配置"><a href="#下载与配置" class="headerlink" title="下载与配置"></a>下载与配置</h1><p>官方最新版下载地址：<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a></p>
-<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819103949883.png" alt="image-20220819103949883"></p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png" alt="image-20220819103949883"></p>
 <h2 id="检验版本"><a href="#检验版本" class="headerlink" title="检验版本"></a>检验版本</h2><p>使用win+r, 然后输入cmd 打开命令行，输入如下命令</p>
 <figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mvn</span> -v</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220819104036178.png" alt="image-20220819104036178"></p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819104036178.png" alt="image-20220819104036178"></p>
 <h2 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h2><p>maven 会默认从maven官方提供的服务器下载jar包。<br>而官方服务器在国外，因为大家都知道的原因，网速很慢，而且容易卡断。 为了便于快速下载相关jar包，可以使用国内maven 阿里云的下载地址</p>
 <p>使用阿里云下载路径：</p>
 <p>打开<code>D:\apache-maven-3.5.0\conf\settings.xml</code></p>
@@ -290,8 +288,8 @@
  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyunmaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>阿里云公共仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://maven.aliyun.com/repository/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>也可以直接复制粘贴即可，修改位置是160-165行</p>
-<h1 id="idea配置maven项目"><a href="#idea配置maven项目" class="headerlink" title="idea配置maven项目"></a>idea配置maven项目</h1><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220825131211524.png" alt="image-20220825131211524"></p>
-<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/image-20220825133125007.png" alt="image-20220825133125007"></p>
+<h1 id="idea配置maven项目"><a href="#idea配置maven项目" class="headerlink" title="idea配置maven项目"></a>idea配置maven项目</h1><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825131211524.png" alt="image-20220825131211524"></p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825133125007.png" alt="image-20220825133125007"></p>
 
     </div>
 
@@ -486,13 +484,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">506k</span>
+    <span title="站点总字数">522k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">7:40</span>
+    <span title="站点阅读时长">7:54</span>
 </div>
 
         
