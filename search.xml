@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>关于&#39;scanf&#39; This function or variable may be unsafe. Consider using scanf_s instead</title>
+    <url>/2022/11/02/vs%E5%90%AF%E5%8A%A8%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<h1 id="问题error-C4996-‘scanf’-This-function-or-variable-may-be-unsafe-Consider-using-scanf-s-instead-的解决"><a href="#问题error-C4996-‘scanf’-This-function-or-variable-may-be-unsafe-Consider-using-scanf-s-instead-的解决" class="headerlink" title="问题error C4996: ‘scanf’: This function or variable may be unsafe. Consider using scanf_s instead. 的解决"></a>问题error C4996: ‘scanf’: This function or variable may be unsafe. Consider using scanf_s instead. 的解决</h1><p>运行c语言代码是会经常遇见下面的问题：</p>
+<p>error C4996: ‘scanf’: This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.<br>1&gt; d:\program files\microsoft visual studio 11.0\vc\include\stdio.h(290) : 参见“scanf”的声明<br>1&gt;C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppCommon.targets(347,5): error MSB6006: “CL.exe”已退出，代码为 2。</p>
+<p>这种微软的警告，主要因为那些C库的函数，很多函数内部是不进行参数检测的（包括越界类的），微软担心使用这些会造成内存异常，所以就改写了同样功能的函数，改写了的函数进行了参数的检测，使用这些新的函数会更安全和便捷。关于这些改写的函数你不用专门去记忆，因为编译器对于每个函数在给出警告时，都会告诉你相应的安全函数，查看警告信息就可以获知，在使用时也再查看一下MSDN详细了解。</p>
+<p>解决方法如下：</p>
+<p>一：将原来的旧函数替换成新的安全函数，比如scanf_s函数</p>
+<p>二：更改预处理定义：</p>
+<pre><code>项目-&gt;属性-&gt;配置属性-&gt;C/C++ -&gt; 预处理器 -&gt; 预处理器定义，增加：_CRT_SECURE_NO_DEPRECATE
+</code></pre>
+<p>三：在预编译头文件 stdafx.h 里（要在没有include任何头文件之前）定义下面的宏：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_DEPRECATE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1</span></span><br></pre></td></tr></table></figure>
+
+<p>第三种方法来源于网络，没有亲自试验</p>
+]]></content>
+      <categories>
+        <category>c++</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>安装MySQL8.0出现错误The service already exists!The current server installed</title>
     <url>/2022/10/30/%E5%AE%89%E8%A3%85MySQL8.0%E5%87%BA%E7%8E%B0%E7%9A%84%E9%94%99%E8%AF%AF/</url>
     <content><![CDATA[<h1 id="安装MySQL8-0出现错误"><a href="#安装MySQL8-0出现错误" class="headerlink" title="安装MySQL8.0出现错误"></a>安装MySQL8.0出现错误</h1><p>安装MySQL8.0出现的The service already exists!The current server installed：</p>
@@ -1936,7 +1959,7 @@
 <p>查看变更：git status</p>
 <p>文件添加到仓库：git add .</p>
 <p>文件提交到版本库：git commit -m “first commit init project”</p>
-<h2 id="提交到远程仓库"><a href="#提交到远程仓库" class="headerlink" title="提交到远程仓库"></a>提交到远程仓库</h2><p>绑定到远程仓库：git remote add origin <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#103;&#105;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a>:guolinac&#x2F;mmall_learning.git</p>
+<h2 id="提交到远程仓库"><a href="#提交到远程仓库" class="headerlink" title="提交到远程仓库"></a>提交到远程仓库</h2><p>绑定到远程仓库：git remote add origin <a href="mailto:&#x67;&#105;&#116;&#64;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#x6d;">&#x67;&#105;&#116;&#64;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#x6d;</a>:guolinac&#x2F;mmall_learning.git</p>
 <p>查看分支：git branch</p>
 <figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line">D:\project_git\mmall&gt;git branch</span><br><span class="line"><span class="bullet">* </span>master</span><br></pre></td></tr></table></figure>
 
