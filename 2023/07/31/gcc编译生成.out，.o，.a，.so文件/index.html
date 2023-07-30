@@ -30,7 +30,7 @@
 <meta property="og:description" content="linux下gcc编译生成.out，.o，.a，.so文件文件类型介绍.out是可执行文件，相当于win上的exe； .o是编译中间目标文件，相当于win上的.obj； .a是静态库，多个.o练链接得到，用于静态链接； .so是共享库，用于动态链接，相当于win上.dll；">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-30T16:21:00.000Z">
-<meta property="article:modified_time" content="2023-07-30T16:27:05.275Z">
+<meta property="article:modified_time" content="2023-07-30T16:33:28.761Z">
 <meta property="article:author" content="郭霖">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
@@ -139,7 +139,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">28</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">31</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -217,7 +217,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-07-31 00:21:00 / 修改时间：00:27:05" itemprop="dateCreated datePublished" datetime="2023-07-31T00:21:00+08:00">2023-07-31</time>
+              <time title="创建时间：2023-07-31 00:21:00 / 修改时间：00:33:28" itemprop="dateCreated datePublished" datetime="2023-07-31T00:21:00+08:00">2023-07-31</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -296,6 +296,8 @@
 <p>我们发现报错了，原来是找不到动态库文件libhello.so，程序在运行时，会在&#x2F;usr&#x2F;lib和&#x2F;lib等目录中查找需要的动态库文件。</p>
 <p>若找到，则载入动态库，否则将提示类似上述错误而终止程序运行。</p>
 <p>我们将文件libhello.so移动到目录&#x2F;usr&#x2F;lib中，再运行main.out，已经可以正常调用so了。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>推荐一个B站视频，关于cmake使用的：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18x4y1977v/?spm_id_from=333.880.my_history.page.click&vd_source=ebd99ada6a4386aacd76d38d8bbe6bab">从零搭建一个c&#x2F;c++工程–合集_哔哩哔哩_bilibili</a></p>
 
     </div>
 
@@ -343,8 +345,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/07/30/%E5%B0%86python%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E6%88%90exe/" rel="prev" title="将python文件打包成exe，让没有python环境的人也能使用">
-      <i class="fa fa-chevron-left"></i> 将python文件打包成exe，让没有python环境的人也能使用
+    <a href="/2023/07/31/C++%E6%AE%B5%E9%94%99%E8%AF%AF(Segmentation%20fault)/" rel="prev" title="C++段错误(Segmentation fault)">
+      <i class="fa fa-chevron-left"></i> C++段错误(Segmentation fault)
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -405,7 +407,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90-out%EF%BC%8C-o%EF%BC%8C-a%EF%BC%8C-so%E6%96%87%E4%BB%B6"><span class="nav-text">linux下gcc编译生成.out，.o，.a，.so文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-text">文件类型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">out可执行文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#o%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">o目标文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a%E9%9D%99%E6%80%81%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">a静态库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">创建静态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">调用静态库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#so%E5%85%B1%E4%BA%AB%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">so共享库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAso"><span class="nav-text">创建so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8so"><span class="nav-text">调用so</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90-out%EF%BC%8C-o%EF%BC%8C-a%EF%BC%8C-so%E6%96%87%E4%BB%B6"><span class="nav-text">linux下gcc编译生成.out，.o，.a，.so文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-text">文件类型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">out可执行文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#o%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">o目标文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a%E9%9D%99%E6%80%81%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">a静态库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">创建静态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">调用静态库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#so%E5%85%B1%E4%BA%AB%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">so共享库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAso"><span class="nav-text">创建so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8so"><span class="nav-text">调用so</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-text">最后</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -421,7 +423,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -487,13 +489,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">614k</span>
+    <span title="站点总字数">632k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">9:18</span>
+    <span title="站点阅读时长">9:34</span>
 </div>
 
         

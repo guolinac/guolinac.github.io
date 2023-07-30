@@ -46,6 +46,174 @@
 <p>我们发现报错了，原来是找不到动态库文件libhello.so，程序在运行时，会在&#x2F;usr&#x2F;lib和&#x2F;lib等目录中查找需要的动态库文件。</p>
 <p>若找到，则载入动态库，否则将提示类似上述错误而终止程序运行。</p>
 <p>我们将文件libhello.so移动到目录&#x2F;usr&#x2F;lib中，再运行main.out，已经可以正常调用so了。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>推荐一个B站视频，关于cmake使用的：</p>
+<p><a href="https://www.bilibili.com/video/BV18x4y1977v/?spm_id_from=333.880.my_history.page.click&vd_source=ebd99ada6a4386aacd76d38d8bbe6bab">从零搭建一个c&#x2F;c++工程–合集_哔哩哔哩_bilibili</a></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++段错误(Segmentation fault)</title>
+    <url>/2023/07/31/C++%E6%AE%B5%E9%94%99%E8%AF%AF(Segmentation%20fault)/</url>
+    <content><![CDATA[<h1 id="C-段错误-Segmentation-fault"><a href="#C-段错误-Segmentation-fault" class="headerlink" title="C++段错误(Segmentation fault)"></a>C++段错误(Segmentation fault)</h1><p>“段错误”（常缩写为”segfault”或”SIGSEGV”）是C++和其他编程语言中常见的运行时错误。它发生在程序尝试访问未被允许访问的内存位置时，通常是由于代码中的错误导致的。段错误通常由以下情况引起：</p>
+<ol>
+<li>解引用空指针：尝试访问或修改指向内存地址0或未初始化的指针的值。</li>
+<li>缓冲区溢出：在数组或缓冲区的边界之外写入数据，导致意外的内存访问。</li>
+<li>使用已释放的内存：在释放或释放后访问指向对象的指针。</li>
+<li>未初始化的变量：访问未初始化的变量的值。</li>
+<li>栈溢出：由于过度递归或堆栈空间的过度使用。</li>
+<li>错误的指针算术：以导致访问无效内存地址的方式操作指针。</li>
+</ol>
+<span id="more"></span>
+
+<p>要调试和修复段错误，可以按照以下步骤进行：</p>
+<ol>
+<li>查看错误信息：当发生段错误时，程序通常会在控制台或日志中打印一条消息。该消息通常包含错误发生的文件和行号。请注意这些信息，因为它们可以帮助您找到有问题的代码。</li>
+<li>查看出错位置的代码：查找与内存相关的操作（指针使用，数组访问）并检查是否存在潜在问题，如空指针，未初始化的变量或不正确的内存访问。</li>
+<li>使用调试器：调试器是强大的工具，可以帮助您精确定位错误发生的位置。在调试器中运行程序可以检查变量的状态，跟踪调用堆栈，并确定段错误的原因。常用的C++调试器包括GDB（GNU Debugger）和LLDB。</li>
+<li>启用编译器警告：确保启用编译器警告，并注意与指针，数组和内存使用相关的任何警告。解决这些警告通常可以防止段错误。</li>
+<li>避免使用裸指针：优先使用智能指针（例如<code>std::unique_ptr</code>，<code>std::shared_ptr</code>）或容器类（例如<code>std::vector</code>，<code>std::array</code>）来处理内存管理。</li>
+<li>边界检查和验证：确保您的代码执行适当的边界检查，以防止缓冲区溢出，并验证用户输入，以防止无效的内存访问。</li>
+<li>内存分析工具：有各种内存分析工具可用，可以帮助您检测与内存相关的问题，如Valgrind（内存错误探测器）。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>proc目录详解</title>
+    <url>/2023/07/31/proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="proc目录详解"><a href="#proc目录详解" class="headerlink" title="proc目录详解"></a>proc目录详解</h1><p>Linux系统上的&#x2F;proc目录是一种文件系统，即proc文件系统。与其它常见的文件系统不同的是，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态。 </p>
+<p>基于&#x2F;proc文件系统如上所述的特殊性，其内的文件也常被称作虚拟文件，并具有一些独特的特点。例如，其中有些文件虽然使用查看命令查看时会返回大量信息，但文件本身的大小却会显示为0字节。此外，这些特殊文件中大多数文件的时间及日期属性通常为当前系统时间和日期，这跟它们随时会被刷新（存储于RAM中）有关。 </p>
+<p>为了查看及使用上的方便，这些文件通常会按照相关性进行分类存储于不同的目录甚至子目录中，如&#x2F;proc&#x2F;scsi目录中存储的就是当前系统上所有SCSI设备的相关信息，&#x2F;proc&#x2F;N中存储的则是系统当前正在运行的进程的相关信息，其中N为正在运行的进程（可以想象得到，在某进程结束后其相关目录则会消失）。 </p>
+<p>大多数虚拟文件可以使用文件查看命令如cat、more或者less进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如apm、free、lspci或top查看时却可以有着不错的表现。</p>
+<span id="more"></span>
+
+<h2 id="进程目录中的常见文件介绍"><a href="#进程目录中的常见文件介绍" class="headerlink" title="进程目录中的常见文件介绍"></a>进程目录中的常见文件介绍</h2><p>&#x2F;proc目录中包含许多以数字命名的子目录，这些数字表示系统当前正在运行进程的进程号，里面包含对应进程相关的多个信息文件。 </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span><span class="title"></span></span><br><span class="line"><span class="title">total</span> 0<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 1<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 10<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 11<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 1156<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 139<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 140<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 141<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:09 1417<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:09 1418</span><br></pre></td></tr></table></figure>
+
+<p>上面列出的是&#x2F;proc目录中一些进程相关的目录，每个目录中是当程本身相关信息的文件。下面是作者系统（RHEL5.3）上运行的一个PID为2674的进程saslauthd的相关文件，其中有些文件是每个进程都会具有的，后文会对这些常见文件做出说明。</p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span>/2674<span class="title"></span></span><br><span class="line"><span class="title">total</span> 0<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span> 2<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> attr</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> auxv</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> cmdline</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> coredump_filter</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> cpuset</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> cwd</span> -&gt; /var/run/saslauthd</span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> environ</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> exe</span> -&gt; /usr/sbin/saslauthd<span class="title"></span></span><br><span class="line"><span class="title">dr-x------</span> 2<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> fd</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> limits</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> loginuid</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> maps</span></span><br><span class="line">-rw------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mem</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mounts</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mountstats</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> oom_adj</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> oom_score</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> root</span> -&gt; /</span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> schedstat</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> smaps</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> stat</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> statm</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:10<span class="title"> status</span></span><br><span class="line">dr-xr-xr-x 3<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> task</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> wchan</span></span><br></pre></td></tr></table></figure>
+
+<p>1.1、cmdline — 启动当前进程的完整命令，但僵尸进程目录中的此文件不包含任何信息； </p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/</span><span class="number">2674</span>/cmdline </span><br><span class="line"><span class="regexp">/usr/</span>sbin/saslauthd</span><br></pre></td></tr></table></figure>
+
+<p>1.2、cwd — 指向当前进程运行目录的一个符号链接； </p>
+<p>1.3、environ — 当前进程的环境变量列表，彼此间用空字符（NULL）隔开；变量用大写字母表示，其值用小写字母表示；</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[root@rhel5 ~]</span><span class="comment"># more /proc/2674/environ </span></span><br><span class="line"><span class="attr">TERM</span>=linuxauthd</span><br></pre></td></tr></table></figure>
+
+<p>1.4、exe — 指向启动当前进程的可执行文件（完整路径）的符号链接，通过&#x2F;proc&#x2F;N&#x2F;exe可以启动当前进程的一个拷贝； </p>
+<p>1.5、fd — 这是个目录，包含当前进程打开的每一个文件的文件描述符（file descriptor），这些文件描述符是指向实际文件的一个符号链接； </p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># ll /proc/2674/fd</span></span><br><span class="line">total 0</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 0 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 1 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 2 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 3 </span>-&gt; socket:[7990]</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 4 </span>-&gt; /var/run/saslauthd/saslauthd.pid</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 5 </span>-&gt; socket:[7991]</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 6 </span>-&gt; /var/run/saslauthd/mux.accept</span><br></pre></td></tr></table></figure>
+
+<p>1.6、limits — 当前进程所使用的每一个受限资源的软限制、硬限制和管理单元；此文件仅可由实际启动当前进程的UID用户读取；（2.6.24以后的内核版本支持此功能）； </p>
+<p>1.7、maps — 当前进程关联到的每个可执行文件和库文件在内存中的映射区域及其访问权限所组成的列表；</p>
+<figure class="highlight dns"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# cat /proc/<span class="number">2674</span>/maps </span><br><span class="line"><span class="number">00110000</span>-<span class="number">00239000</span> r-xp <span class="number">00000000 08</span>:<span class="number">02 130647</span>     /lib/libcrypto.so.<span class="number">0</span>.<span class="number">9</span>.<span class="number">8</span>e</span><br><span class="line"><span class="number">00239000</span>-<span class="number">0024c000</span> rwxp <span class="number">00129000 08</span>:<span class="number">02 130647</span>     /lib/libcrypto.so.<span class="number">0</span>.<span class="number">9</span>.<span class="number">8</span>e</span><br><span class="line"><span class="number">0024c000</span>-<span class="number">00250000</span> rwxp <span class="number">0024c000</span> <span class="number">00</span>:<span class="number">00</span> <span class="number">0</span> </span><br><span class="line"><span class="number">00250000</span>-<span class="number">00252000</span> r-xp <span class="number">00000000 08</span>:<span class="number">02 130462</span>     /lib/libdl-<span class="number">2</span>.<span class="number">5</span>.so</span><br><span class="line"><span class="number">00252000</span>-<span class="number">00253000</span> r-xp <span class="number">00001000 08</span>:<span class="number">02 130462</span>     /lib/libdl-<span class="number">2</span>.<span class="number">5</span>.so</span><br></pre></td></tr></table></figure>
+
+<p>1.8、mem — 当前进程所占用的内存空间，由open、read和lseek等系统调用使用，不能被用户读取； </p>
+<p>1.9、root — 指向当前进程运行根目录的符号链接；在Unix和Linux系统上，通常采用chroot命令使每个进程运行于独立的根目录； </p>
+<p>1.10、stat — 当前进程的状态信息，包含一系统格式化后的数据列，可读性差，通常由ps命令使用； </p>
+<p>1.11、statm — 当前进程占用内存的状态信息，通常以“页面”（page）表示； </p>
+<p>1.12、status — 与stat所提供信息类似，但可读性较好，如下所示，每行表示一个属性信息；其详细介绍请参见 proc的man手册页； </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># more /proc/2674/status </span></span><br><span class="line"><span class="attr">Name:</span>   <span class="string">saslauthd</span></span><br><span class="line"><span class="attr">State:</span>  <span class="string">S</span> <span class="string">(sleeping)</span></span><br><span class="line"><span class="attr">SleepAVG:</span>       <span class="number">0</span><span class="string">%</span></span><br><span class="line"><span class="attr">Tgid:</span>   <span class="number">2674</span></span><br><span class="line"><span class="attr">Pid:</span>    <span class="number">2674</span></span><br><span class="line"><span class="attr">PPid:</span>   <span class="number">1</span></span><br><span class="line"><span class="attr">TracerPid:</span>      <span class="number">0</span></span><br><span class="line"><span class="attr">Uid:</span>    <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span></span><br><span class="line"><span class="attr">Gid:</span>    <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span></span><br><span class="line"><span class="attr">FDSize:</span> <span class="number">32</span></span><br><span class="line"><span class="attr">Groups:</span></span><br><span class="line"><span class="attr">VmPeak:</span>     <span class="number">5576 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">VmSize:</span>     <span class="number">5572 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">VmLck:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">VmHWM:</span>       <span class="number">696</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">VmRSS:</span>       <span class="number">696</span> <span class="string">kB</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>1.13、task — 目录文件，包含由当前进程所运行的每一个线程的相关信息，每个线程的相关信息文件均保存在一个由线程号（tid）命名的目录中，这类似于其内容类似于每个进程目录中的内容；（内核2.6版本以后支持此功能） </p>
+<h2 id="x2F-proc目录下常见的文件介绍"><a href="#x2F-proc目录下常见的文件介绍" class="headerlink" title="&#x2F;proc目录下常见的文件介绍"></a>&#x2F;proc目录下常见的文件介绍</h2><p>2.1、&#x2F;proc&#x2F;apm<br>高级电源管理（APM）版本信息及电池相关状态信息，通常由apm命令使用； </p>
+<p>2.2、&#x2F;proc&#x2F;buddyinfo<br>用于诊断内存碎片问题的相关信息文件； </p>
+<p>2.3、&#x2F;proc&#x2F;cmdline<br>在启动时传递至内核的相关参数信息，这些信息通常由lilo或grub等启动管理工具进行传递； </p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/</span>cmdline </span><br><span class="line">ro root=<span class="regexp">/dev/</span>VolGroup00/LogVol00 rhgb quiet</span><br></pre></td></tr></table></figure>
+
+<p>2.4、&#x2F;proc&#x2F;cpuinfo<br>处理器的相关信息的文件； </p>
+<p>2.5、&#x2F;proc&#x2F;crypto<br>系统上已安装的内核使用的密码算法及每个算法的详细信息列表；</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /proc/crypto </span><br><span class="line">name         : <span class="type">crc32c</span></span><br><span class="line">driver       : <span class="type">crc32c</span>-<span class="keyword">generic</span></span><br><span class="line">module       : <span class="type">kernel</span></span><br><span class="line">priority     : 0</span><br><span class="line"><span class="keyword">type</span>         <span class="type">: </span>digest</span><br><span class="line">blocksize    : 32</span><br><span class="line">digestsize   : 4</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.6、&#x2F;proc&#x2F;devices<br>系统已经加载的所有块设备和字符设备的信息，包含主设备号和设备组（与主设备号对应的设备类型）名； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/devices<span class="title"> </span></span><br><span class="line"><span class="title">Character</span> devices:</span><br><span class="line">  1<span class="title"> mem</span></span><br><span class="line">  4 /dev/vc/0</span><br><span class="line">  4<span class="title"> tty</span></span><br><span class="line">  4<span class="title"> ttyS</span></span><br><span class="line">  …………<span class="title"></span></span><br><span class="line"><span class="title"></span></span><br><span class="line"><span class="title">Block</span> devices:</span><br><span class="line">  1<span class="title"> ramdisk</span></span><br><span class="line">  2<span class="title"> fd</span></span><br><span class="line">  8<span class="title"> sd</span></span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+<p>2.7、&#x2F;proc&#x2F;diskstats<br>每块磁盘设备的磁盘I&#x2F;O统计信息列表；（内核2.5.69以后的版本支持此功能） </p>
+<p>2.8、&#x2F;proc&#x2F;dma<br>每个正在使用且注册的ISA DMA通道的信息列表；</p>
+<figure class="highlight ldif"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/dma</span></span><br><span class="line"><span class="attribute">2</span>: floppy</span><br><span class="line"><span class="attribute">4</span>: cascade</span><br></pre></td></tr></table></figure>
+
+<p>2.9、&#x2F;proc&#x2F;execdomains<br>内核当前支持的执行域（每种操作系统独特“个性”）信息列表； </p>
+<figure class="highlight autoit"><table><tr><td class="code"><pre><span class="line">[root<span class="symbol">@rhel5</span> ~]<span class="meta"># more /proc/execdomains </span></span><br><span class="line"><span class="number">0</span><span class="number">-0</span>     Linux                   [kernel]</span><br></pre></td></tr></table></figure>
+
+<p>2.10、&#x2F;proc&#x2F;fb<br>帧缓冲设备列表文件，包含帧缓冲设备的设备号和相关驱动信息； </p>
+<p>2.11、&#x2F;proc&#x2F;filesystems<br>当前被内核支持的文件系统类型列表文件，被标示为nodev的文件系统表示不需要块设备的支持；通常mount一个设备时，如果没有指定文件系统类型将通过此文件来决定其所需文件系统的类型； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/filesystems<span class="title"> </span></span><br><span class="line"><span class="title">nodev</span> <span class="title">  sysfs</span></span><br><span class="line">nodev<span class="title">   rootfs</span></span><br><span class="line">nodev<span class="title">   proc</span></span><br><span class="line"><span class="title">        iso9660</span></span><br><span class="line"><span class="title">        ext3</span></span><br><span class="line">…………</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.12、&#x2F;proc&#x2F;interrupts<br>X86或X86_64体系架构系统上每个IRQ相关的中断号列表；多路处理器平台上每个CPU对于每个I&#x2F;O设备均有自己的中断号； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/interrupts<span class="title"> </span></span><br><span class="line"><span class="title">           CPU0</span>       </span><br><span class="line">  0:    1305421<span class="title">    IO-APIC-edge</span> <span class="title"> timer</span></span><br><span class="line">  1:         61<span class="title">    IO-APIC-edge</span> <span class="title"> i8042</span></span><br><span class="line">185:       1068<span class="title">   IO-APIC-level</span> <span class="title"> eth0</span></span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.13、&#x2F;proc&#x2F;iomem<br>每个物理设备上的记忆体（RAM或者ROM）在系统内存中的映射信息； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/iomem </span><br><span class="line">00000000-0009f7ff :<span class="title"> System</span> RAM</span><br><span class="line">0009f800-0009ffff :<span class="title"> reserved</span></span><br><span class="line">000a0000-000bffff :<span class="title"> Video</span> RAM<span class="title"> area</span></span><br><span class="line">000c0000-000c7fff :<span class="title"> Video</span> ROM</span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+
+<p>2.14、&#x2F;proc&#x2F;ioports<br>当前正在使用且已经注册过的与物理设备进行通讯的输入-输出端口范围信息列表；如下面所示，第一列表示注册的I&#x2F;O端口范围，其后表示相关的设备； </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># less /proc/ioports </span></span><br><span class="line"><span class="attr">0000-001f :</span> <span class="string">dma1</span></span><br><span class="line"><span class="attr">0020-0021 :</span> <span class="string">pic1</span></span><br><span class="line"><span class="attr">0040-0043 :</span> <span class="string">timer0</span></span><br><span class="line"><span class="attr">0050-0053 :</span> <span class="string">timer1</span></span><br><span class="line"><span class="attr">0060-006f :</span> <span class="string">keyboard</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>2.15、&#x2F;proc&#x2F;kallsyms<br>模块管理工具用来动态链接或绑定可装载模块的符号定义，由内核输出；（内核2.5.71以后的版本支持此功能）；通常这个文件中的信息量相当大； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/kallsyms<span class="title"> </span></span><br><span class="line"><span class="title">c04011f0</span> T<span class="title"> _stext</span></span><br><span class="line">c04011f0<span class="title"> t</span> run_init_process<span class="title"></span></span><br><span class="line"><span class="title">c04011f0</span> T<span class="title"> stext</span></span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+<p>2.16、&#x2F;proc&#x2F;kcore<br>系统使用的物理内存，以ELF核心文件（core file）格式存储，其文件大小为已使用的物理内存（RAM）加上4KB；这个文件用来检查内核数据结构的当前状态，因此，通常由GBD通常调试工具使用，但不能使用文件查看命令打开此文件； </p>
+<p>2.17、&#x2F;proc&#x2F;kmsg<br>此文件用来保存由内核输出的信息，通常由&#x2F;sbin&#x2F;klogd或&#x2F;bin&#x2F;dmsg等程序使用，不要试图使用查看命令打开此文件； </p>
+<p>2.18、&#x2F;proc&#x2F;loadavg<br>保存关于CPU和磁盘I&#x2F;O的负载平均值，其前三列分别表示每1秒钟、每5秒钟及每15秒的负载平均值，类似于uptime命令输出的相关信息；第四列是由斜线隔开的两个数值，前者表示当前正由内核调度的实体（进程和线程）的数目，后者表示系统当前存活的内核调度实体的数目；第五列表示此文件被查看前最近一个由内核创建的进程的PID； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/loadavg </span><br><span class="line">0.45 0.12 0.04 4/125 5549</span><br><span class="line"></span><br><span class="line">[root@rhel5 ~]#<span class="title"> uptime</span></span><br><span class="line">06:00:54<span class="title"> up</span>  1:06,  3<span class="title"> users,</span> <span class="title"> load</span> average: 0.45, 0.12, 0.04</span><br></pre></td></tr></table></figure>
+
+<p>2.19、&#x2F;proc&#x2F;locks<br>保存当前由内核锁定的文件的相关信息，包含内核内部的调试数据；每个锁定占据一行，且具有一个惟一的编号；如下输出信息中每行的第二列表示当前锁定使用的锁定类别，POSIX表示目前较新类型的文件锁，由lockf系统调用产生，FLOCK是传统的UNIX文件锁，由flock系统调用产生；第三列也通常由两种类型，ADVISORY表示不允许其他用户锁定此文件，但允许读取，MANDATORY表示此文件锁定期间不允许其他用户任何形式的访问； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/locks </span><br><span class="line">1:<span class="title"> POSIX</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4904<span class="title"> fd:00:4325393</span> 0<span class="title"> EOF</span></span><br><span class="line">2:<span class="title"> POSIX</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4550<span class="title"> fd:00:2066539</span> 0<span class="title"> EOF</span></span><br><span class="line">3:<span class="title"> FLOCK</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4497<span class="title"> fd:00:2066533</span> 0<span class="title"> EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>2.20、&#x2F;proc&#x2F;mdstat<br>保存RAID相关的多块磁盘的当前状态信息，在没有使用RAID机器上，其显示为如下状态： </p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><span class="line">[root<span class="meta">@rhel5</span> ~]<span class="comment"># less /proc/mdstat </span></span><br><span class="line">Personalities : </span><br><span class="line">unused devices: <span class="variable">&lt;none&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2.21、&#x2F;proc&#x2F;meminfo<br>系统中关于当前内存的利用状况等的信息，常由free命令使用；可以使用文件查看命令直接读取此文件，其内容显示为两列，前者为统计属性，后者为对应的值； </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># less /proc/meminfo </span></span><br><span class="line"><span class="attr">MemTotal:</span>       <span class="number">515492</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">MemFree:</span>          <span class="number">8452 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">Buffers:</span>         <span class="number">19724</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">Cached:</span>         <span class="number">376400</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">SwapCached:</span>          <span class="number">4</span> <span class="string">kB</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>2.22、&#x2F;proc&#x2F;mounts<br>在内核2.4.29版本以前，此文件的内容为系统当前挂载的所有文件系统，在2.4.19以后的内核中引进了每个进程使用独立挂载名称空间的方式，此文件则随之变成了指向&#x2F;proc&#x2F;self&#x2F;mounts（每个进程自身挂载名称空间中的所有挂载点列表）文件的符号链接；&#x2F;proc&#x2F;self是一个独特的目录，后文中会对此目录进行介绍； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span> |grep<span class="title"> mounts</span></span><br><span class="line">lrwxrwxrwx  1<span class="title"> root</span> <span class="title">     root</span>             11<span class="title"> Feb</span>  8 06:43<span class="title"> mounts</span> -&gt;<span class="title"> self/mounts</span></span><br></pre></td></tr></table></figure>
+
+<p>如下所示，其中第一列表示挂载的设备，第二列表示在当前目录树中的挂载点，第三点表示当前文件系统的类型，第四列表示挂载属性（ro或者rw），第五列和第六列用来匹配&#x2F;etc&#x2F;mtab文件中的转储（dump）属性； </p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/m</span>ounts </span><br><span class="line">rootfs / rootfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/dev/</span>root / ext3 rw,data=ordered <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/dev /</span>dev tmpfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/proc /</span>proc proc rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/sys /</span>sys sysfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/proc/</span>bus<span class="regexp">/usb /</span>proc<span class="regexp">/bus/u</span>sb usbfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.23、&#x2F;proc&#x2F;modules<br>当前装入内核的所有模块名称列表，可以由lsmod命令使用，也可以直接查看；如下所示，其中第一列表示模块名，第二列表示此模块占用内存空间大小，第三列表示此模块有多少实例被装入，第四列表示此模块依赖于其它哪些模块，第五列表示此模块的装载状态（Live：已经装入；Loading：正在装入；Unloading：正在卸载），第六列表示此模块在内核内存（kernel memory）中的偏移量； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/modules<span class="title"> </span></span><br><span class="line"><span class="title">autofs4</span> 24517 2 -<span class="title"> Live</span> 0xe09f7000<span class="title"></span></span><br><span class="line"><span class="title">hidp</span> 23105 2 -<span class="title"> Live</span> 0xe0a06000<span class="title"></span></span><br><span class="line"><span class="title">rfcomm</span> 42457 0 -<span class="title"> Live</span> 0xe0ab3000<span class="title"></span></span><br><span class="line"><span class="title">l2cap</span> 29505 10<span class="title"> hidp,rfcomm,</span> Live 0xe0aaa000</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.24、&#x2F;proc&#x2F;partitions<br>块设备每个分区的主设备号（major）和次设备号（minor）等信息，同时包括每个分区所包含的块（block）数目（如下面输出中第三列所示）； </p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/partitions </span></span><br><span class="line">major minor  <span class="comment">#blocks  name</span></span><br><span class="line"></span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 0 </span> <span class="number"> 20971520 </span>sda</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 1 </span>   <span class="number"> 104391 </span>sda1</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 2 </span>  <span class="number"> 6907950 </span>sda2</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 3 </span>  <span class="number"> 5630782 </span>sda3</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 4 </span>        <span class="number"> 1 </span>sda4</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 5 </span>  <span class="number"> 3582463 </span>sda5</span><br></pre></td></tr></table></figure>
+
+<p>2.25、&#x2F;proc&#x2F;pci<br>内核初始化时发现的所有PCI设备及其配置信息列表，其配置信息多为某PCI设备相关IRQ信息，可读性不高，可以用“&#x2F;sbin&#x2F;lspci –vb”命令获得较易理解的相关信息；在2.6内核以后，此文件已为&#x2F;proc&#x2F;bus&#x2F;pci目录及其下的文件代替； </p>
+<p>2.26、&#x2F;proc&#x2F;slabinfo<br>在内核中频繁使用的对象（如inode、dentry等）都有自己的cache，即slab pool，而&#x2F;proc&#x2F;slabinfo文件列出了这些对象相关slap的信息；详情可以参见内核文档中slapinfo的手册页； </p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/slabinfo </span></span><br><span class="line">slabinfo - version: 2.1</span><br><span class="line"><span class="comment"># name            &lt;active_objs&gt; &lt;num_objs&gt; &lt;objsize&gt; &lt;objperslab&gt; &lt;pagesperslab&gt; : tunables &lt;limit&gt; &lt;batchcount&gt; &lt;sharedfactor&gt; : slabdata &lt;ac</span></span><br><span class="line">tive_slabs&gt; &lt;num_slabs&gt; &lt;sharedavail&gt;</span><br><span class="line">rpc_buffers           <span class="number"> 8 </span>    <span class="number"> 8 </span> <span class="number"> 2048 </span>  <span class="number"> 2 </span>  <span class="number"> 1 </span>: tunables  <span class="number"> 24 </span> <span class="number"> 12 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 4 </span>    <span class="number"> 4 </span>     0</span><br><span class="line">rpc_tasks             <span class="number"> 8 </span>   <span class="number"> 20 </span>  <span class="number"> 192 </span> <span class="number"> 20 </span>  <span class="number"> 1 </span>: tunables <span class="number"> 120 </span> <span class="number"> 60 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 1 </span>    <span class="number"> 1 </span>     0</span><br><span class="line">rpc_inode_cache       <span class="number"> 6 </span>    <span class="number"> 9 </span>  <span class="number"> 448 </span>  <span class="number"> 9 </span>  <span class="number"> 1 </span>: tunables  <span class="number"> 54 </span> <span class="number"> 27 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 1 </span>    <span class="number"> 1 </span>     0</span><br><span class="line">…………</span><br><span class="line">…………</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.27、&#x2F;proc&#x2F;stat<br>实时追踪自系统上次启动以来的多种统计信息；如下所示，其中，<br>“cpu”行后的八个值分别表示以1&#x2F;100（jiffies）秒为单位的统计值（包括系统运行于用户模式、低优先级用户模式，运系统模式、空闲模式、I&#x2F;O等待模式的时间等）；<br>“intr”行给出中断的信息，第一个为自系统启动以来，发生的所有的中断的次数；然后每个数对应一个特定的中断自系统启动以来所发生的次数；<br>“ctxt”给出了自系统启动以来CPU发生的上下文交换的次数。<br>“btime”给出了从系统启动到现在为止的时间，单位为秒；<br>“processes (total_forks) 自系统启动以来所创建的任务的个数目；<br>“procs_running”：当前运行队列的任务的数目；<br>“procs_blocked”：当前被阻塞的任务的数目； </p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/stat</span></span><br><span class="line">cpu <span class="number"> 2751 </span>26<span class="number"> 5771 </span>266413<span class="number"> 2555 </span>99<span class="number"> 411 </span>0</span><br><span class="line">cpu0<span class="number"> 2751 </span>26<span class="number"> 5771 </span>266413<span class="number"> 2555 </span>99<span class="number"> 411 </span>0</span><br><span class="line">intr<span class="number"> 2810179 </span>2780489<span class="number"> 67 </span>0<span class="number"> 3 </span>3<span class="number"> 0 </span>5<span class="number"> 0 </span>1<span class="number"> 0 </span>0<span class="number"> 0 </span>1707<span class="number"> 0 </span>0<span class="number"> 9620 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span></span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0 </span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>5504<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>12781<span class="number"> 0 </span>0 0</span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0 0</span><br><span class="line">ctxt 427300</span><br><span class="line">btime 1234084100</span><br><span class="line">processes 3491</span><br><span class="line">procs_running 1</span><br><span class="line">procs_blocked 0</span><br></pre></td></tr></table></figure>
+
+<p>2.28、&#x2F;proc&#x2F;swaps<br>当前系统上的交换分区及其空间利用信息，如果有多个交换分区的话，则会每个交换分区的信息分别存储于&#x2F;proc&#x2F;swap目录中的单独文件中，而其优先级数字越低，被使用到的可能性越大；下面是作者系统中只有一个交换分区时的输出信息； </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/swaps<span class="title"> </span></span><br><span class="line"><span class="title">Filename</span> <span class="title">                               Type</span> <span class="title">           Size</span> <span class="title">   Used</span> <span class="title">   Priority</span></span><br><span class="line">/dev/sda8<span class="title">                               partition</span>       642560  0       -1</span><br></pre></td></tr></table></figure>
+
+<p>2.29、&#x2F;proc&#x2F;uptime<br>系统上次启动以来的运行时间，如下所示，其第一个数字表示系统运行时间，第二个数字表示系统空闲时间，单位是秒； </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># more /proc/uptime </span></span><br><span class="line"><span class="number">3809.86 </span><span class="number">3714.13</span></span><br></pre></td></tr></table></figure>
+
+<p>2.30、&#x2F;proc&#x2F;version<br>当前系统运行的内核版本号，在作者的RHEL5.3上还会显示系统安装的gcc版本，如下所示； </p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-attr">[root@rhel5 ~]</span># <span class="selector-tag">more</span> /<span class="selector-tag">proc</span>/<span class="selector-tag">version</span> </span><br><span class="line"><span class="selector-tag">Linux</span> <span class="selector-tag">version</span> <span class="number">2.6</span><span class="selector-class">.18-128</span><span class="selector-class">.el5</span> (mockbuild<span class="variable">@hs20-bc1-5</span>.build.redhat.com) (gcc version <span class="number">4.1</span>.<span class="number">2</span> <span class="number">20080704</span> (Red Hat <span class="number">4.1</span>.<span class="number">2</span>-<span class="number">44</span>)) <span class="selector-id">#1</span> <span class="selector-tag">SMP</span> <span class="selector-tag">Wed</span> <span class="selector-tag">Dec</span> <span class="number">17</span> <span class="number">11</span>:<span class="number">42</span>:<span class="number">39</span> <span class="selector-tag">EST</span> <span class="number">2008</span></span><br></pre></td></tr></table></figure>
+
+<p>2.31、&#x2F;proc&#x2F;vmstat<br>当前系统虚拟内存的多种统计数据，信息量可能会比较大，这因系统而有所不同，可读性较好；下面为作者机器上输出信息的一个片段；（2.6以后的内核支持此文件） </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/vmstat<span class="title"> </span></span><br><span class="line"><span class="title">nr_anon_pages</span> 22270<span class="title"></span></span><br><span class="line"><span class="title">nr_mapped</span> 8542<span class="title"></span></span><br><span class="line"><span class="title">nr_file_pages</span> 47706<span class="title"></span></span><br><span class="line"><span class="title">nr_slab</span> 4720<span class="title"></span></span><br><span class="line"><span class="title">nr_page_table_pages</span> 897<span class="title"></span></span><br><span class="line"><span class="title">nr_dirty</span> 21<span class="title"></span></span><br><span class="line"><span class="title">nr_writeback</span> 0</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.32、&#x2F;proc&#x2F;zoneinfo<br>内存区域（zone）的详细信息列表，信息量较大，下面列出的是一个输出片段： </p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/zoneinfo<span class="title"> </span></span><br><span class="line"><span class="title">Node</span> 0,<span class="title"> zone</span> <span class="title">     DMA</span></span><br><span class="line"><span class="title">  pages</span> free     1208<span class="title"></span></span><br><span class="line"><span class="title">        min</span>      28<span class="title"></span></span><br><span class="line"><span class="title">        low</span>      35<span class="title"></span></span><br><span class="line"><span class="title">        high</span>     42<span class="title"></span></span><br><span class="line"><span class="title">        active</span>   439<span class="title"></span></span><br><span class="line"><span class="title">        inactive</span> 1139<span class="title"></span></span><br><span class="line"><span class="title">        scanned</span>  0 (a: 7<span class="title"> i:</span> 30)<span class="title"></span></span><br><span class="line"><span class="title">        spanned</span>  4096<span class="title"></span></span><br><span class="line"><span class="title">        present</span>  4096<span class="title"></span></span><br><span class="line"><span class="title">    nr_anon_pages</span> 192<span class="title"></span></span><br><span class="line"><span class="title">    nr_mapped</span>    141<span class="title"></span></span><br><span class="line"><span class="title">    nr_file_pages</span> 1385<span class="title"></span></span><br><span class="line"><span class="title">    nr_slab</span>      253<span class="title"></span></span><br><span class="line"><span class="title">    nr_page_table_pages</span> 2<span class="title"></span></span><br><span class="line"><span class="title">    nr_dirty</span>     523<span class="title"></span></span><br><span class="line"><span class="title">    nr_writeback</span> 0<span class="title"></span></span><br><span class="line"><span class="title">    nr_unstable</span>  0<span class="title"></span></span><br><span class="line"><span class="title">    nr_bounce</span>    0<span class="title"></span></span><br><span class="line"><span class="title">        protection:</span> (0, 0, 296, 296)<span class="title"></span></span><br><span class="line"><span class="title">  pagesets</span></span><br><span class="line"><span class="title">  all_unreclaimable:</span> 0<span class="title"></span></span><br><span class="line"><span class="title">  prev_priority:</span>     12<span class="title"></span></span><br><span class="line"><span class="title">  start_pfn:</span>         0</span><br><span class="line">…………</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="x2F-proc-x2F-sys目录详解"><a href="#x2F-proc-x2F-sys目录详解" class="headerlink" title="&#x2F;proc&#x2F;sys目录详解"></a>&#x2F;proc&#x2F;sys目录详解</h2><p>与&#x2F;proc下其它文件的“只读”属性不同的是，管理员可对&#x2F;proc&#x2F;sys子目录中的许多文件内容进行修改以更改内核的运行特性，事先可以使用“ls -l”命令查看某文件是否“可写入”。写入操作通常使用类似于“echo DATA &gt; &#x2F;path&#x2F;to&#x2F;your&#x2F;filename”的格式进行。需要注意的是，即使文件可写，其一般也不可以使用编辑器进行编辑。 </p>
+<p>3.1、&#x2F;proc&#x2F;sys&#x2F;debug 子目录<br>此目录通常是一空目录； </p>
+<p>3.2、&#x2F;proc&#x2F;sys&#x2F;dev 子目录 </p>
+<p>为系统上特殊设备提供参数信息文件的目录，其不同设备的信息文件分别存储于不同的子目录中，如大多数系统上都会具有的&#x2F;proc&#x2F;sys&#x2F;dev&#x2F;cdrom和&#x2F;proc&#x2F;sys&#x2F;dev&#x2F;raid（如果内核编译时开启了支持raid的功能） 目录，其内存储的通常是系统上cdrom和raid的相关参数信息文件。 </p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -140,6 +308,144 @@
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux目录详解</title>
+    <url>/2023/07/01/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="linux目录详解"><a href="#linux目录详解" class="headerlink" title="linux目录详解"></a>linux目录详解</h1><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;bin</td>
+<td>存放二进制可执行文件(ls,cat,mkdir等)，常用命令一般都在这里。</td>
+</tr>
+<tr>
+<td>&#x2F;home</td>
+<td>存放所有用户文件的根目录，是用户主目录的基点，比如用户user的主目录就是&#x2F;home&#x2F;user，可以用~user表示</td>
+</tr>
+<tr>
+<td>&#x2F;usr</td>
+<td>用于存放系统应用程序，比较重要的目录 &#x2F;usr&#x2F;local 本地系统管理员软件安装目录（安装系统级的应用）。这是最庞大的目录，要用到的应用程序和文件几乎都在这个目录。 &#x2F;usr&#x2F;x11r6 存放x window的目录 &#x2F;usr&#x2F;bin 众多的应用程序 &#x2F;usr&#x2F;sbin 超级用户的一些管理程序 &#x2F;usr&#x2F;doc linux文档 &#x2F;usr&#x2F;include linux下开发和编译应用程序所需要的头文件 &#x2F;usr&#x2F;lib 常用的动态链接库和软件包的配置文件 &#x2F;usr&#x2F;man 帮助文档 &#x2F;usr&#x2F;src 源代码，linux内核的源代码就放在&#x2F;usr&#x2F;src&#x2F;linux里 &#x2F;usr&#x2F;local&#x2F;bin 本地增加的命令 &#x2F;usr&#x2F;local&#x2F;lib 本地增加的库</td>
+</tr>
+<tr>
+<td>&#x2F;opt</td>
+<td>额外安装的可选应用程序包所放置的位置。一般情况下，我们可以把tomcat等都安装到这里。</td>
+</tr>
+<tr>
+<td>&#x2F;proc</td>
+<td>虚拟文件系统目录，是系统内存的映射。可直接访问这个目录来获取系统信息。</td>
+</tr>
+<tr>
+<td>&#x2F;root</td>
+<td>超级用户（系统管理员）的主目录（特权阶级^o^）</td>
+</tr>
+<tr>
+<td>&#x2F;sbin</td>
+<td>存放二进制可执行文件，只有root才能访问。这里存放的是系统管理员使用的系统级别的管理命令和程序。如ifconfig等。</td>
+</tr>
+<tr>
+<td>&#x2F;dev</td>
+<td>用于存放设备文件。</td>
+</tr>
+<tr>
+<td>&#x2F;mnt</td>
+<td>系统管理员安装临时文件系统的安装点，系统提供这个目录是让用户临时挂载其他的文件系统。</td>
+</tr>
+<tr>
+<td>&#x2F;boot</td>
+<td>存放用于系统引导时使用的各种文件</td>
+</tr>
+<tr>
+<td>&#x2F;lib</td>
+<td>存放跟文件系统中的程序运行所需要的共享库及内核模块。共享库又叫动态链接共享库，作用类似windows里的.dll文件，存放了根文件系统程序运行所需的共享文件。</td>
+</tr>
+<tr>
+<td>&#x2F;tmp</td>
+<td>用于存放各种临时文件，是公用的临时文件存储点。</td>
+</tr>
+<tr>
+<td>&#x2F;var</td>
+<td>用于存放运行时需要改变数据的文件，也是某些大文件的溢出区，比方说各种服务的日志文件（系统启动日志等。）等。</td>
+</tr>
+<tr>
+<td>&#x2F;lost+found</td>
+<td>这个目录平时是空的，系统非正常关机而留下“无家可归”的文件（windows下叫什么.chk）就在这里</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h2 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h2><p>学习文件系统的意义在于文件系统有很多设计思路可以迁移到实际的工作场景中，比如：</p>
+<ul>
+<li>MySQL 的 binlog 和 Redis AOF 都像极了日志文件系统的设计；</li>
+<li>B Tree 用于加速磁盘数据访问的设计，对于索引设计也有通用的意义。</li>
+</ul>
+<p>特别是近年来分布式系统的普及，学习分布式文件系统，也是理解分布式架构最核心的一个环节。其实文件系统最精彩的还是虚拟文件系统的设计，比如 Linux 可以支持每个目录用不同的文件系统。这些文件看上去是一个个目录和文件，实际上可能是磁盘、内存、网络文件系统、远程磁盘、网卡、随机数产生器、输入输出设备等，这样虚拟文件系统就成了整合一切设备资源的平台。大量的操作都可以抽象成对文件的操作，程序的书写就会完整而统一，且扩展性强。</p>
+<p>这一讲，我会从 Linux 的目录结构和用途开始，带你认识 Linux 的文件系统。Linux 所有的文件都建立在虚拟文件系统（Virtual File System ，VFS）之上，如下图所示：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/Cip5yF_jAd-APzhvAADyJAEGLTc170.png" alt="Lark20201223-163616.png"></p>
+<p>当你访问一个目录或者文件，虽然用的是 Linux 标准的文件 API 对文件进行操作，但实际操作的可能是磁盘、内存、网络或者数据库等。<strong>因此，Linux 上不同的目录可能是不同的磁盘，不同的文件可能是不同的设备</strong>。</p>
+<h3 id="分区结构"><a href="#分区结构" class="headerlink" title="分区结构"></a>分区结构</h3><p>在 Linux 中，<code>/</code>是根目录。之前我们在“<strong>08 讲</strong>”提到过，每个目录可以是不同的文件系统（不同的磁盘或者设备）。你可能会问我，<code>/</code>是对应一个磁盘还是多个磁盘呢？在<code>/</code>创建目录的时候，目录属于哪个磁盘呢？</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/CgpVE1_jAeqAern4AAH5hspmQ0Y638.png" alt="Drawing 1.png"></p>
+<p>你可以用<code>df -h</code>查看上面两个问题的答案，在上图中我的<code>/</code>挂载到了<code>/dev/sda5</code>上。如果你想要看到更多信息，可以使用<code>df -T</code>，如下图所示：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/CgpVE1_jAfGAf6BqAAGJaAmhd0Q927.png" alt="Drawing 2.png"></p>
+<p><code>/</code>的文件系统类型是<code>ext4</code>。这是一种常用的日志文件系统。关于日志文件系统，我会在“<strong>30 讲”</strong>为你介绍。然后你可能还会有一个疑问，<code>/dev/sda5</code>究竟是一块磁盘还是别的什么？这个时候你可以用<code>fdisk -l</code>查看，结果如下图：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/CgqCHl_jAf-AGBtKAANDnVrYDh0934.png" alt="Drawing 3.png"></p>
+<p>你可以看到我的 Linux 虚拟机上，有一块 30G 的硬盘（当然是虚拟的）。然后这块硬盘下有 3 个设备（Device）：&#x2F;dev&#x2F;sda1, &#x2F;dev&#x2F;sda2 和 &#x2F;dev&#x2F;sda5。在 Linux 中，数字 1~4 结尾的是主分区，通常一块磁盘最多只能有 4 个主分区用于系统启动。主分区之下，还可以再分成若干个逻辑分区，4 以上的数字都是逻辑分区。因此<code>/dev/sda2</code>和<code>/dev/sda5</code>是主分区包含逻辑分区的关系。</p>
+<h3 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h3><p>分区结构最终需要最终挂载到目录上。上面例子中<code>/dev/sda5</code>分区被挂载到了<code>/</code>下。 这样在<code>/</code>创建的文件都属于这个<code>/dev/sda5</code>分区。 另外，<code>/dev/sda5</code>采用<code>ext4</code>文件系统。可见<strong>不同的目录可以采用不同的文件系统</strong>。</p>
+<p>将一个文件系统映射到某个目录的过程叫作挂载（Mount）。当然这里的文件系统可以是某个分区、某个 USB 设备，也可以是某个读卡器等。你可以用<code>mount -l</code>查看已经挂载的文件系统。</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/Cip5yF_jAfeAIaUWAANFrmAEXQM991.png" alt="Drawing 4.png"></p>
+<p>上图中的<code>sysfs``proc``devtmpfs``tmpfs``ext4</code>都是不同的文件系统，下面我们来说说它们的作用。</p>
+<ul>
+<li><code>sysfs</code>让用户通过文件访问和设置设备驱动信息。</li>
+<li><code>proc</code>是一个虚拟文件系统，让用户可以通过文件访问内核中的进程信息。</li>
+<li><code>devtmpfs</code>在内存中创造设备文件节点。</li>
+<li><code>tmpfs</code>用内存模拟磁盘文件。</li>
+<li><code>ext4</code>是一个通常意义上我们认为的文件系统，也是管理磁盘上文件用的系统。</li>
+</ul>
+<p>你可以看到挂载记录中不仅有文件系统类型，挂载的目录（on 后面部分），还有读写的权限等。你也可以用<code>mount</code>指令挂载一个文件系统到某个目录，比如说：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mount /dev/sda6 /abc</span><br></pre></td></tr></table></figure>
+
+<p>上面这个命令将<code>/dev/sda6</code>挂载到目录<code>abc</code>。</p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p>因为 Linux 内文件系统较多，用途繁杂，Linux 对文件系统中的目录进行了一定的归类，如下图所示：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/linux%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3.assets/Ciqc1F_jAhGADnWLAAFf1qd349k816.png" alt="Lark20201223-163621.png"></p>
+<p><strong>最顶层的目录称作根目录，</strong> 用<code>/</code>表示。<code>/</code>目录下用户可以再创建目录，但是有一些目录随着系统创建就已经存在，接下来我会和你一起讨论下它们的用途。</p>
+<p><strong>&#x2F;bin（二进制</strong>）包含了许多所有用户都可以访问的可执行文件，如 ls, cp, cd 等。这里的大多数程序都是二进制格式的，因此称作<code>bin</code>目录。<code>bin</code>是一个命名习惯，比如说<code>nginx</code>中的可执行文件会在 Nginx 安装目录的 bin 文件夹下面。</p>
+<p><strong>&#x2F;dev（设备文件）</strong> 通常挂载在<code>devtmpfs</code>文件系统上，里面存放的是设备文件节点。通常直接和内存进行映射，而不是存在物理磁盘上。</p>
+<p>值得一提的是其中有几个有趣的文件，它们是虚拟设备。</p>
+<p><strong>&#x2F;dev&#x2F;null</strong>是可以用来销毁任何输出的虚拟设备。你可以用<code>&gt;</code>重定向符号将任何输出流重定向到<code>/dev/null</code>来忽略输出的结果。</p>
+<p><strong>&#x2F;dev&#x2F;zero</strong>是一个产生数字 0 的虚拟设备。无论你对它进行多少次读取，都会读到 0。</p>
+<p><strong>&#x2F;dev&#x2F;ramdom</strong>是一个产生随机数的虚拟设备。读取这个文件中数据，你会得到一个随机数。你不停地读取这个文件，就会得到一个随机数的序列。</p>
+<p><strong>&#x2F;etc（配置文件），</strong><code>/etc</code>名字的含义是<code>and so on……</code>，也就是“等等及其他”，Linux 用它来保管程序的配置。比如说<code>mysql</code>通常会在<code>/etc/mysql</code>下创建配置。再比如说<code>/etc/passwd</code>是系统的用户配置，存储了用户信息。</p>
+<p><strong>&#x2F;proc（进程和内核文件）</strong> 存储了执行中进程和内核的信息。比如你可以通过<code>/proc/1122</code>目录找到和进程<code>1122</code>关联的全部信息。还可以在<code>/proc/cpuinfo</code>下找到和 CPU 相关的全部信息。</p>
+<p><strong>&#x2F;sbin（系统二进制）</strong> 和<code>/bin</code>类似，通常是系统启动必需的指令，也可以包括管理员才会使用的指令。</p>
+<p><strong>&#x2F;tmp（临时文件）</strong> 用于存放应用的临时文件，通常用的是<code>tmpfs</code>文件系统。因为<code>tmpfs</code>是一个内存文件系统，系统重启的时候清除<code>/tmp</code>文件，所以这个目录不能放应用和重要的数据。</p>
+<p><strong>&#x2F;var （Variable data file,，可变数据文件）</strong> 用于存储运行时的数据，比如日志通常会存放在<code>/var/log</code>目录下面。再比如应用的缓存文件、用户的登录行为等，都可以放到<code>/var</code>目录下，<code>/var</code>下的文件会长期保存。</p>
+<p><strong>&#x2F;boot（启动）</strong> 目录下存放了 Linux 的内核文件和启动镜像，通常这个目录会写入磁盘最头部的分区，启动的时候需要加载目录内的文件。</p>
+<p><strong>&#x2F;opt（Optional Software，可选软件）</strong> 通常会把第三方软件安装到这个目录。以后你安装软件的时候，可以考虑在这个目录下创建。</p>
+<p><strong>&#x2F;root（root 用户家目录）</strong> 为了防止误操作，Linux 设计中 root 用户的家目录没有设计在<code>/home/root</code>下，而是放到了<code>/root</code>目录。</p>
+<p><strong>&#x2F;home（家目录）</strong> 用于存放用户的个人数据，比如用户<code>lagou</code>的个人数据会存放到<code>/home/lagou</code>下面。并且通常在用户登录，或者执行<code>cd</code>指令后，都会在家目录下工作。 用户通常会对自己的家目录拥有管理权限，而无法访问其他用户的家目录。</p>
+<p><strong>&#x2F;media（媒体）</strong> 自动挂载的设备通常会出现在<code>/media</code>目录下。比如你插入 U 盘，通常较新版本的 Linux 都会帮你自动完成挂载，也就是在<code>/media</code>下创建一个目录代表 U 盘。</p>
+<p><strong>&#x2F;mnt（Mount，挂载）</strong> 我们习惯把手动挂载的设备放到这个目录。比如你插入 U 盘后，如果 Linux 没有帮你完成自动挂载，可以用<code>mount</code>命令手动将 U 盘内容挂载到<code>/mnt</code>目录下。</p>
+<p><strong>&#x2F;svr（Service Data,，服务数据）</strong> 通常用来存放服务数据，比如说你开发的网站资源文件（脚本、网页等）。不过现在很多团队的习惯发生了变化， 有的团队会把网站相关的资源放到<code>/www</code>目录下，也有的团队会放到<code>/data</code>下。总之，在存放资源的角度，还是比较灵活的。</p>
+<p><strong>&#x2F;usr（Unix System Resource）</strong> 包含系统需要的资源文件，通常应用程序会把后来安装的可执行文件也放到这个目录下，比如说</p>
+<ul>
+<li><code>vim</code>编辑器的可执行文件通常会在<code>/usr/bin</code>目录下，区别于<code>ls</code>会在<code>/bin</code>目录下</li>
+<li><code>/usr/sbin</code>中会包含有通常系统管理员才会使用的指令。</li>
+<li><code>/usr/lib</code>目录中存放系统的库文件，比如一些重要的对象和动态链接库文件。</li>
+<li><code>/usr/lib</code>目录下会有大量的<code>.so</code>文件，这些叫作<code>Shared Object</code>，类似<code>windows</code>下的<code>dll</code>文件。</li>
+<li><code>/usr/share</code>目录下主要是文档，比如说 man 的文档都在<code>/usr/share/man</code>下面。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一讲我们了解了 Linux 虚拟文件系统的设计，并且熟悉了 Linux 的目录结构。我曾经看到不少程序员把程序装到了<code>/home</code>目录，也看到过不少程序员将数据放到了<code>/root</code>目录。这样做并不会带来致命性问题，但是会给其他和你一起工作的同事带来困扰。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>

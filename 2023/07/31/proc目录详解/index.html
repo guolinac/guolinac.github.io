@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/haon2.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/haon2.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-mac-osx.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guolinac.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="proc目录详解Linux系统上的&#x2F;proc目录是一种文件系统，即proc文件系统。与其它常见的文件系统不同的是，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态。  基于&#x2F;proc文件系统如上所述的特殊性，其内的文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="proc目录详解">
+<meta property="og:url" content="https://guolinac.github.io/2023/07/31/proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="郭霖的博客">
+<meta property="og:description" content="proc目录详解Linux系统上的&#x2F;proc目录是一种文件系统，即proc文件系统。与其它常见的文件系统不同的是，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态。  基于&#x2F;proc文件系统如上所述的特殊性，其内的文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-30T16:21:00.000Z">
+<meta property="article:modified_time" content="2023-07-30T17:14:13.425Z">
+<meta property="article:author" content="郭霖">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guolinac.github.io/2023/07/31/proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>proc目录详解 | 郭霖的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">郭霖的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">腾讯音乐实习ing</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">31</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guolinac.github.io/2023/07/31/proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/haon1.jpg">
+      <meta itemprop="name" content="郭霖">
+      <meta itemprop="description" content="wx: Acwx763">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="郭霖的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          proc目录详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-07-31 00:21:00 / 修改时间：01:14:13" itemprop="dateCreated datePublished" datetime="2023-07-31T00:21:00+08:00">2023-07-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>11 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+      
+        <h1 id="proc目录详解"><a href="#proc目录详解" class="headerlink" title="proc目录详解"></a>proc目录详解</h1><p>Linux系统上的&#x2F;proc目录是一种文件系统，即proc文件系统。与其它常见的文件系统不同的是，&#x2F;proc是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，用户可以通过这些文件查看有关系统硬件及当前正在运行进程的信息，甚至可以通过更改其中某些文件来改变内核的运行状态。 </p>
+<p>基于&#x2F;proc文件系统如上所述的特殊性，其内的文件也常被称作虚拟文件，并具有一些独特的特点。例如，其中有些文件虽然使用查看命令查看时会返回大量信息，但文件本身的大小却会显示为0字节。此外，这些特殊文件中大多数文件的时间及日期属性通常为当前系统时间和日期，这跟它们随时会被刷新（存储于RAM中）有关。 </p>
+<p>为了查看及使用上的方便，这些文件通常会按照相关性进行分类存储于不同的目录甚至子目录中，如&#x2F;proc&#x2F;scsi目录中存储的就是当前系统上所有SCSI设备的相关信息，&#x2F;proc&#x2F;N中存储的则是系统当前正在运行的进程的相关信息，其中N为正在运行的进程（可以想象得到，在某进程结束后其相关目录则会消失）。 </p>
+<p>大多数虚拟文件可以使用文件查看命令如cat、more或者less进行查看，有些文件信息表述的内容可以一目了然，但也有文件的信息却不怎么具有可读性。不过，这些可读性较差的文件在使用一些命令如apm、free、lspci或top查看时却可以有着不错的表现。</p>
+<span id="more"></span>
+
+<h2 id="进程目录中的常见文件介绍"><a href="#进程目录中的常见文件介绍" class="headerlink" title="进程目录中的常见文件介绍"></a>进程目录中的常见文件介绍</h2><p>&#x2F;proc目录中包含许多以数字命名的子目录，这些数字表示系统当前正在运行进程的进程号，里面包含对应进程相关的多个信息文件。 </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span><span class="title"></span></span><br><span class="line"><span class="title">total</span> 0<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 1<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 10<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 11<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 1156<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 139<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 140<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:08 141<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:09 1417<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span>  5<span class="title"> root</span> <span class="title">     root</span>              0<span class="title"> Feb</span>  8 17:09 1418</span><br></pre></td></tr></table></figure>
+
+<p>上面列出的是&#x2F;proc目录中一些进程相关的目录，每个目录中是当程本身相关信息的文件。下面是作者系统（RHEL5.3）上运行的一个PID为2674的进程saslauthd的相关文件，其中有些文件是每个进程都会具有的，后文会对这些常见文件做出说明。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span>/2674<span class="title"></span></span><br><span class="line"><span class="title">total</span> 0<span class="title"></span></span><br><span class="line"><span class="title">dr-xr-xr-x</span> 2<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> attr</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> auxv</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> cmdline</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> coredump_filter</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> cpuset</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> cwd</span> -&gt; /var/run/saslauthd</span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> environ</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> exe</span> -&gt; /usr/sbin/saslauthd<span class="title"></span></span><br><span class="line"><span class="title">dr-x------</span> 2<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> fd</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> limits</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> loginuid</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> maps</span></span><br><span class="line">-rw------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mem</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mounts</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> mountstats</span></span><br><span class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> oom_adj</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> oom_score</span></span><br><span class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> root</span> -&gt; /</span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> schedstat</span></span><br><span class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> smaps</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:09<span class="title"> stat</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> statm</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:10<span class="title"> status</span></span><br><span class="line">dr-xr-xr-x 3<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:15<span class="title"> task</span></span><br><span class="line">-r--r--r-- 1<span class="title"> root</span> root 0<span class="title"> Feb</span>  8 17:14<span class="title"> wchan</span></span><br></pre></td></tr></table></figure>
+
+<p>1.1、cmdline — 启动当前进程的完整命令，但僵尸进程目录中的此文件不包含任何信息； </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/</span><span class="number">2674</span>/cmdline </span><br><span class="line"><span class="regexp">/usr/</span>sbin/saslauthd</span><br></pre></td></tr></table></figure>
+
+<p>1.2、cwd — 指向当前进程运行目录的一个符号链接； </p>
+<p>1.3、environ — 当前进程的环境变量列表，彼此间用空字符（NULL）隔开；变量用大写字母表示，其值用小写字母表示；</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[root@rhel5 ~]</span><span class="comment"># more /proc/2674/environ </span></span><br><span class="line"><span class="attr">TERM</span>=linuxauthd</span><br></pre></td></tr></table></figure>
+
+<p>1.4、exe — 指向启动当前进程的可执行文件（完整路径）的符号链接，通过&#x2F;proc&#x2F;N&#x2F;exe可以启动当前进程的一个拷贝； </p>
+<p>1.5、fd — 这是个目录，包含当前进程打开的每一个文件的文件描述符（file descriptor），这些文件描述符是指向实际文件的一个符号链接； </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># ll /proc/2674/fd</span></span><br><span class="line">total 0</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 0 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 1 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 2 </span>-&gt; /dev/null</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 3 </span>-&gt; socket:[7990]</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 4 </span>-&gt; /var/run/saslauthd/saslauthd.pid</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 5 </span>-&gt; socket:[7991]</span><br><span class="line">lrwx------<span class="number"> 1 </span>root root<span class="number"> 64 </span>Feb <span class="number"> 8 </span>17:17<span class="number"> 6 </span>-&gt; /var/run/saslauthd/mux.accept</span><br></pre></td></tr></table></figure>
+
+<p>1.6、limits — 当前进程所使用的每一个受限资源的软限制、硬限制和管理单元；此文件仅可由实际启动当前进程的UID用户读取；（2.6.24以后的内核版本支持此功能）； </p>
+<p>1.7、maps — 当前进程关联到的每个可执行文件和库文件在内存中的映射区域及其访问权限所组成的列表；</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# cat /proc/<span class="number">2674</span>/maps </span><br><span class="line"><span class="number">00110000</span>-<span class="number">00239000</span> r-xp <span class="number">00000000 08</span>:<span class="number">02 130647</span>     /lib/libcrypto.so.<span class="number">0</span>.<span class="number">9</span>.<span class="number">8</span>e</span><br><span class="line"><span class="number">00239000</span>-<span class="number">0024c000</span> rwxp <span class="number">00129000 08</span>:<span class="number">02 130647</span>     /lib/libcrypto.so.<span class="number">0</span>.<span class="number">9</span>.<span class="number">8</span>e</span><br><span class="line"><span class="number">0024c000</span>-<span class="number">00250000</span> rwxp <span class="number">0024c000</span> <span class="number">00</span>:<span class="number">00</span> <span class="number">0</span> </span><br><span class="line"><span class="number">00250000</span>-<span class="number">00252000</span> r-xp <span class="number">00000000 08</span>:<span class="number">02 130462</span>     /lib/libdl-<span class="number">2</span>.<span class="number">5</span>.so</span><br><span class="line"><span class="number">00252000</span>-<span class="number">00253000</span> r-xp <span class="number">00001000 08</span>:<span class="number">02 130462</span>     /lib/libdl-<span class="number">2</span>.<span class="number">5</span>.so</span><br></pre></td></tr></table></figure>
+
+<p>1.8、mem — 当前进程所占用的内存空间，由open、read和lseek等系统调用使用，不能被用户读取； </p>
+<p>1.9、root — 指向当前进程运行根目录的符号链接；在Unix和Linux系统上，通常采用chroot命令使每个进程运行于独立的根目录； </p>
+<p>1.10、stat — 当前进程的状态信息，包含一系统格式化后的数据列，可读性差，通常由ps命令使用； </p>
+<p>1.11、statm — 当前进程占用内存的状态信息，通常以“页面”（page）表示； </p>
+<p>1.12、status — 与stat所提供信息类似，但可读性较好，如下所示，每行表示一个属性信息；其详细介绍请参见 proc的man手册页； </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># more /proc/2674/status </span></span><br><span class="line"><span class="attr">Name:</span>   <span class="string">saslauthd</span></span><br><span class="line"><span class="attr">State:</span>  <span class="string">S</span> <span class="string">(sleeping)</span></span><br><span class="line"><span class="attr">SleepAVG:</span>       <span class="number">0</span><span class="string">%</span></span><br><span class="line"><span class="attr">Tgid:</span>   <span class="number">2674</span></span><br><span class="line"><span class="attr">Pid:</span>    <span class="number">2674</span></span><br><span class="line"><span class="attr">PPid:</span>   <span class="number">1</span></span><br><span class="line"><span class="attr">TracerPid:</span>      <span class="number">0</span></span><br><span class="line"><span class="attr">Uid:</span>    <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span></span><br><span class="line"><span class="attr">Gid:</span>    <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span>       <span class="number">0</span></span><br><span class="line"><span class="attr">FDSize:</span> <span class="number">32</span></span><br><span class="line"><span class="attr">Groups:</span></span><br><span class="line"><span class="attr">VmPeak:</span>     <span class="number">5576 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">VmSize:</span>     <span class="number">5572 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">VmLck:</span>         <span class="number">0</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">VmHWM:</span>       <span class="number">696</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">VmRSS:</span>       <span class="number">696</span> <span class="string">kB</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>1.13、task — 目录文件，包含由当前进程所运行的每一个线程的相关信息，每个线程的相关信息文件均保存在一个由线程号（tid）命名的目录中，这类似于其内容类似于每个进程目录中的内容；（内核2.6版本以后支持此功能） </p>
+<h2 id="x2F-proc目录下常见的文件介绍"><a href="#x2F-proc目录下常见的文件介绍" class="headerlink" title="&#x2F;proc目录下常见的文件介绍"></a>&#x2F;proc目录下常见的文件介绍</h2><p>2.1、&#x2F;proc&#x2F;apm<br>高级电源管理（APM）版本信息及电池相关状态信息，通常由apm命令使用； </p>
+<p>2.2、&#x2F;proc&#x2F;buddyinfo<br>用于诊断内存碎片问题的相关信息文件； </p>
+<p>2.3、&#x2F;proc&#x2F;cmdline<br>在启动时传递至内核的相关参数信息，这些信息通常由lilo或grub等启动管理工具进行传递； </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/</span>cmdline </span><br><span class="line">ro root=<span class="regexp">/dev/</span>VolGroup00/LogVol00 rhgb quiet</span><br></pre></td></tr></table></figure>
+
+<p>2.4、&#x2F;proc&#x2F;cpuinfo<br>处理器的相关信息的文件； </p>
+<p>2.5、&#x2F;proc&#x2F;crypto<br>系统上已安装的内核使用的密码算法及每个算法的详细信息列表；</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /proc/crypto </span><br><span class="line">name         : <span class="type">crc32c</span></span><br><span class="line">driver       : <span class="type">crc32c</span>-<span class="keyword">generic</span></span><br><span class="line">module       : <span class="type">kernel</span></span><br><span class="line">priority     : 0</span><br><span class="line"><span class="keyword">type</span>         <span class="type">: </span>digest</span><br><span class="line">blocksize    : 32</span><br><span class="line">digestsize   : 4</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.6、&#x2F;proc&#x2F;devices<br>系统已经加载的所有块设备和字符设备的信息，包含主设备号和设备组（与主设备号对应的设备类型）名； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/devices<span class="title"> </span></span><br><span class="line"><span class="title">Character</span> devices:</span><br><span class="line">  1<span class="title"> mem</span></span><br><span class="line">  4 /dev/vc/0</span><br><span class="line">  4<span class="title"> tty</span></span><br><span class="line">  4<span class="title"> ttyS</span></span><br><span class="line">  …………<span class="title"></span></span><br><span class="line"><span class="title"></span></span><br><span class="line"><span class="title">Block</span> devices:</span><br><span class="line">  1<span class="title"> ramdisk</span></span><br><span class="line">  2<span class="title"> fd</span></span><br><span class="line">  8<span class="title"> sd</span></span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+<p>2.7、&#x2F;proc&#x2F;diskstats<br>每块磁盘设备的磁盘I&#x2F;O统计信息列表；（内核2.5.69以后的版本支持此功能） </p>
+<p>2.8、&#x2F;proc&#x2F;dma<br>每个正在使用且注册的ISA DMA通道的信息列表；</p>
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/dma</span></span><br><span class="line"><span class="attribute">2</span>: floppy</span><br><span class="line"><span class="attribute">4</span>: cascade</span><br></pre></td></tr></table></figure>
+
+<p>2.9、&#x2F;proc&#x2F;execdomains<br>内核当前支持的执行域（每种操作系统独特“个性”）信息列表； </p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="symbol">@rhel5</span> ~]<span class="meta"># more /proc/execdomains </span></span><br><span class="line"><span class="number">0</span><span class="number">-0</span>     Linux                   [kernel]</span><br></pre></td></tr></table></figure>
+
+<p>2.10、&#x2F;proc&#x2F;fb<br>帧缓冲设备列表文件，包含帧缓冲设备的设备号和相关驱动信息； </p>
+<p>2.11、&#x2F;proc&#x2F;filesystems<br>当前被内核支持的文件系统类型列表文件，被标示为nodev的文件系统表示不需要块设备的支持；通常mount一个设备时，如果没有指定文件系统类型将通过此文件来决定其所需文件系统的类型； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/filesystems<span class="title"> </span></span><br><span class="line"><span class="title">nodev</span> <span class="title">  sysfs</span></span><br><span class="line">nodev<span class="title">   rootfs</span></span><br><span class="line">nodev<span class="title">   proc</span></span><br><span class="line"><span class="title">        iso9660</span></span><br><span class="line"><span class="title">        ext3</span></span><br><span class="line">…………</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.12、&#x2F;proc&#x2F;interrupts<br>X86或X86_64体系架构系统上每个IRQ相关的中断号列表；多路处理器平台上每个CPU对于每个I&#x2F;O设备均有自己的中断号； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/interrupts<span class="title"> </span></span><br><span class="line"><span class="title">           CPU0</span>       </span><br><span class="line">  0:    1305421<span class="title">    IO-APIC-edge</span> <span class="title"> timer</span></span><br><span class="line">  1:         61<span class="title">    IO-APIC-edge</span> <span class="title"> i8042</span></span><br><span class="line">185:       1068<span class="title">   IO-APIC-level</span> <span class="title"> eth0</span></span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.13、&#x2F;proc&#x2F;iomem<br>每个物理设备上的记忆体（RAM或者ROM）在系统内存中的映射信息； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/iomem </span><br><span class="line">00000000-0009f7ff :<span class="title"> System</span> RAM</span><br><span class="line">0009f800-0009ffff :<span class="title"> reserved</span></span><br><span class="line">000a0000-000bffff :<span class="title"> Video</span> RAM<span class="title"> area</span></span><br><span class="line">000c0000-000c7fff :<span class="title"> Video</span> ROM</span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+
+<p>2.14、&#x2F;proc&#x2F;ioports<br>当前正在使用且已经注册过的与物理设备进行通讯的输入-输出端口范围信息列表；如下面所示，第一列表示注册的I&#x2F;O端口范围，其后表示相关的设备； </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># less /proc/ioports </span></span><br><span class="line"><span class="attr">0000-001f :</span> <span class="string">dma1</span></span><br><span class="line"><span class="attr">0020-0021 :</span> <span class="string">pic1</span></span><br><span class="line"><span class="attr">0040-0043 :</span> <span class="string">timer0</span></span><br><span class="line"><span class="attr">0050-0053 :</span> <span class="string">timer1</span></span><br><span class="line"><span class="attr">0060-006f :</span> <span class="string">keyboard</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>2.15、&#x2F;proc&#x2F;kallsyms<br>模块管理工具用来动态链接或绑定可装载模块的符号定义，由内核输出；（内核2.5.71以后的版本支持此功能）；通常这个文件中的信息量相当大； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/kallsyms<span class="title"> </span></span><br><span class="line"><span class="title">c04011f0</span> T<span class="title"> _stext</span></span><br><span class="line">c04011f0<span class="title"> t</span> run_init_process<span class="title"></span></span><br><span class="line"><span class="title">c04011f0</span> T<span class="title"> stext</span></span><br><span class="line">  …………</span><br></pre></td></tr></table></figure>
+
+<p>2.16、&#x2F;proc&#x2F;kcore<br>系统使用的物理内存，以ELF核心文件（core file）格式存储，其文件大小为已使用的物理内存（RAM）加上4KB；这个文件用来检查内核数据结构的当前状态，因此，通常由GBD通常调试工具使用，但不能使用文件查看命令打开此文件； </p>
+<p>2.17、&#x2F;proc&#x2F;kmsg<br>此文件用来保存由内核输出的信息，通常由&#x2F;sbin&#x2F;klogd或&#x2F;bin&#x2F;dmsg等程序使用，不要试图使用查看命令打开此文件； </p>
+<p>2.18、&#x2F;proc&#x2F;loadavg<br>保存关于CPU和磁盘I&#x2F;O的负载平均值，其前三列分别表示每1秒钟、每5秒钟及每15秒的负载平均值，类似于uptime命令输出的相关信息；第四列是由斜线隔开的两个数值，前者表示当前正由内核调度的实体（进程和线程）的数目，后者表示系统当前存活的内核调度实体的数目；第五列表示此文件被查看前最近一个由内核创建的进程的PID； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/loadavg </span><br><span class="line">0.45 0.12 0.04 4/125 5549</span><br><span class="line"></span><br><span class="line">[root@rhel5 ~]#<span class="title"> uptime</span></span><br><span class="line">06:00:54<span class="title"> up</span>  1:06,  3<span class="title"> users,</span> <span class="title"> load</span> average: 0.45, 0.12, 0.04</span><br></pre></td></tr></table></figure>
+
+<p>2.19、&#x2F;proc&#x2F;locks<br>保存当前由内核锁定的文件的相关信息，包含内核内部的调试数据；每个锁定占据一行，且具有一个惟一的编号；如下输出信息中每行的第二列表示当前锁定使用的锁定类别，POSIX表示目前较新类型的文件锁，由lockf系统调用产生，FLOCK是传统的UNIX文件锁，由flock系统调用产生；第三列也通常由两种类型，ADVISORY表示不允许其他用户锁定此文件，但允许读取，MANDATORY表示此文件锁定期间不允许其他用户任何形式的访问； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/locks </span><br><span class="line">1:<span class="title"> POSIX</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4904<span class="title"> fd:00:4325393</span> 0<span class="title"> EOF</span></span><br><span class="line">2:<span class="title"> POSIX</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4550<span class="title"> fd:00:2066539</span> 0<span class="title"> EOF</span></span><br><span class="line">3:<span class="title"> FLOCK</span> <span class="title"> ADVISORY</span> <span class="title"> WRITE</span> 4497<span class="title"> fd:00:2066533</span> 0<span class="title"> EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>2.20、&#x2F;proc&#x2F;mdstat<br>保存RAID相关的多块磁盘的当前状态信息，在没有使用RAID机器上，其显示为如下状态： </p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="meta">@rhel5</span> ~]<span class="comment"># less /proc/mdstat </span></span><br><span class="line">Personalities : </span><br><span class="line">unused devices: <span class="variable">&lt;none&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2.21、&#x2F;proc&#x2F;meminfo<br>系统中关于当前内存的利用状况等的信息，常由free命令使用；可以使用文件查看命令直接读取此文件，其内容显示为两列，前者为统计属性，后者为对应的值； </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># less /proc/meminfo </span></span><br><span class="line"><span class="attr">MemTotal:</span>       <span class="number">515492</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">MemFree:</span>          <span class="number">8452 </span><span class="string">kB</span></span><br><span class="line"><span class="attr">Buffers:</span>         <span class="number">19724</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">Cached:</span>         <span class="number">376400</span> <span class="string">kB</span></span><br><span class="line"><span class="attr">SwapCached:</span>          <span class="number">4</span> <span class="string">kB</span></span><br><span class="line"><span class="string">…………</span></span><br></pre></td></tr></table></figure>
+
+<p>2.22、&#x2F;proc&#x2F;mounts<br>在内核2.4.29版本以前，此文件的内容为系统当前挂载的所有文件系统，在2.4.19以后的内核中引进了每个进程使用独立挂载名称空间的方式，此文件则随之变成了指向&#x2F;proc&#x2F;self&#x2F;mounts（每个进程自身挂载名称空间中的所有挂载点列表）文件的符号链接；&#x2F;proc&#x2F;self是一个独特的目录，后文中会对此目录进行介绍； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# ll /<span class="keyword">proc</span> |grep<span class="title"> mounts</span></span><br><span class="line">lrwxrwxrwx  1<span class="title"> root</span> <span class="title">     root</span>             11<span class="title"> Feb</span>  8 06:43<span class="title"> mounts</span> -&gt;<span class="title"> self/mounts</span></span><br></pre></td></tr></table></figure>
+
+<p>如下所示，其中第一列表示挂载的设备，第二列表示在当前目录树中的挂载点，第三点表示当前文件系统的类型，第四列表示挂载属性（ro或者rw），第五列和第六列用来匹配&#x2F;etc&#x2F;mtab文件中的转储（dump）属性； </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more <span class="regexp">/proc/m</span>ounts </span><br><span class="line">rootfs / rootfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/dev/</span>root / ext3 rw,data=ordered <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/dev /</span>dev tmpfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/proc /</span>proc proc rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/sys /</span>sys sysfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="regexp">/proc/</span>bus<span class="regexp">/usb /</span>proc<span class="regexp">/bus/u</span>sb usbfs rw <span class="number">0</span> <span class="number">0</span></span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.23、&#x2F;proc&#x2F;modules<br>当前装入内核的所有模块名称列表，可以由lsmod命令使用，也可以直接查看；如下所示，其中第一列表示模块名，第二列表示此模块占用内存空间大小，第三列表示此模块有多少实例被装入，第四列表示此模块依赖于其它哪些模块，第五列表示此模块的装载状态（Live：已经装入；Loading：正在装入；Unloading：正在卸载），第六列表示此模块在内核内存（kernel memory）中的偏移量； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/modules<span class="title"> </span></span><br><span class="line"><span class="title">autofs4</span> 24517 2 -<span class="title"> Live</span> 0xe09f7000<span class="title"></span></span><br><span class="line"><span class="title">hidp</span> 23105 2 -<span class="title"> Live</span> 0xe0a06000<span class="title"></span></span><br><span class="line"><span class="title">rfcomm</span> 42457 0 -<span class="title"> Live</span> 0xe0ab3000<span class="title"></span></span><br><span class="line"><span class="title">l2cap</span> 29505 10<span class="title"> hidp,rfcomm,</span> Live 0xe0aaa000</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.24、&#x2F;proc&#x2F;partitions<br>块设备每个分区的主设备号（major）和次设备号（minor）等信息，同时包括每个分区所包含的块（block）数目（如下面输出中第三列所示）； </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/partitions </span></span><br><span class="line">major minor  <span class="comment">#blocks  name</span></span><br><span class="line"></span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 0 </span> <span class="number"> 20971520 </span>sda</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 1 </span>   <span class="number"> 104391 </span>sda1</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 2 </span>  <span class="number"> 6907950 </span>sda2</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 3 </span>  <span class="number"> 5630782 </span>sda3</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 4 </span>        <span class="number"> 1 </span>sda4</span><br><span class="line">  <span class="number"> 8 </span>   <span class="number"> 5 </span>  <span class="number"> 3582463 </span>sda5</span><br></pre></td></tr></table></figure>
+
+<p>2.25、&#x2F;proc&#x2F;pci<br>内核初始化时发现的所有PCI设备及其配置信息列表，其配置信息多为某PCI设备相关IRQ信息，可读性不高，可以用“&#x2F;sbin&#x2F;lspci –vb”命令获得较易理解的相关信息；在2.6内核以后，此文件已为&#x2F;proc&#x2F;bus&#x2F;pci目录及其下的文件代替； </p>
+<p>2.26、&#x2F;proc&#x2F;slabinfo<br>在内核中频繁使用的对象（如inode、dentry等）都有自己的cache，即slab pool，而&#x2F;proc&#x2F;slabinfo文件列出了这些对象相关slap的信息；详情可以参见内核文档中slapinfo的手册页； </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/slabinfo </span></span><br><span class="line">slabinfo - version: 2.1</span><br><span class="line"><span class="comment"># name            &lt;active_objs&gt; &lt;num_objs&gt; &lt;objsize&gt; &lt;objperslab&gt; &lt;pagesperslab&gt; : tunables &lt;limit&gt; &lt;batchcount&gt; &lt;sharedfactor&gt; : slabdata &lt;ac</span></span><br><span class="line">tive_slabs&gt; &lt;num_slabs&gt; &lt;sharedavail&gt;</span><br><span class="line">rpc_buffers           <span class="number"> 8 </span>    <span class="number"> 8 </span> <span class="number"> 2048 </span>  <span class="number"> 2 </span>  <span class="number"> 1 </span>: tunables  <span class="number"> 24 </span> <span class="number"> 12 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 4 </span>    <span class="number"> 4 </span>     0</span><br><span class="line">rpc_tasks             <span class="number"> 8 </span>   <span class="number"> 20 </span>  <span class="number"> 192 </span> <span class="number"> 20 </span>  <span class="number"> 1 </span>: tunables <span class="number"> 120 </span> <span class="number"> 60 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 1 </span>    <span class="number"> 1 </span>     0</span><br><span class="line">rpc_inode_cache       <span class="number"> 6 </span>    <span class="number"> 9 </span>  <span class="number"> 448 </span>  <span class="number"> 9 </span>  <span class="number"> 1 </span>: tunables  <span class="number"> 54 </span> <span class="number"> 27 </span>  <span class="number"> 8 </span>: slabdata     <span class="number"> 1 </span>    <span class="number"> 1 </span>     0</span><br><span class="line">…………</span><br><span class="line">…………</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.27、&#x2F;proc&#x2F;stat<br>实时追踪自系统上次启动以来的多种统计信息；如下所示，其中，<br>“cpu”行后的八个值分别表示以1&#x2F;100（jiffies）秒为单位的统计值（包括系统运行于用户模式、低优先级用户模式，运系统模式、空闲模式、I&#x2F;O等待模式的时间等）；<br>“intr”行给出中断的信息，第一个为自系统启动以来，发生的所有的中断的次数；然后每个数对应一个特定的中断自系统启动以来所发生的次数；<br>“ctxt”给出了自系统启动以来CPU发生的上下文交换的次数。<br>“btime”给出了从系统启动到现在为止的时间，单位为秒；<br>“processes (total_forks) 自系统启动以来所创建的任务的个数目；<br>“procs_running”：当前运行队列的任务的数目；<br>“procs_blocked”：当前被阻塞的任务的数目； </p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]<span class="comment"># more /proc/stat</span></span><br><span class="line">cpu <span class="number"> 2751 </span>26<span class="number"> 5771 </span>266413<span class="number"> 2555 </span>99<span class="number"> 411 </span>0</span><br><span class="line">cpu0<span class="number"> 2751 </span>26<span class="number"> 5771 </span>266413<span class="number"> 2555 </span>99<span class="number"> 411 </span>0</span><br><span class="line">intr<span class="number"> 2810179 </span>2780489<span class="number"> 67 </span>0<span class="number"> 3 </span>3<span class="number"> 0 </span>5<span class="number"> 0 </span>1<span class="number"> 0 </span>0<span class="number"> 0 </span>1707<span class="number"> 0 </span>0<span class="number"> 9620 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span></span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0 </span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>5504<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>12781<span class="number"> 0 </span>0 0</span><br><span class="line">0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0<span class="number"> 0 </span>0 0</span><br><span class="line">ctxt 427300</span><br><span class="line">btime 1234084100</span><br><span class="line">processes 3491</span><br><span class="line">procs_running 1</span><br><span class="line">procs_blocked 0</span><br></pre></td></tr></table></figure>
+
+<p>2.28、&#x2F;proc&#x2F;swaps<br>当前系统上的交换分区及其空间利用信息，如果有多个交换分区的话，则会每个交换分区的信息分别存储于&#x2F;proc&#x2F;swap目录中的单独文件中，而其优先级数字越低，被使用到的可能性越大；下面是作者系统中只有一个交换分区时的输出信息； </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/swaps<span class="title"> </span></span><br><span class="line"><span class="title">Filename</span> <span class="title">                               Type</span> <span class="title">           Size</span> <span class="title">   Used</span> <span class="title">   Priority</span></span><br><span class="line">/dev/sda8<span class="title">                               partition</span>       642560  0       -1</span><br></pre></td></tr></table></figure>
+
+<p>2.29、&#x2F;proc&#x2F;uptime<br>系统上次启动以来的运行时间，如下所示，其第一个数字表示系统运行时间，第二个数字表示系统空闲时间，单位是秒； </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">root@rhel5</span> <span class="string">~</span>]<span class="comment"># more /proc/uptime </span></span><br><span class="line"><span class="number">3809.86 </span><span class="number">3714.13</span></span><br></pre></td></tr></table></figure>
+
+<p>2.30、&#x2F;proc&#x2F;version<br>当前系统运行的内核版本号，在作者的RHEL5.3上还会显示系统安装的gcc版本，如下所示； </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@rhel5 ~]</span># <span class="selector-tag">more</span> /<span class="selector-tag">proc</span>/<span class="selector-tag">version</span> </span><br><span class="line"><span class="selector-tag">Linux</span> <span class="selector-tag">version</span> <span class="number">2.6</span><span class="selector-class">.18-128</span><span class="selector-class">.el5</span> (mockbuild<span class="variable">@hs20-bc1-5</span>.build.redhat.com) (gcc version <span class="number">4.1</span>.<span class="number">2</span> <span class="number">20080704</span> (Red Hat <span class="number">4.1</span>.<span class="number">2</span>-<span class="number">44</span>)) <span class="selector-id">#1</span> <span class="selector-tag">SMP</span> <span class="selector-tag">Wed</span> <span class="selector-tag">Dec</span> <span class="number">17</span> <span class="number">11</span>:<span class="number">42</span>:<span class="number">39</span> <span class="selector-tag">EST</span> <span class="number">2008</span></span><br></pre></td></tr></table></figure>
+
+<p>2.31、&#x2F;proc&#x2F;vmstat<br>当前系统虚拟内存的多种统计数据，信息量可能会比较大，这因系统而有所不同，可读性较好；下面为作者机器上输出信息的一个片段；（2.6以后的内核支持此文件） </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/vmstat<span class="title"> </span></span><br><span class="line"><span class="title">nr_anon_pages</span> 22270<span class="title"></span></span><br><span class="line"><span class="title">nr_mapped</span> 8542<span class="title"></span></span><br><span class="line"><span class="title">nr_file_pages</span> 47706<span class="title"></span></span><br><span class="line"><span class="title">nr_slab</span> 4720<span class="title"></span></span><br><span class="line"><span class="title">nr_page_table_pages</span> 897<span class="title"></span></span><br><span class="line"><span class="title">nr_dirty</span> 21<span class="title"></span></span><br><span class="line"><span class="title">nr_writeback</span> 0</span><br><span class="line">…………</span><br></pre></td></tr></table></figure>
+
+<p>2.32、&#x2F;proc&#x2F;zoneinfo<br>内存区域（zone）的详细信息列表，信息量较大，下面列出的是一个输出片段： </p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@rhel5 ~]# more /<span class="keyword">proc</span>/zoneinfo<span class="title"> </span></span><br><span class="line"><span class="title">Node</span> 0,<span class="title"> zone</span> <span class="title">     DMA</span></span><br><span class="line"><span class="title">  pages</span> free     1208<span class="title"></span></span><br><span class="line"><span class="title">        min</span>      28<span class="title"></span></span><br><span class="line"><span class="title">        low</span>      35<span class="title"></span></span><br><span class="line"><span class="title">        high</span>     42<span class="title"></span></span><br><span class="line"><span class="title">        active</span>   439<span class="title"></span></span><br><span class="line"><span class="title">        inactive</span> 1139<span class="title"></span></span><br><span class="line"><span class="title">        scanned</span>  0 (a: 7<span class="title"> i:</span> 30)<span class="title"></span></span><br><span class="line"><span class="title">        spanned</span>  4096<span class="title"></span></span><br><span class="line"><span class="title">        present</span>  4096<span class="title"></span></span><br><span class="line"><span class="title">    nr_anon_pages</span> 192<span class="title"></span></span><br><span class="line"><span class="title">    nr_mapped</span>    141<span class="title"></span></span><br><span class="line"><span class="title">    nr_file_pages</span> 1385<span class="title"></span></span><br><span class="line"><span class="title">    nr_slab</span>      253<span class="title"></span></span><br><span class="line"><span class="title">    nr_page_table_pages</span> 2<span class="title"></span></span><br><span class="line"><span class="title">    nr_dirty</span>     523<span class="title"></span></span><br><span class="line"><span class="title">    nr_writeback</span> 0<span class="title"></span></span><br><span class="line"><span class="title">    nr_unstable</span>  0<span class="title"></span></span><br><span class="line"><span class="title">    nr_bounce</span>    0<span class="title"></span></span><br><span class="line"><span class="title">        protection:</span> (0, 0, 296, 296)<span class="title"></span></span><br><span class="line"><span class="title">  pagesets</span></span><br><span class="line"><span class="title">  all_unreclaimable:</span> 0<span class="title"></span></span><br><span class="line"><span class="title">  prev_priority:</span>     12<span class="title"></span></span><br><span class="line"><span class="title">  start_pfn:</span>         0</span><br><span class="line">…………</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="x2F-proc-x2F-sys目录详解"><a href="#x2F-proc-x2F-sys目录详解" class="headerlink" title="&#x2F;proc&#x2F;sys目录详解"></a>&#x2F;proc&#x2F;sys目录详解</h2><p>与&#x2F;proc下其它文件的“只读”属性不同的是，管理员可对&#x2F;proc&#x2F;sys子目录中的许多文件内容进行修改以更改内核的运行特性，事先可以使用“ls -l”命令查看某文件是否“可写入”。写入操作通常使用类似于“echo DATA &gt; &#x2F;path&#x2F;to&#x2F;your&#x2F;filename”的格式进行。需要注意的是，即使文件可写，其一般也不可以使用编辑器进行编辑。 </p>
+<p>3.1、&#x2F;proc&#x2F;sys&#x2F;debug 子目录<br>此目录通常是一空目录； </p>
+<p>3.2、&#x2F;proc&#x2F;sys&#x2F;dev 子目录 </p>
+<p>为系统上特殊设备提供参数信息文件的目录，其不同设备的信息文件分别存储于不同的子目录中，如大多数系统上都会具有的&#x2F;proc&#x2F;sys&#x2F;dev&#x2F;cdrom和&#x2F;proc&#x2F;sys&#x2F;dev&#x2F;raid（如果内核编译时开启了支持raid的功能） 目录，其内存储的通常是系统上cdrom和raid的相关参数信息文件。 </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>郭霖
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://guolinac.github.io/2023/07/31/proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3/" title="proc目录详解">https://guolinac.github.io/2023/07/31/proc目录详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/30/%E5%B0%86python%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E6%88%90exe/" rel="prev" title="将python文件打包成exe，让没有python环境的人也能使用">
+      <i class="fa fa-chevron-left"></i> 将python文件打包成exe，让没有python环境的人也能使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/31/C++%E6%AE%B5%E9%94%99%E8%AF%AF(Segmentation%20fault)/" rel="next" title="C++段错误(Segmentation fault)">
+      C++段错误(Segmentation fault) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#proc%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3"><span class="nav-text">proc目录详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%9B%AE%E5%BD%95%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-text">进程目录中的常见文件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x2F-proc%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%B8%B8%E8%A7%81%E7%9A%84%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-text">&#x2F;proc目录下常见的文件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x2F-proc-x2F-sys%E7%9B%AE%E5%BD%95%E8%AF%A6%E8%A7%A3"><span class="nav-text">&#x2F;proc&#x2F;sys目录详解</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="郭霖"
+      src="/images/haon1.jpg">
+  <p class="site-author-name" itemprop="name">郭霖</p>
+  <div class="site-description" itemprop="description">wx: Acwx763</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guolinac" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guolinac" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fab fa-google"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">郭霖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">632k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">9:34</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
