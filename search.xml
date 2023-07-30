@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>将python文件打包成exe，让没有python环境的人也能使用</title>
+    <url>/2023/07/30/%E5%B0%86python%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E6%88%90exe/</url>
+    <content><![CDATA[<h1 id="将python文件打包成exe，让没有python环境的人也能使用"><a href="#将python文件打包成exe，让没有python环境的人也能使用" class="headerlink" title="将python文件打包成exe，让没有python环境的人也能使用"></a>将python文件打包成exe，让没有python环境的人也能使用</h1><p>笔者用的是python3.10与anaconda环境</p>
+<p>首先安装所需的库：</p>
+<p><code>conda install pyinstaller </code></p>
+<p>在代码所在的目录中，创建一个新的Python脚本（例如<code>compress_pdf_app.py</code>），并将原始代码放入其中。</p>
+<span id="more"></span>
+
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># compress_pdf_app.py</span></span><br><span class="line"><span class="keyword">import</span> PyPDF2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compress_pdf</span>(<span class="params">input_path, output_path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(input_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        pdf = PyPDF2.PdfFileReader(file)</span><br><span class="line">        writer = PyPDF2.PdfFileWriter()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="built_in">range</span>(pdf.getNumPages()):</span><br><span class="line">            page = pdf.getPage(page_num)</span><br><span class="line">            <span class="comment"># 对页面内容进行压缩</span></span><br><span class="line">            page.compressContentStreams()</span><br><span class="line">            writer.addPage(page)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(output_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> output_file:</span><br><span class="line">            writer.write(output_file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 可以用相对路径或者绝对路径</span></span><br><span class="line">    input_pdf = <span class="string">&quot;input.pdf&quot;</span></span><br><span class="line">    output_pdf = <span class="string">&quot;output_compressed.pdf&quot;</span></span><br><span class="line">    compress_pdf(input_pdf, output_pdf)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>使用PyInstaller将<code>compress_pdf_app.py</code>打包成可执行文件。在命令行中进入该脚本所在的目录，然后运行以下命令：</p>
+<p><code>pyinstaller --onefile compress_pdf_app.py</code></p>
+<ol>
+<li>PyInstaller将会在当前目录下生成一个<code>dist</code>文件夹，并在其中包含可执行文件。该可执行文件是与平台相关的，例如在Windows系统中会生成一个<code>.exe</code>文件，在Linux系统中会生成一个无后缀的文件。</li>
+</ol>
+<p>现在，你可以将生成的可执行文件发送给没有Python环境的人，他们可以直接运行这个文件，无需安装Python，即可使用这个压缩PDF的功能。</p>
+<h2 id="给文件添加元信息"><a href="#给文件添加元信息" class="headerlink" title="给文件添加元信息"></a>给文件添加元信息</h2><p>这个命令可以在生成exe文件的时候添加图标，作者，版本号，使用方法等信息</p>
+<p>注意，还得多安装一个包：<code>conda install pillow</code></p>
+<ol>
+<li>创建一个图标文件（.ico），如果你已经有一个了，将它移到你的Python脚本同一个文件夹中。</li>
+<li>用PyInstaller将你的Python脚本打包成一个exe文件。在你的命令行输入以下的命令：</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">pyinstaller <span class="attr">--onefile</span> <span class="attr">--windowed</span> <span class="attr">--icon</span>=fire<span class="selector-class">.ico</span> <span class="attr">--name</span>=compress_pdf_app <span class="attr">--version-file</span>=version<span class="selector-class">.txt</span> compress_pdf_app.py</span><br></pre></td></tr></table></figure>
+
+<p>在这个命令中，<code>--onefile</code> 参数表示生成单一的exe文件，<code>--windowed</code> 参数表示无控制台运行，<code>--icon=fire.ico</code> 表示使用你的ico文件作为应用程序图标，<code>--name</code> 参数用于指定生成的exe文件的名称，<code>--version-file</code> 用于指定版本信息文件。</p>
+<ol start="3">
+<li>你需要创建一个版本信息文件 <code>version.txt</code>，以下是一个简单的示例：</li>
+</ol>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">VSVersionInfo</span>(</span><br><span class="line">  ffi=<span class="built_in">FixedFileInfo</span>(</span><br><span class="line">    filevers=(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">    prodvers=(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">    mask=<span class="number">0</span>x3f,</span><br><span class="line">    flags=<span class="number">0</span>x0,</span><br><span class="line">    OS=<span class="number">0</span>x4,</span><br><span class="line">    fileType=<span class="number">0</span>x1,</span><br><span class="line">    subtype=<span class="number">0</span>x0,</span><br><span class="line">    date=(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    ),</span><br><span class="line">  kids=[</span><br><span class="line">    <span class="built_in">StringFileInfo</span>(</span><br><span class="line">      [</span><br><span class="line">      <span class="built_in">StringTable</span>(</span><br><span class="line">        <span class="string">&#x27;040904b0&#x27;</span>,</span><br><span class="line">        [<span class="built_in">StringStruct</span>(<span class="string">&#x27;CompanyName&#x27;</span>, <span class="string">&#x27;guolin&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;FileDescription&#x27;</span>, <span class="string">&#x27;将pdf命名为input.pdf并放在与本文件同目录下即可&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;FileVersion&#x27;</span>, <span class="string">&#x27;1.0&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;InternalName&#x27;</span>, <span class="string">&#x27;compress_pdf_app&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;OriginalFilename&#x27;</span>, <span class="string">&#x27;compress_pdf_app&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;ProductName&#x27;</span>, <span class="string">&#x27;compress_pdf_app&#x27;</span>),</span><br><span class="line">        <span class="built_in">StringStruct</span>(<span class="string">&#x27;ProductVersion&#x27;</span>, <span class="string">&#x27;1.0&#x27;</span>)])</span><br><span class="line">      ]), </span><br><span class="line">    <span class="built_in">VarFileInfo</span>([<span class="built_in">VarStruct</span>(<span class="string">&#x27;Translation&#x27;</span>, [<span class="number">0</span>, <span class="number">1200</span>])])</span><br><span class="line">  ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pdf压缩脚本</title>
     <url>/2023/07/30/pdf%E5%8E%8B%E7%BC%A9%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h1 id="通过Python压缩pdf"><a href="#通过Python压缩pdf" class="headerlink" title="通过Python压缩pdf"></a>通过Python压缩pdf</h1><p>pdf如果直接经过编辑，可能会有多图层叠加的问题；多次编辑后pdf文件可能会变得非常大，所以提供一种压缩pdf的方式，并且pdf压缩后，仍然可以选定文本和编辑文本。</p>
