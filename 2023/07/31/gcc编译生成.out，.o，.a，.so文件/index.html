@@ -22,25 +22,20 @@
     var CONFIG = {"hostname":"guolinac.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具 Maven 主要用处一：相同的项目结构 使用Maven管理的Java 项目都有着相同的项目结构  有一个pom.xml 用于维护当前项目都用了哪些jar包 所有的java代码都放在 src&#x2F;main&#x2F;java 下面 所有的测试代码都放在src&#x2F;test&#x2F;java 下面  Maven 主要用处二：统一">
+  <meta name="description" content="linux下gcc编译生成.out，.o，.a，.so文件文件类型介绍.out是可执行文件，相当于win上的exe； .o是编译中间目标文件，相当于win上的.obj； .a是静态库，多个.o练链接得到，用于静态链接； .so是共享库，用于动态链接，相当于win上.dll；">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Maven下载">
-<meta property="og:url" content="https://guolinac.github.io/2022/08/20/Maven/index.html">
+<meta property="og:title" content="linux下gcc编译生成.out，.o，.a，.so文件">
+<meta property="og:url" content="https://guolinac.github.io/2023/07/31/gcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90.out%EF%BC%8C.o%EF%BC%8C.a%EF%BC%8C.so%E6%96%87%E4%BB%B6/index.html">
 <meta property="og:site_name" content="郭霖的博客">
-<meta property="og:description" content="介绍Maven 是专门用于构建和管理Java相关项目的工具 Maven 主要用处一：相同的项目结构 使用Maven管理的Java 项目都有着相同的项目结构  有一个pom.xml 用于维护当前项目都用了哪些jar包 所有的java代码都放在 src&#x2F;main&#x2F;java 下面 所有的测试代码都放在src&#x2F;test&#x2F;java 下面  Maven 主要用处二：统一">
+<meta property="og:description" content="linux下gcc编译生成.out，.o，.a，.so文件文件类型介绍.out是可执行文件，相当于win上的exe； .o是编译中间目标文件，相当于win上的.obj； .a是静态库，多个.o练链接得到，用于静态链接； .so是共享库，用于动态链接，相当于win上.dll；">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819104036178.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825131211524.png">
-<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825133125007.png">
-<meta property="article:published_time" content="2022-08-20T14:52:38.000Z">
-<meta property="article:modified_time" content="2022-10-29T20:11:34.680Z">
+<meta property="article:published_time" content="2023-07-30T16:21:00.000Z">
+<meta property="article:modified_time" content="2023-07-30T16:27:05.275Z">
 <meta property="article:author" content="郭霖">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png">
 
-<link rel="canonical" href="https://guolinac.github.io/2022/08/20/Maven/">
+<link rel="canonical" href="https://guolinac.github.io/2023/07/31/gcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90.out%EF%BC%8C.o%EF%BC%8C.a%EF%BC%8C.so%E6%96%87%E4%BB%B6/">
 
 
 <script id="page-configurations">
@@ -53,7 +48,7 @@
   };
 </script>
 
-  <title>Maven下载 | 郭霖的博客</title>
+  <title>linux下gcc编译生成.out，.o，.a，.so文件 | 郭霖的博客</title>
   
 
 
@@ -198,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://guolinac.github.io/2022/08/20/Maven/">
+    <link itemprop="mainEntityOfPage" href="https://guolinac.github.io/2023/07/31/gcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90.out%EF%BC%8C.o%EF%BC%8C.a%EF%BC%8C.so%E6%96%87%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/haon1.jpg">
@@ -211,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Maven下载
+          linux下gcc编译生成.out，.o，.a，.so文件
         </h1>
 
         <div class="post-meta">
@@ -220,23 +215,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-08-20 22:52:38" itemprop="dateCreated datePublished" datetime="2022-08-20T22:52:38+08:00">2022-08-20</time>
+              <time title="创建时间：2023-07-31 00:21:00 / 修改时间：00:27:05" itemprop="dateCreated datePublished" datetime="2023-07-31T00:21:00+08:00">2023-07-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-10-30 04:11:34" itemprop="dateModified" datetime="2022-10-30T04:11:34+08:00">2022-10-30</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
                 </span>
             </span>
 
@@ -246,7 +235,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>838</span>
+              <span>1.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -264,34 +253,49 @@
     
     <div class="post-body" itemprop="articleBody">
       
-        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Maven 是专门用于构建和管理Java相关项目的工具</p>
-<p>Maven 主要用处一：相同的项目结构</p>
-<p>使用Maven管理的Java 项目都有着相同的项目结构</p>
-<ol>
-<li>有一个pom.xml 用于维护当前项目都用了哪些jar包</li>
-<li>所有的java代码都放在 src&#x2F;main&#x2F;java 下面</li>
-<li>所有的测试代码都放在src&#x2F;test&#x2F;java 下面</li>
-</ol>
-<p>Maven 主要用处二：统一维护jar包</p>
-<p>比如说有3个Java 项目，这些项目都不是maven风格。那么这3个项目，就会各自维护一套jar包。 而其中有些jar包是相同的。</p>
-<p>而maven风格的项目，首先把所有的jar包都放在“仓库”里，然后哪个项目需要用到这个jar包，只需要给出jar包的名称和版本号就行了。 这样<strong>jar包就实现了共享</strong></p>
+        <h1 id="linux下gcc编译生成-out，-o，-a，-so文件"><a href="#linux下gcc编译生成-out，-o，-a，-so文件" class="headerlink" title="linux下gcc编译生成.out，.o，.a，.so文件"></a>linux下gcc编译生成.out，.o，.a，.so文件</h1><h2 id="文件类型介绍"><a href="#文件类型介绍" class="headerlink" title="文件类型介绍"></a>文件类型介绍</h2><p>.out是可执行文件，相当于win上的exe；</p>
+<p>.o是编译中间目标文件，相当于win上的.obj；</p>
+<p>.a是静态库，多个.o练链接得到，用于静态链接；</p>
+<p>.so是共享库，用于动态链接，相当于win上.dll；</p>
 <span id="more"></span>
 
-<h1 id="下载与配置"><a href="#下载与配置" class="headerlink" title="下载与配置"></a>下载与配置</h1><p>官方最新版下载地址：<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a></p>
-<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819103949883.png" alt="image-20220819103949883"></p>
-<h2 id="检验版本"><a href="#检验版本" class="headerlink" title="检验版本"></a>检验版本</h2><p>使用win+r, 然后输入cmd 打开命令行，输入如下命令</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mvn</span> -v</span><br></pre></td></tr></table></figure>
+<h2 id="out可执行文件生成"><a href="#out可执行文件生成" class="headerlink" title="out可执行文件生成"></a>out可执行文件生成</h2><p>main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello world!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220819104036178.png" alt="image-20220819104036178"></p>
-<h2 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h2><p>maven 会默认从maven官方提供的服务器下载jar包。<br>而官方服务器在国外，因为大家都知道的原因，网速很慢，而且容易卡断。 为了便于快速下载相关jar包，可以使用国内maven 阿里云的下载地址</p>
-<p>使用阿里云下载路径：</p>
-<p>打开<code>D:\apache-maven-3.5.0\conf\settings.xml</code></p>
-<p>修改在mirrors下新加一个阿里云的镜像地址：</p>
- <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyunmaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>阿里云公共仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://maven.aliyun.com/repository/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>编译cpp：</p>
+<p>gcc main.cpp -o a.out</p>
+<p>执行a.out：</p>
+<p>.&#x2F;a.out</p>
+<h2 id="o目标文件生成"><a href="#o目标文件生成" class="headerlink" title="o目标文件生成"></a>o目标文件生成</h2><p>hello.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">hello</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello!\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>也可以直接复制粘贴即可，修改位置是160-165行</p>
-<h1 id="idea配置maven项目"><a href="#idea配置maven项目" class="headerlink" title="idea配置maven项目"></a>idea配置maven项目</h1><p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825131211524.png" alt="image-20220825131211524"></p>
-<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/Maven.assets/image-20220825133125007.png" alt="image-20220825133125007"></p>
+<p>生成.o文件：</p>
+<p>gcc -c hello.cpp</p>
+<p>得到hello.o，由于是中间文件，所以无法执行</p>
+<h2 id="a静态库生成"><a href="#a静态库生成" class="headerlink" title="a静态库生成"></a>a静态库生成</h2><h3 id="创建静态库"><a href="#创建静态库" class="headerlink" title="创建静态库"></a>创建静态库</h3><p>由.o文件创建静态库，静态库文件名的命名规范是以lib为前缀，紧接着跟静态库名，扩展名为.a。</p>
+<p>例如：我们将创建的静态库名为hello，则静态库文件名就是libhello.a。</p>
+<p>生成.a文件：</p>
+<p>ar -cr libhello.a hello.o</p>
+<h3 id="调用静态库"><a href="#调用静态库" class="headerlink" title="调用静态库"></a>调用静态库</h3><p>main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">hello</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">hello</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译main.cpp，静态链接libhello.a：</p>
+<p>gcc main.cpp libhello.a -o main.out</p>
+<h2 id="so共享库生成"><a href="#so共享库生成" class="headerlink" title="so共享库生成"></a>so共享库生成</h2><h3 id="创建so"><a href="#创建so" class="headerlink" title="创建so"></a>创建so</h3><p>由.o文件创建动态库文件，动态库文件名命名规范和静态库文件名命名规范类似，也是在动态库名增加前缀lib，但其</p>
+<p>文件扩展名为.so。</p>
+<p>例如：我们将创建的动态库名为hello，则动态库文件名就是libhello.so。</p>
+<p>生成so文件：</p>
+<p>gcc -shared -fPIC -o libhello.so hello.o</p>
+<p>我们执行，发现报错了</p>
+<p>这是因为在生成hello.o时，没有使用-fPIC选项，所以我们使用</p>
+<p>gcc -c -fPIC hello.cpp</p>
+<p>重新生成一下hello.o，再次执行生成so命令。</p>
+<h3 id="调用so"><a href="#调用so" class="headerlink" title="调用so"></a>调用so</h3><p>编译main.cpp：</p>
+<p>gcc -o main.out main.cpp -L. -lhello</p>
+<p>执行，我们发现报错了</p>
+<p>我们发现报错了，原来是找不到动态库文件libhello.so，程序在运行时，会在&#x2F;usr&#x2F;lib和&#x2F;lib等目录中查找需要的动态库文件。</p>
+<p>若找到，则载入动态库，否则将提示类似上述错误而终止程序运行。</p>
+<p>我们将文件libhello.so移动到目录&#x2F;usr&#x2F;lib中，再运行main.out，已经可以正常调用so了。</p>
 
     </div>
 
@@ -307,7 +311,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://guolinac.github.io/2022/08/20/Maven/" title="Maven下载">https://guolinac.github.io/2022/08/20/Maven/</a>
+    <a href="https://guolinac.github.io/2023/07/31/gcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90.out%EF%BC%8C.o%EF%BC%8C.a%EF%BC%8C.so%E6%96%87%E4%BB%B6/" title="linux下gcc编译生成.out，.o，.a，.so文件">https://guolinac.github.io/2023/07/31/gcc编译生成.out，.o，.a，.so文件/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -330,7 +334,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
           </div>
 
         
@@ -339,13 +343,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/08/19/%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/" rel="prev" title="注解与反射">
-      <i class="fa fa-chevron-left"></i> 注解与反射
+    <a href="/2023/07/30/%E5%B0%86python%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E6%88%90exe/" rel="prev" title="将python文件打包成exe，让没有python环境的人也能使用">
+      <i class="fa fa-chevron-left"></i> 将python文件打包成exe，让没有python环境的人也能使用
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/08/24/Python/" rel="next" title="Python">
-      Python <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +405,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-text">下载与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E9%AA%8C%E7%89%88%E6%9C%AC"><span class="nav-text">检验版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%B7%AF%E5%BE%84"><span class="nav-text">下载路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#idea%E9%85%8D%E7%BD%AEmaven%E9%A1%B9%E7%9B%AE"><span class="nav-text">idea配置maven项目</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90-out%EF%BC%8C-o%EF%BC%8C-a%EF%BC%8C-so%E6%96%87%E4%BB%B6"><span class="nav-text">linux下gcc编译生成.out，.o，.a，.so文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-text">文件类型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">out可执行文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#o%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90"><span class="nav-text">o目标文件生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a%E9%9D%99%E6%80%81%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">a静态库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">创建静态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-text">调用静态库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#so%E5%85%B1%E4%BA%AB%E5%BA%93%E7%94%9F%E6%88%90"><span class="nav-text">so共享库生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAso"><span class="nav-text">创建so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8so"><span class="nav-text">调用so</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
