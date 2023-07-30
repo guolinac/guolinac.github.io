@@ -5917,16 +5917,37 @@
     <url>/2023/07/30/pdf%E5%8E%8B%E7%BC%A9%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h1 id="通过Python压缩pdf"><a href="#通过Python压缩pdf" class="headerlink" title="通过Python压缩pdf"></a>通过Python压缩pdf</h1><p>pdf如果直接经过编辑，可能会有多图层叠加的问题；多次编辑后pdf文件可能会变得非常大，所以提供一种压缩pdf的方式，并且pdf压缩后，仍然可以选定文本和编辑文本。</p>
 <p>PS：市面上的在线压缩软件要么收费，要么压缩效果不好，压缩以后可能有乱码</p>
-<p>建议使用anaconda安装python的pypdf2包</p>
+<h2 id="通过PyPDF2实现压缩"><a href="#通过PyPDF2实现压缩" class="headerlink" title="通过PyPDF2实现压缩"></a>通过PyPDF2实现压缩</h2><p>建议使用anaconda安装python的pypdf2包</p>
 <p>笔者用的python版本是3.6，可能会出现pypdf2版本不兼容的问题</p>
 <p>提供一个命令，直接输入conda命令行，即可让conda推荐合适的插件版本</p>
 <p><code>conda install -c conda-forge &lt;package&gt;</code></p>
 <span id="more"></span>
 
-<p>代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> PyPDF2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compress_pdf</span>(<span class="params">input_path, output_path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(input_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        pdf = PyPDF2.PdfFileReader(file)</span><br><span class="line">        writer = PyPDF2.PdfFileWriter()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="built_in">range</span>(pdf.getNumPages()):</span><br><span class="line">            page = pdf.getPage(page_num)</span><br><span class="line">            <span class="comment"># 对页面内容进行压缩</span></span><br><span class="line">            page.compressContentStreams()  </span><br><span class="line">            writer.addPage(page)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(output_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> output_file:</span><br><span class="line">            writer.write(output_file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 可以用相对路径或者绝对路径</span></span><br><span class="line">    input_pdf = <span class="string">&quot;input.pdf&quot;</span></span><br><span class="line">    output_pdf = <span class="string">&quot;output_compressed.pdf&quot;</span></span><br><span class="line">    compress_pdf(input_pdf, output_pdf)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> PyPDF2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compress_pdf</span>(<span class="params">input_path, output_path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(input_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        pdf = PyPDF2.PdfFileReader(file)</span><br><span class="line">        writer = PyPDF2.PdfFileWriter()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="built_in">range</span>(pdf.getNumPages()):</span><br><span class="line">            page = pdf.getPage(page_num)</span><br><span class="line">            <span class="comment"># 对页面内容进行压缩</span></span><br><span class="line">            page.compressContentStreams()  </span><br><span class="line">            writer.addPage(page)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(output_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> output_file:</span><br><span class="line">            writer.write(output_file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 可以用相对路径或者绝对路径</span></span><br><span class="line">    input_pdf = <span class="string">&quot;input.pdf&quot;</span></span><br><span class="line">    output_pdf = <span class="string">&quot;output_compressed.pdf&quot;</span></span><br><span class="line">    compress_pdf(input_pdf, output_pdf)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>经过测试，成功将46.2 MB的PDF压缩到了4.29 MB，并且保留了原有格式和字体，不会有乱码的情况</p>
+<h3 id="压缩原理"><a href="#压缩原理" class="headerlink" title="压缩原理"></a>压缩原理</h3><ol>
+<li>首先，我们使用Python的<code>open()</code>函数以二进制读取模式打开输入的PDF文件。这样我们就可以读取PDF文件的内容。</li>
+<li>接下来，我们使用PyPDF2的<code>PdfFileReader()</code>函数创建一个PDF文件阅读器对象，以便读取输入PDF文件的内容。通过这个阅读器对象，我们可以获取PDF文件的总页数和访问每一页的内容。</li>
+<li>接着，我们创建一个新的PDF文件写入器对象，使用<code>PdfFileWriter()</code>函数。</li>
+<li>然后，我们使用一个循环遍历输入PDF文件的每一页。在循环中，我们使用<code>pdf.getPage(page_num)</code>来获取当前页的内容。</li>
+<li>对于每一页，我们调用<code>page.compressContentStreams()</code>函数，这是PyPDF2库中的一个方法，用于对页面内容进行压缩。</li>
+<li>压缩完成后，我们将当前页添加到新的PDF文件写入器对象中，使用<code>writer.addPage(page)</code>。</li>
+<li>在遍历所有页面后，我们使用<code>open()</code>函数以二进制写入模式打开输出的PDF文件。</li>
+<li>最后，我们使用新的PDF文件写入器对象的<code>write()</code>函数将压缩后的内容写入输出PDF文件。</li>
+</ol>
+<p>这样，通过循环遍历所有页面，对每一页的内容进行压缩，并将压缩后的内容写入新的PDF文件，我们就完成了PDF文件的压缩过程。值得注意的是，这个压缩过程主要针对内容的压缩，而不是对文件结构进行重组。压缩的效果取决于PDF文件的内容和结构，对于不同类型的PDF文件可能会产生不同的结果。</p>
+<p><strong>那么page.compressContentStreams()的原理是什么呢？</strong></p>
+<p><code>page.compressContentStreams()</code>方法是PyPDF2库中用于压缩PDF页面内容流（Content Stream）的函数。PDF页面的内容流是一系列操作指令，用于描述页面上的文本、图像和其他元素的位置、样式和绘制方式。通过压缩内容流，可以减小PDF文件的大小，节省存储空间和传输时间。</p>
+<p><code>compressContentStreams()</code>方法的原理如下：</p>
+<ol>
+<li>遍历内容流：首先，PyPDF2库会遍历页面的内容流，解析其中的操作指令和参数。</li>
+<li>优化操作：在遍历过程中，PyPDF2会尝试对内容流中的操作进行优化，例如合并相邻的相同操作、删除冗余的操作、简化操作参数等。</li>
+<li>压缩操作：PyPDF2会对内容流中的文本和图像数据进行压缩，以减小数据的大小。例如，它可能会压缩文本字符串、使用更高压缩率的图像格式等。</li>
+<li>重新生成内容流：在优化和压缩操作完成后，PyPDF2会重新生成经过优化和压缩的内容流。</li>
+<li>更新页面内容：最后，PyPDF2会将经过优化和压缩的内容流替换原始页面的内容流，从而实现对页面内容的压缩。</li>
+</ol>
+<p>值得注意的是，<code>compressContentStreams()</code>方法主要针对页面的内容流进行压缩，而不会对PDF文件的结构进行重组。压缩的效果取决于页面内容的复杂性和特点，对于包含大量文本和图像的页面，压缩效果可能会更明显。但对于一些特殊类型的PDF文件或已经进行过压缩处理的PDF文件，压缩的效果可能较小。在实际使用中，建议检查压缩后的PDF文件，以确保满足预期的压缩效果。</p>
 ]]></content>
       <categories>
         <category>Python</category>
