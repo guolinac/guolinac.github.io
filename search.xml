@@ -45,6 +45,373 @@
       </tags>
   </entry>
   <entry>
+    <title>常见linux命令</title>
+    <url>/2023/05/30/linux%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h1 id="一、基础知识"><a href="#一、基础知识" class="headerlink" title="一、基础知识"></a>一、基础知识</h1><h2 id="1-1-Linux系统的文件结构"><a href="#1-1-Linux系统的文件结构" class="headerlink" title="1.1 Linux系统的文件结构"></a>1.1 Linux系统的文件结构</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin        二进制文件，系统常规命令</span><br><span class="line">/boot       系统启动分区，系统启动时读取的文件</span><br><span class="line">/dev        设备文件</span><br><span class="line">/etc        大多数配置文件</span><br><span class="line">/home       普通用户的家目录</span><br><span class="line">/lib        32位函数库</span><br><span class="line">/lib64      64位库</span><br><span class="line">/media      手动临时挂载点</span><br><span class="line">/mnt        手动临时挂载点</span><br><span class="line">/opt        第三方软件安装位置</span><br><span class="line">/proc       进程信息及硬件信息</span><br><span class="line">/root       临时设备的默认挂载点</span><br><span class="line">/sbin       系统管理命令</span><br><span class="line">/srv        数据</span><br><span class="line">/var        数据</span><br><span class="line">/sys        内核相关信息</span><br><span class="line">/tmp        临时文件</span><br><span class="line">/usr        用户相关设定</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="1-2-Linux系统命令行的含义"><a href="#1-2-Linux系统命令行的含义" class="headerlink" title="1.2 Linux系统命令行的含义"></a>1.2 Linux系统命令行的含义</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">示例：root@app00:~<span class="comment"># </span></span><br><span class="line">root    <span class="regexp">//</span>用户名，root为超级用户</span><br><span class="line">@       <span class="regexp">//</span>分隔符</span><br><span class="line">app00   <span class="regexp">//</span>主机名称</span><br><span class="line">~       <span class="regexp">//</span>当前所在目录，默认用户目录为~，会随着目录切换而变化，例如：（root@app00:/bin<span class="comment"># ，当前位置在bin目录下）</span></span><br><span class="line"><span class="comment">#       //表示当前用户是超级用户，普通用户为$，例如：（&quot;yao@app00:/root$&quot; ，表示使用用户&quot;yao&quot;访问/root文件夹）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-3-命令的组成"><a href="#1-3-命令的组成" class="headerlink" title="1.3 命令的组成"></a>1.3 命令的组成</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">示例：命令 参数名 参数值</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、基础操作"><a href="#二、基础操作" class="headerlink" title="二、基础操作"></a>二、基础操作</h1><h2 id="2-1-关闭系统"><a href="#2-1-关闭系统" class="headerlink" title="2.1 关闭系统"></a>2.1 关闭系统</h2><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">(<span class="number">1</span>)立刻关机</span><br><span class="line">  shutdown -h now 或者 <span class="built_in">poweroff</span></span><br><span class="line">(<span class="number">2</span>)两分钟后关机</span><br><span class="line">  shutdown -h <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-重启系统"><a href="#2-2-重启系统" class="headerlink" title="2.2 重启系统"></a>2.2 重启系统</h2><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">(<span class="number">1</span>)立刻重启</span><br><span class="line">  shutdown -r now 或者 <span class="built_in">reboot</span></span><br><span class="line">(<span class="number">2</span>)两分钟后重启</span><br><span class="line">  shutdown -r <span class="number">2</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="2-3-帮助命令（help）"><a href="#2-3-帮助命令（help）" class="headerlink" title="2.3 帮助命令（help）"></a>2.3 帮助命令（help）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ifconfig  --help     <span class="regexp">//</span>查看 ifconfig 命令的用法</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-4-命令说明书（man）"><a href="#2-4-命令说明书（man）" class="headerlink" title="2.4 命令说明书（man）"></a>2.4 命令说明书（man）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">man shutdown         <span class="regexp">//</span>打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-5-切换用户（su）"><a href="#2-5-切换用户（su）" class="headerlink" title="2.5 切换用户（su）"></a>2.5 切换用户（su）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">su yao               <span class="regexp">//</span>切换为用户<span class="string">&quot;yao&quot;</span>,输入后回车需要输入该用户的密码</span><br><span class="line"><span class="keyword">exit</span>                 <span class="regexp">//</span>退出当前用户</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、目录操作"><a href="#三、目录操作" class="headerlink" title="三、目录操作"></a>三、目录操作</h1><h2 id="3-1-切换目录（cd）"><a href="#3-1-切换目录（cd）" class="headerlink" title="3.1 切换目录（cd）"></a>3.1 切换目录（cd）</h2><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cd</span> /                 <span class="string">//</span>切换到根目录</span><br><span class="line"><span class="keyword">cd</span> <span class="string">/bin</span>              <span class="string">//</span>切换到根目录下的bin目录</span><br><span class="line"><span class="keyword">cd</span> <span class="string">../</span>               <span class="string">//</span>切换到上一级目录 或者使用命令：<span class="keyword">cd</span> <span class="string">..</span></span><br><span class="line"><span class="keyword">cd</span> ~                 <span class="string">//</span>切换到home目录</span><br><span class="line"><span class="keyword">cd</span> -                 <span class="string">//</span>切换到上次访问的目录</span><br><span class="line"><span class="keyword">cd</span> xx<span class="params">(文件夹名)</span>       <span class="string">//</span>切换到本目录下的名为xx的文件目录，如果目录不存在报错</span><br><span class="line"><span class="keyword">cd</span> <span class="string">/xxx/xx/x</span>         <span class="string">//</span>可以输入完整的路径，直接切换到目标目录，输入过程中可以使用tab键快速补全</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-查看目录（ls）"><a href="#3-2-查看目录（ls）" class="headerlink" title="3.2 查看目录（ls）"></a>3.2 查看目录（ls）</h2><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ls</span>                   <span class="string">//</span>查看当前目录下的所有目录和文件</span><br><span class="line"><span class="keyword">ls</span> -a                <span class="string">//</span>查看当前目录下的所有目录和文件（包括隐藏的文件）</span><br><span class="line"><span class="keyword">ls</span> -l                <span class="string">//</span>列表查看当前目录下的所有目录和文件（列表查看，显示更多信息），与命令<span class="string">&quot;ll&quot;</span>效果一样</span><br><span class="line"><span class="keyword">ls</span> <span class="string">/bin</span>              <span class="string">//</span>查看指定目录下的所有目录和文件 </span><br></pre></td></tr></table></figure>
+
+<h2 id="3-3-删除目录与文件（rm）"><a href="#3-3-删除目录与文件（rm）" class="headerlink" title="3.3 删除目录与文件（rm）"></a>3.3 删除目录与文件（rm）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">rm 文件名              <span class="regexp">//</span>删除当前目录下的文件</span><br><span class="line">rm -f 文件名           <span class="regexp">//</span>删除当前目录的的文件（不询问）</span><br><span class="line">rm -r 文件夹名         <span class="regexp">//</span>递归删除当前目录下此名的目录</span><br><span class="line">rm -rf 文件夹名        <span class="regexp">//</span>递归删除当前目录下此名的目录（不询问）</span><br><span class="line">rm -rf *              <span class="regexp">//</span>将当前目录下的所有目录和文件全部删除</span><br><span class="line">rm -rf <span class="regexp">/*             /</span><span class="regexp">/将根目录下的所有文件全部删除【慎用！相当于格式化系统】</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-4-修改目录（mv）"><a href="#3-4-修改目录（mv）" class="headerlink" title="3.4 修改目录（mv）"></a>3.4 修改目录（mv）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">mv 当前目录名 新目录名        <span class="regexp">//</span>修改目录名，同样适用与文件操作</span><br><span class="line">mv <span class="regexp">/usr/</span>tmp<span class="regexp">/tool /</span>opt       <span class="regexp">//</span>将<span class="regexp">/usr/</span>tmp目录下的tool目录剪切到 /opt目录下面</span><br><span class="line">mv -r <span class="regexp">/usr/</span>tmp<span class="regexp">/tool /</span>opt    <span class="regexp">//</span>递归剪切目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-5-拷贝目录（cp）"><a href="#3-5-拷贝目录（cp）" class="headerlink" title="3.5 拷贝目录（cp）"></a>3.5 拷贝目录（cp）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cp <span class="regexp">/usr/</span>tmp<span class="regexp">/tool /</span>opt       <span class="regexp">//</span>将<span class="regexp">/usr/</span>tmp目录下的tool目录复制到 /opt目录下面</span><br><span class="line">cp -r <span class="regexp">/usr/</span>tmp<span class="regexp">/tool /</span>opt    <span class="regexp">//</span>递归剪复制目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-6-搜索目录（find）"><a href="#3-6-搜索目录（find）" class="headerlink" title="3.6 搜索目录（find）"></a>3.6 搜索目录（find）</h2><figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">find</span> <span class="regexp">/bin -name &#x27;a*&#x27;        /</span><span class="regexp">/查找/</span>bin目录下的所有以a开头的文件或者目录</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-7-查看当前目录（pwd）"><a href="#3-7-查看当前目录（pwd）" class="headerlink" title="3.7 查看当前目录（pwd）"></a>3.7 查看当前目录（pwd）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">pwd                         <span class="regexp">//</span>显示当前位置路径</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、文件操作"><a href="#四、文件操作" class="headerlink" title="四、文件操作"></a>四、文件操作</h1><h2 id="4-1-新增文件（touch）"><a href="#4-1-新增文件（touch）" class="headerlink" title="4.1 新增文件（touch）"></a>4.1 新增文件（touch）</h2><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">touch  <span class="selector-tag">a</span><span class="selector-class">.txt</span>         <span class="comment">//在当前目录下创建名为a的txt文件（文件不存在），如果文件存在，将文件时间属性修改为当前系统时间</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-2-删除文件（rm）"><a href="#4-2-删除文件（rm）" class="headerlink" title="4.2 删除文件（rm）"></a>4.2 删除文件（rm）</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">rm 文件名              <span class="regexp">//</span>删除当前目录下的文件</span><br><span class="line">rm -f 文件名           <span class="regexp">//</span>删除当前目录的的文件（不询问）</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-3-编辑文件（vi、vim）"><a href="#4-3-编辑文件（vi、vim）" class="headerlink" title="4.3 编辑文件（vi、vim）"></a>4.3 编辑文件（vi、vim）</h2><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">vi</span> 文件名              //打开需要编辑的文件</span><br><span class="line">--进入后，操作界面有三种模式：命令模式（<span class="keyword">command</span> <span class="keyword">mode</span>）、插入模式（Insert <span class="keyword">mode</span>）和底行模式（<span class="keyword">last</span> <span class="built_in">line</span> <span class="keyword">mode</span>）</span><br><span class="line">命令模式</span><br><span class="line">-刚进入文件就是命令模式，通过方向键控制光标位置，</span><br><span class="line">-使用命令<span class="string">&quot;dd&quot;</span>删除当前整行</span><br><span class="line">-使用命令<span class="string">&quot;/字段&quot;</span>进行查找</span><br><span class="line">-按<span class="string">&quot;i&quot;</span>在光标所在字符前开始插入</span><br><span class="line">-按<span class="string">&quot;a&quot;</span>在光标所在字符后开始插入</span><br><span class="line">-按<span class="string">&quot;o&quot;</span>在光标所在行的下面另起一新行插入</span><br><span class="line">-按<span class="string">&quot;：&quot;</span>进入底行模式</span><br><span class="line">插入模式</span><br><span class="line">-此时可以对文件内容进行编辑，左下角会显示 <span class="string">&quot;-- 插入 --&quot;</span><span class="comment">&quot;</span></span><br><span class="line">-按<span class="string">&quot;ESC&quot;</span>进入底行模式</span><br><span class="line">底行模式</span><br><span class="line">-退出编辑：      :q</span><br><span class="line">-强制退出：      :q!</span><br><span class="line">-保存并退出：    :<span class="keyword">wq</span></span><br><span class="line">## 操作步骤示例 ##</span><br><span class="line"><span class="number">1</span>.保存文件：按<span class="string">&quot;ESC&quot;</span> -&gt; 输入<span class="string">&quot;:&quot;</span> -&gt; 输入<span class="string">&quot;wq&quot;</span>,回车     //保存并退出编辑</span><br><span class="line"><span class="number">2</span>.取消操作：按<span class="string">&quot;ESC&quot;</span> -&gt; 输入<span class="string">&quot;:&quot;</span> -&gt; 输入<span class="string">&quot;q!&quot;</span>,回车     //撤销本次修改并退出编辑</span><br><span class="line">## 补充 ##</span><br><span class="line"><span class="keyword">vim</span> +<span class="number">10</span> filename.txt                   //打开文件并跳到第<span class="number">10</span>行</span><br><span class="line"><span class="keyword">vim</span> -R /etc/passwd                     //以只读模式打开文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-4-查看文件"><a href="#4-4-查看文件" class="headerlink" title="4.4 查看文件"></a>4.4 查看文件</h2><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">cat <span class="selector-tag">a</span><span class="selector-class">.txt</span>          <span class="comment">//查看文件最后一屏内容</span></span><br><span class="line">less <span class="selector-tag">a</span><span class="selector-class">.txt</span>         <span class="comment">//PgUp向上翻页，PgDn向下翻页，&quot;q&quot;退出查看</span></span><br><span class="line">more <span class="selector-tag">a</span><span class="selector-class">.txt</span>         <span class="comment">//显示百分比，回车查看下一行，空格查看下一页，&quot;q&quot;退出查看</span></span><br><span class="line">tail -<span class="number">100</span> <span class="selector-tag">a</span><span class="selector-class">.txt</span>    <span class="comment">//查看文件的后100行，&quot;Ctrl+C&quot;退出查看</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-给文件替换字符串（sed）"><a href="#4-5-给文件替换字符串（sed）" class="headerlink" title="4.5 给文件替换字符串（sed）"></a>4.5 给文件替换字符串（sed）</h2><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在输出或打印中，替换字符串。并不改变原文件内容</span></span><br><span class="line"><span class="attribute">sed</span> <span class="string">&#x27;作用范围s/替换查找目标/替换成为/替换目标option&#x27;</span> 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换字符串，并更改原文件内容</span></span><br><span class="line"><span class="comment"># 在sed后面加 -i,即编辑文档“edit files in place”选项</span></span><br><span class="line">sed -i <span class="string">&#x27;作用范围s/替换查找目标/替换成为/替换目标option&#x27;</span> 文件名</span><br></pre></td></tr></table></figure>
+
+<p>例，<em>sed ‘s&#x2F;cat&#x2F;dog&#x2F;g’ pet.txt</em><br>在全局范围(s前的作用范围无内容)查找cat并替换为dog，作用范围内每一行出现的不仅第一个目标，而是所有目标都会被替换（g）。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 作用范围在全文</span></span><br><span class="line"><span class="attribute">sed</span> <span class="string">&#x27;s/cat/dog/g&#x27;</span> pet.txt</span><br></pre></td></tr></table></figure>
+
+<p>指定行，写上行号；指定某行到某行，用逗号连接行号</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 作用范围在第1行</span></span><br><span class="line"><span class="attribute">sed</span> &#x27;<span class="number">1</span>s/cat/dog/g&#x27; pet.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作用范围在第6行到第10行</span></span><br><span class="line"><span class="attribute">sed</span> &#x27;<span class="number">6</span>,<span class="number">10</span>s/cat/dog/g&#x27; pet.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作用范围在第6行到最后一行</span></span><br><span class="line"><span class="attribute">sed</span> &#x27;<span class="number">6</span>,$s/cat/dog/g&#x27; pet.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 作用范围在指定行到其后2行，用加号(减号不可用)</span></span><br><span class="line"><span class="attribute">sed</span> &#x27;<span class="number">1</span>,+<span class="number">2</span>s/cat/dog/g&#x27; pet.txt</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、文件权限"><a href="#五、文件权限" class="headerlink" title="五、文件权限"></a>五、文件权限</h1><h2 id="5-1-权限说明"><a href="#5-1-权限说明" class="headerlink" title="5.1 权限说明"></a>5.1 权限说明</h2><figure class="highlight clean"><table><tr><td class="code"><pre><span class="line">文件权限简介：<span class="string">&#x27;r&#x27;</span> 代表可读（<span class="number">4</span>），<span class="string">&#x27;w&#x27;</span> 代表可写（<span class="number">2</span>），<span class="string">&#x27;x&#x27;</span> 代表执行权限（<span class="number">1</span>），括号内代表<span class="string">&quot;8421法&quot;</span></span><br><span class="line">##文件权限信息示例：-rwxrw-r--</span><br><span class="line">-第一位：<span class="string">&#x27;-&#x27;</span>就代表是文件，<span class="string">&#x27;d&#x27;</span>代表是文件夹</span><br><span class="line">-第一组三位：拥有者的权限</span><br><span class="line">-第二组三位：拥有者所在的组，组员的权限</span><br><span class="line">-第三组三位：代表的是其他用户的权限</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-2-文件权限"><a href="#5-2-文件权限" class="headerlink" title="5.2 文件权限"></a>5.2 文件权限</h2><table>
+<thead>
+<tr>
+<th align="left">who</th>
+<th align="left">用户类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>u</code></td>
+<td align="left">user</td>
+<td align="left">文件所有者</td>
+</tr>
+<tr>
+<td align="left"><code>g</code></td>
+<td align="left">group</td>
+<td align="left">文件所有者所在组</td>
+</tr>
+<tr>
+<td align="left"><code>o</code></td>
+<td align="left">others</td>
+<td align="left">所有其他用户</td>
+</tr>
+<tr>
+<td align="left"><code>a</code></td>
+<td align="left">all</td>
+<td align="left">所有用户, 相当于 <em>ugo</em></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><code>+</code></th>
+<th>为指定的用户类型增加权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-</code></td>
+<td>去除指定用户类型的权限</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>设置指定用户权限的设置，即将用户类型的所有权限重新设置</td>
+</tr>
+</tbody></table>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">普通授权    chmod +x <span class="selector-tag">a</span><span class="selector-class">.txt</span>    </span><br><span class="line"><span class="number">8421</span>法     chmod <span class="number">777</span> <span class="selector-tag">a</span><span class="selector-class">.txt</span>     <span class="comment">//1+2+4=7，&quot;7&quot;说明授予所有权限</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>八进制语法：</strong></p>
+<p>chmod命令可以使用八进制数来指定权限。文件或目录的权限位是由9个权限位来控制，每三位为一组，它们分别是文件所有者（User）的读、写、执行，用户组（Group）的读、写、执行以及其它用户（Other）的读、写、执行。历史上，文件权限被放在一个比特掩码中，掩码中指定的比特位设为1，用来说明一个类具有相应的优先级。</p>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">权限</th>
+<th align="left">rwx</th>
+<th align="left">二进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">7</td>
+<td align="left">读 + 写 + 执行</td>
+<td align="left">rwx</td>
+<td align="left">111</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">读 + 写</td>
+<td align="left">rw-</td>
+<td align="left">110</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">读 + 执行</td>
+<td align="left">r-x</td>
+<td align="left">101</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">只读</td>
+<td align="left">r–</td>
+<td align="left">100</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">写 + 执行</td>
+<td align="left">-wx</td>
+<td align="left">011</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">只写</td>
+<td align="left">-w-</td>
+<td align="left">010</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">只执行</td>
+<td align="left">–x</td>
+<td align="left">001</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">无</td>
+<td align="left">—</td>
+<td align="left">000</td>
+</tr>
+</tbody></table>
+<h1 id="六、打包与解压"><a href="#六、打包与解压" class="headerlink" title="六、打包与解压"></a>六、打包与解压</h1><h2 id="6-1-说明"><a href="#6-1-说明" class="headerlink" title="6.1 说明"></a>6.1 说明</h2><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="string">.zip</span>、<span class="string">.rar</span>        <span class="string">//windows</span>系统中压缩文件的扩展名</span><br><span class="line"><span class="string">.tar</span>              <span class="string">//Linux</span>中打包文件的扩展名</span><br><span class="line"><span class="string">.gz</span>               <span class="string">//Linux</span>中压缩文件的扩展名</span><br><span class="line"><span class="string">.tar.gz</span>           <span class="string">//Linux</span>中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-2-打包文件"><a href="#6-2-打包文件" class="headerlink" title="6.2 打包文件"></a>6.2 打包文件</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">tar -zcvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明：z：调用gzip压缩命令进行压缩; c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -zcvf a.tar file1 file2,...      <span class="regexp">//</span>多个文件压缩打包</span><br></pre></td></tr></table></figure>
+
+<h1 id="七、其他常用命令"><a href="#七、其他常用命令" class="headerlink" title="七、其他常用命令"></a>七、其他常用命令</h1><h2 id="7-1-find"><a href="#7-1-find" class="headerlink" title="7.1 find"></a>7.1 find</h2><figure class="highlight sqf"><table><tr><td class="code"><pre><span class="line"><span class="built_in">find</span> . -<span class="built_in">name</span> <span class="string">&quot;*.c&quot;</span>     <span class="comment">//将目前目录及其子目录下所有延伸档名是 c 的文件列出来</span></span><br><span class="line"><span class="built_in">find</span> . -<span class="built_in">type</span> f         <span class="comment">//将目前目录其其下子目录中所有一般文件列出</span></span><br><span class="line"><span class="built_in">find</span> . -ctime -<span class="number">20</span>      <span class="comment">//将目前目录及其子目录下所有最近 20 天内更新过的文件列出</span></span><br><span class="line"><span class="built_in">find</span> /var/<span class="built_in">log</span> -<span class="built_in">type</span> f -mtime +<span class="number">7</span> -ok rm &#123;&#125; \;     <span class="comment">//查找/var/log目录中更改时间在7日以前的普通文件，并在删除之前询问它们</span></span><br><span class="line"><span class="built_in">find</span> . -<span class="built_in">type</span> f -perm <span class="number">644</span> -<span class="built_in">exec</span> ls -l &#123;&#125; \;       <span class="comment">//查找前目录中文件属主具有读、写权限，并且文件所属组的用户和其他用户具有读权限的文件</span></span><br><span class="line"><span class="built_in">find</span> / -<span class="built_in">type</span> f -<span class="built_in">size</span> <span class="number">0</span> -<span class="built_in">exec</span> ls -l &#123;&#125; \;         <span class="comment">//为了查找系统中所有文件长度为0的普通文件，并列出它们的完整路径</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-2-whereis"><a href="#7-2-whereis" class="headerlink" title="7.2 whereis"></a>7.2 whereis</h2><p>这个命令可以用来查找二进制（命令）、源文件、man文件。与<code>which</code>不同的是这条命令可以是通过文件索引数据库而非PATH来查找的，所以查找的面比<code>which</code>要广</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line">whereis <span class="keyword">ls</span>             <span class="string">//</span>将和<span class="keyword">ls</span>文件相关的文件都查找出来</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-3-which"><a href="#7-3-which" class="headerlink" title="7.3 which"></a>7.3 which</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：which指令会在环境变量<span class="variable">$PATH</span>设置的目录里查找符合条件的文件。</span><br><span class="line">which bash             <span class="regexp">//</span>查看指令<span class="string">&quot;bash&quot;</span>的绝对路径</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-4-sudo"><a href="#7-4-sudo" class="headerlink" title="7.4 sudo"></a>7.4 sudo</h2><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">说明：sudo命令以系统管理者的身份执行指令，也就是说，经由 sudo 所执行的指令就好像是 root 亲自执行。需要输入自己账户密码。</span><br><span class="line">使用权限：在 /etc/sudoers 中有出现的使用者</span><br><span class="line">sudo -l                              <span class="comment">//列出目前的权限</span></span><br><span class="line">$ sudo -u yao vi ~www/index<span class="selector-class">.html</span>    <span class="comment">//sudo -u指定用户执行命令,以 yao 用户身份编辑  home 目录下www目录中的 index.html 文件</span></span><br><span class="line">普通用户切换到root用户下：sudo -<span class="selector-tag">i</span></span><br><span class="line">root用户切换到普通用户下：su testuser</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-5-grep"><a href="#7-5-grep" class="headerlink" title="7.5 grep"></a>7.5 grep</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">grep -i <span class="string">&quot;the&quot;</span> demo_file              <span class="regexp">//</span>在文件中查找字符串(不区分大小写)</span><br><span class="line">grep -A <span class="number">3</span> -i <span class="string">&quot;example&quot;</span> demo_text     <span class="regexp">//</span>输出成功匹配的行，以及该行之后的三行</span><br><span class="line">grep -r <span class="string">&quot;ramesh&quot;</span> *                   <span class="regexp">//</span>在一个文件夹中递归查询包含指定字符串的文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-6-service"><a href="#7-6-service" class="headerlink" title="7.6 service"></a>7.6 service</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：service命令用于运行System V init脚本，这些脚本一般位于<span class="regexp">/etc/i</span>nit.d文件下，这个命令可以直接运行这个文件夹里面的脚本，而不用加上路径</span><br><span class="line">service ssh status      <span class="regexp">//</span>查看服务状态 </span><br><span class="line">service --status-all    <span class="regexp">//</span>查看所有服务状态 </span><br><span class="line">service ssh restart     <span class="regexp">//</span>重启服务 </span><br></pre></td></tr></table></figure>
+
+<h2 id="7-7-free"><a href="#7-7-free" class="headerlink" title="7.7 free"></a>7.7 free</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：这个命令用于显示系统当前内存的使用情况，包括已用内存、可用内存和交换内存的情况 </span><br><span class="line">free -g            <span class="regexp">//</span>以G为单位输出内存的使用量，-g为GB，-m为MB，-k为KB，-b为字节 </span><br><span class="line">free -t            <span class="regexp">//</span>查看所有内存的汇总</span><br></pre></td></tr></table></figure>
+
+<p><img src="/linux%E5%91%BD%E4%BB%A4.assets/20200722152217915.jpg" alt="img"></p>
+<p>total：表示物理，内存总量<br>used：总计分配给缓存(包含Buffer和cache)使用的数量，但其中可能部分缓存并未实际使用<br>free：未被分配的内存。是真正尚未被使用的物理内存数量。<br>shared：共享内存，一般系统不会用到，这里也不讨论<br>buff：系统分配但未被使用的buffers数量<br>cache：系统分配但未被使用的cache数量<br>（cache是cpu和内存之间的，buffer是内存和磁盘之间的，都是为了解决速度不对等的问题。<br>缓存(cache)是把读取过来的数据保存起来，重新读取时若命中，就不去硬盘了，若没有命中就去读硬盘，其中的数据会根据读取频率进行组织，把最频繁读取的内容放在最容易找到的位置，把不再读取的内容不断往后排，直至从中删除。<br>缓冲(buffer)时根据磁盘的读写设计的，把分散的写操作集中进行，减少磁盘碎片和硬盘的的反复寻道，从而提高系统性能，linux有一个守护进程定期清空缓冲内容（即写入磁盘）。<br>buffer是即将要写入磁盘的，而cache是被从磁盘中读出来的。）<br>available：和free是有区别的，是实际可以用的最大空间。是应用程序认为可用内存数量，available &#x3D; free + buff&#x2F;cache (注：只是大概的计算方法)Linux 为了提升读写性能，会消耗一部分内存资源缓存磁盘数据，对于内核来说，buffer 和 cache 其实都属于已经被使用的内存。但当应用程序申请内存时，如果 free 内存不够，内核就会回收 buffer 和 cache 的内存来满足应用程序的请求。这就是稍后要说明的 buffer 和 cache。</p>
+<h2 id="7-8-top"><a href="#7-8-top" class="headerlink" title="7.8 top"></a>7.8 top</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">top               <span class="regexp">//</span>显示当前系统中占用资源最多的一些进程, shift+m 按照内存大小查看</span><br></pre></td></tr></table></figure>
+
+<p><img src="/linux%E5%91%BD%E4%BB%A4.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2txWmh1,size_16,color_FFFFFF,t_70.jpeg" alt="img"></p>
+<p>各行参数信息：</p>
+<hr>
+<p>第一行：</p>
+<p>12:18:39 系统当前时间<br>392 days, 17:32 系统从开机到现在的时间<br>1 user 当前用户数</p>
+<p>load average: 5.44, 6.00, 6.10  系统1分钟、5分钟、15分钟的CPU负载信息</p>
+<p>第二行：</p>
+<p>532 total：当前有532个任务，也就是532个进程。<br>2 running：2个进程正在运行<br>529 sleeping：529个进程睡眠<br>0 stopped：停止的进程数</p>
+<p>1 zombie：僵死的进程数</p>
+<p>第三行：</p>
+<p>Cpu(s)：表示这一行显示CPU总体信息</p>
+<p>8.1us：用户态进程占用CPU时间百分比，不包含renice值为负的任务占用的CPU的时间。<br>2.4sy：内核占用CPU时间百分比<br>0.0ni：改变过优先级的进程占用CPU的百分比<br>89.0 id：空闲CPU时间百分比<br>0.2wa：等待I&#x2F;O的CPU时间百分比<br>0.0hi：CPU硬中断时间百分比<br>0.3si：CPU软中断时间百分比<br>注：这里显示数据是所有cpu的平均值，如果想看每一个cpu的处理情况，按1即可；折叠，再次按1；</p>
+<hr>
+<p>第四行：</p>
+<p>Men：内存的意思</p>
+<p>65281768k total：物理内存总量<br>30484308k used：使用的物理内存量<br>3235388k free：空闲的物理内存量</p>
+<p>31562072k buff&#x2F;cache：用作内核缓存的物理内存量</p>
+<p>第五行：</p>
+<p>Swap：交换空间</p>
+<p>total：交换区总量<br>used：使用的交换区量<br>free：空闲的交换区量</p>
+<p>avail Men：实际最大可用交换区总量</p>
+<p>进程信息：</p>
+<p>PID：进程的ID<br>USER：进程所有者<br>PR：进程的优先级别，越小越优先被执行<br>NInice：值<br>VIRT：进程占用的虚拟内存<br>RES：进程占用的物理内存<br>SHR：进程使用的共享内存<br>S：进程的状态。S表示休眠，R表示正在运行，Z表示僵死状态，N表示该进程优先值为负数<br>%CPU：进程占用CPU的使用率<br>%MEM：进程使用的物理内存和总内存的百分比<br>TIME+：该进程启动后占用的总的CPU时间，即占用CPU使用时间的累加值。<br>COMMAND：进程启动命令名称</p>
+<p>然后按特定按键 就能很清楚的查看到cpu和内存的使用情况</p>
+<p>① 键入大写P，结果按CPU占用降序排序， %CPU</p>
+<p><img src="/linux%E5%91%BD%E4%BB%A4.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2txWmh1,size_16,color_FFFFFF,t_70-20230423152401485.jpeg" alt="img"></p>
+<p>② 键入大写M，结果按内存占用降序排序， %MEN </p>
+<p><img src="/linux%E5%91%BD%E4%BB%A4.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2txWmh1,size_16,color_FFFFFF,t_70-20230423152422719.jpeg" alt="img"></p>
+<h2 id="7-9-df"><a href="#7-9-df" class="headerlink" title="7.9 df"></a>7.9 df</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：显示文件系统的磁盘使用情况</span><br><span class="line">df -h            <span class="regexp">//</span>一种易看的显示</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-10-mount"><a href="#7-10-mount" class="headerlink" title="7.10 mount"></a>7.10 mount</h2><figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line">mount <span class="string">/dev/sdb1</span> <span class="string">/u01</span>              <span class="string">//</span>挂载一个文件系统，需要先创建一个目录，然后将这个文件系统挂载到这个目录上</span><br><span class="line">dev/sdb1 <span class="string">/u01</span> ext2 defaults 0 2   <span class="string">//</span>添加到fstab中进行自动挂载，这样任何时候系统重启的时候，文件系统都会被加载 </span><br></pre></td></tr></table></figure>
+
+<h2 id="7-11-uname"><a href="#7-11-uname" class="headerlink" title="7.11 uname"></a>7.11 uname</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">说明：<span class="built_in">uname</span>可以显示一些重要的系统信息，例如内核名称、主机名、内核版本号、处理器类型之类的信息 </span><br><span class="line"><span class="built_in">uname</span> -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-12-yum"><a href="#7-12-yum" class="headerlink" title="7.12 yum"></a>7.12 yum</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：安装插件命令</span><br><span class="line">yum install httpd      <span class="regexp">//</span>使用yum安装apache </span><br><span class="line">yum update httpd       <span class="regexp">//</span>更新apache </span><br><span class="line">yum remove httpd       <span class="regexp">//</span>卸载/删除apache </span><br></pre></td></tr></table></figure>
+
+<h2 id="7-13-rpm"><a href="#7-13-rpm" class="headerlink" title="7.13 rpm"></a>7.13 rpm</h2><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">说明：插件安装命令</span><br><span class="line">rpm -ivh httpd-<span class="number">2.2</span>.<span class="number">3</span>-<span class="number">22.0</span>.<span class="number">1</span><span class="selector-class">.el5</span><span class="selector-class">.i386</span><span class="selector-class">.rpm</span>      <span class="comment">//使用rpm文件安装apache </span></span><br><span class="line">rpm -uvh httpd-<span class="number">2.2</span>.<span class="number">3</span>-<span class="number">22.0</span>.<span class="number">1</span><span class="selector-class">.el5</span><span class="selector-class">.i386</span><span class="selector-class">.rpm</span>      <span class="comment">//使用rpm更新apache </span></span><br><span class="line">rpm -ev httpd                                 <span class="comment">//卸载/删除apache </span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-14-date"><a href="#7-14-date" class="headerlink" title="7.14 date"></a>7.14 date</h2><figure class="highlight arcade"><table><tr><td class="code"><pre><span class="line"><span class="built_in">date</span> -s <span class="string">&quot;01/31/2010 23:59:53&quot;</span>   <span class="comment">///设置系统时间</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-15-wget"><a href="#7-15-wget" class="headerlink" title="7.15 wget"></a>7.15 wget</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">说明：使用wget从网上下载软件、音乐、视频 </span><br><span class="line">示例：wget http:<span class="regexp">//</span>prdownloads.sourceforge.net<span class="regexp">/sourceforge/</span>nagios/nagios-<span class="number">3.2</span>.<span class="number">1</span>.tar.gz</span><br><span class="line"><span class="regexp">//</span>下载文件并以指定的文件名保存文件</span><br><span class="line">wget -O nagios.tar.gz http:<span class="regexp">//</span>prdownloads.sourceforge.net<span class="regexp">/sourceforge/</span>nagios/nagios-<span class="number">3.2</span>.<span class="number">1</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-16-ftp"><a href="#7-16-ftp" class="headerlink" title="7.16 ftp"></a>7.16 ftp</h2><figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">ftp</span> <span class="built_in">IP</span>/hostname    <span class="comment">//访问ftp服务器</span></span><br><span class="line"><span class="keyword">mls</span> *.html -       <span class="comment">//显示远程主机上文件列表</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-17-scp"><a href="#7-17-scp" class="headerlink" title="7.17 scp"></a>7.17 scp</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">scp <span class="regexp">/opt/</span>data.txt  <span class="number">192.168</span>.<span class="number">1.101</span>:<span class="regexp">/opt/</span>    <span class="regexp">//</span>将本地opt目录下的data文件发送到<span class="number">192.168</span>.<span class="number">1.101</span>服务器的opt目录下</span><br><span class="line"></span><br><span class="line">scp <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1</span>.mp3 root@www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/mu</span>sic </span><br><span class="line">scp <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1</span>.mp3 root@www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/mu</span>sic/<span class="number">001</span>.mp3 </span><br><span class="line">scp <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1</span>.mp3 www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/mu</span>sic </span><br><span class="line">scp <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1</span>.mp3 www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/mu</span>sic/<span class="number">001</span>.mp3 </span><br><span class="line"></span><br><span class="line">scp -r <span class="regexp">/home/</span>space<span class="regexp">/music/</span> root@www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/</span> </span><br><span class="line">scp -r <span class="regexp">/home/</span>space<span class="regexp">/music/</span> www.runoob.com:<span class="regexp">/home/</span>root<span class="regexp">/others/</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="7-18-cpu信息"><a href="#7-18-cpu信息" class="headerlink" title="7.18 cpu信息"></a>7.18 cpu信息</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">看cpu信息</span><br><span class="line">cat <span class="regexp">/proc/</span>cpuinfo </span><br><span class="line"></span><br><span class="line">查看系统平均负载</span><br><span class="line">cat <span class="regexp">/proc/</span>loadavg</span><br><span class="line"><span class="number">0.08</span> <span class="number">0.06</span> <span class="number">0.10</span> <span class="number">1</span>/<span class="number">442</span> <span class="number">8347</span></span><br><span class="line">前三项分别是最近<span class="number">1</span>分钟、<span class="number">5</span>分钟和<span class="number">15</span>分钟的系统平均负载。系统平均负载为在特定时间间隔内运行队列中的平均进程数，包括正在CPU上运行或者等待运行的进程。</span><br><span class="line">第四项，分子是正在运行的进程数，分母是进程总数。</span><br><span class="line">最后一项是最近运行的进程ID号。</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-19-网络负载"><a href="#7-19-网络负载" class="headerlink" title="7.19 网络负载"></a>7.19 网络负载</h2><p>1.查看服务器网络端口</p>
+<p><a href="https://so.csdn.net/so/search?q=ifconfig&spm=1001.2101.3001.7020">ifconfig</a></p>
+<p>2.<a href="https://so.csdn.net/so/search?q=ethtool&spm=1001.2101.3001.7020">ethtool</a>命令查看宽带大小</p>
+<p>三、nload命令实时统计网卡带宽使用率</p>
+<p>没有nload命令的需要下载；</p>
+<blockquote>
+<p>yum -y install nload</p>
+</blockquote>
+<p>#等待下载完</p>
+<p>#直接使用命令查看</p>
+<blockquote>
+<p>nload</p>
+</blockquote>
+<p>四、dstat -n命令实时监测网络的状态</p>
+<p>下载yum install dstat</p>
+<p>dstat -n</p>
+<h2 id="7-20-vmstat"><a href="#7-20-vmstat" class="headerlink" title="7.20 vmstat"></a>7.20 vmstat</h2><p>vmstat是Virtual Meomory Statistics（虚拟内存统计）的缩写，可对操作系统的虚拟内存、进程、CPU活动进行监控，是对系统的整体情况进行统计。</p>
+<figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">$ vmstat</span></span><br><span class="line"><span class="comment">procs</span>   <span class="literal">-----------</span><span class="comment">memory</span><span class="literal">-----------</span>  <span class="literal">--</span><span class="comment">swap</span><span class="literal">--</span>  <span class="literal">--</span><span class="comment">io</span><span class="literal">--</span>  <span class="literal">--</span><span class="comment">system</span><span class="literal">--</span>  <span class="literal">-----</span><span class="comment">cpu</span><span class="literal">-----</span></span><br><span class="line"> <span class="comment">r  b   swpd    free   buff   cache   si   so   bi  bo   in   cs    us sy id wa st</span></span><br><span class="line"> <span class="comment">1  0     0  14376368 161976 1130836   0    0    0   3    2    2     0  0 100 0  0</span></span><br></pre></td></tr></table></figure>
+
+<p>我们只关注cpu列：<br><strong>us</strong>：用户进程执行时间百分比<br><strong>sy</strong>：系统进程执行时间百分比<br><strong>id</strong>：空闲时间百分比<br><strong>wa</strong>：等待IO时间百分比<br><strong>st</strong>：被虚拟机偷走的cpu时间百分比</p>
+<h2 id="7-21-iostat命令"><a href="#7-21-iostat命令" class="headerlink" title="7.21 iostat命令"></a>7.21 iostat命令</h2><p>iostat是I&#x2F;O statistics（输入&#x2F;输出统计）的缩写，iostat将对系统的磁盘操作活动进行监视。iostat命令主要是用来查看IO使用状况，也可以查看cpu使用情况。</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Linux</span> <span class="number">3</span>.<span class="number">10</span>.<span class="number">0</span>-<span class="number">862</span>.<span class="number">3</span>.<span class="number">2</span>.el7.x86_64 (instance-<span class="number">34</span>rgafwb)     <span class="number">01</span>/<span class="number">03</span>/<span class="number">2020</span>     _x86_64_    (<span class="number">8</span> CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">avg</span>-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           <span class="attribute">0</span>.<span class="number">17</span>    <span class="number">0</span>.<span class="number">02</span>    <span class="number">0</span>.<span class="number">15</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">99</span>.<span class="number">64</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">Device</span>:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line"><span class="attribute">vda</span>               <span class="number">1</span>.<span class="number">94</span>         <span class="number">0</span>.<span class="number">30</span>        <span class="number">18</span>.<span class="number">15</span>    <span class="number">5030634</span>  <span class="number">302731996</span></span><br><span class="line"><span class="attribute">vdb</span>               <span class="number">0</span>.<span class="number">00</span>         <span class="number">0</span>.<span class="number">00</span>         <span class="number">0</span>.<span class="number">00</span>       <span class="number">6252</span>        <span class="number">148</span></span><br></pre></td></tr></table></figure>
+
+<p>avg-cpu 行是CPU平均使用率，与前述命令类似：</p>
+<p>　　<strong>%user</strong>：CPU处在用户模式下的时间百分比。</p>
+<p>　　<strong>%nice</strong>：CPU处在带NICE值的用户模式下的时间百分比。</p>
+<p>　　<strong>%system</strong>：CPU处在系统模式下的时间百分比。</p>
+<p>　　<strong>%iowait</strong>：CPU等待输入输出完成时间的百分比。</p>
+<p>　　<strong>%steal</strong>：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。</p>
+<p>　　<strong>%idle</strong>：CPU空闲时间百分比。</p>
+<h2 id="7-22-sar命令"><a href="#7-22-sar命令" class="headerlink" title="7.22 sar命令"></a>7.22 sar命令</h2><p>sar（System Activity Reporter，系统活动情况报告）是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I&#x2F;O、CPU效率、内存使用状况、进程活动及IPC有关的活动等。我们现在只关注CPU使用率和系统负载。</p>
+<ul>
+<li><strong>输出CPU使用率的统计信息</strong>：</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sar</span> <span class="number">10</span> <span class="number">3</span>　　　　//每<span class="number">10</span>秒采样一次，连续采样<span class="number">3</span>次</span><br><span class="line"><span class="attribute">sar</span> -u <span class="number">10</span> <span class="number">3</span>　　//同上</span><br><span class="line"><span class="attribute">sar</span>　　　　　　　//输出全天cpu使用率的统计信息</span><br><span class="line"><span class="attribute">sar</span> -p　　　　　//同上</span><br><span class="line"><span class="attribute">sar</span> -P <span class="literal">ALL</span> <span class="number">2</span> <span class="number">3</span>　　//每<span class="number">2</span>秒采样一次，连续采样<span class="number">3</span>次，输出CPU每个核心的使用率</span><br></pre></td></tr></table></figure>
+
+<p>输出如下：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># sar -u 10 3</span></span><br><span class="line"><span class="attribute">Linux</span> <span class="number">2</span>.<span class="number">6</span>.<span class="number">32</span>-<span class="number">642</span>.<span class="number">13</span>.<span class="number">1</span>.el6.x86_64 (appstore-nginx-test)     <span class="number">01</span>/<span class="number">03</span>/<span class="number">2020</span>     _x86_64_    (<span class="number">8</span> CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">02</span>:<span class="number">26</span>:<span class="number">29</span> PM     CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line"><span class="attribute">02</span>:<span class="number">26</span>:<span class="number">39</span> PM     <span class="literal">all</span>      <span class="number">0</span>.<span class="number">28</span>      <span class="number">0</span>.<span class="number">00</span>      <span class="number">0</span>.<span class="number">31</span>      <span class="number">0</span>.<span class="number">01</span>      <span class="number">0</span>.<span class="number">01</span>     <span class="number">99</span>.<span class="number">38</span></span><br><span class="line"><span class="attribute">02</span>:<span class="number">26</span>:<span class="number">49</span> PM     <span class="literal">all</span>      <span class="number">0</span>.<span class="number">33</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">31</span>      <span class="number">0</span>.<span class="number">05</span>      <span class="number">0</span>.<span class="number">03</span>     <span class="number">99</span>.<span class="number">26</span></span><br><span class="line"><span class="attribute">02</span>:<span class="number">26</span>:<span class="number">59</span> PM     <span class="literal">all</span>      <span class="number">0</span>.<span class="number">29</span>      <span class="number">0</span>.<span class="number">00</span>      <span class="number">0</span>.<span class="number">35</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">03</span>     <span class="number">99</span>.<span class="number">31</span></span><br><span class="line"><span class="attribute">Average</span>:        <span class="literal">all</span>      <span class="number">0</span>.<span class="number">30</span>      <span class="number">0</span>.<span class="number">01</span>      <span class="number">0</span>.<span class="number">33</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">02</span>     <span class="number">99</span>.<span class="number">32</span></span><br></pre></td></tr></table></figure>
+
+<p>CPU列的 “all” 说明统计信息是所有cpu使用率的平均值，数字 “x” 说明此统计信息是CPU核心x的使用率。各列数据的意义与前述几个命令一样，不再赘述。</p>
+<ul>
+<li><strong>系统平均负载</strong></li>
+</ul>
+<p>监控进程队列长度和平均负载，每10秒采样一次，连续采样3次：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># sar -q 1 3</span></span><br><span class="line"><span class="attribute">Linux</span> <span class="number">2</span>.<span class="number">6</span>.<span class="number">32</span>-<span class="number">642</span>.<span class="number">13</span>.<span class="number">1</span>.el6.x86_64 (appstore-nginx-test)     <span class="number">01</span>/<span class="number">03</span>/<span class="number">2020</span>     _x86_64_    (<span class="number">8</span> CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">03</span>:<span class="number">01</span>:<span class="number">01</span> PM   runq-sz  plist-sz   ldavg-<span class="number">1</span>   ldavg-<span class="number">5</span>  ldavg-<span class="number">15</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">01</span>:<span class="number">02</span> PM         <span class="number">0</span>       <span class="number">512</span>      <span class="number">0</span>.<span class="number">06</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">00</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">01</span>:<span class="number">03</span> PM         <span class="number">0</span>       <span class="number">512</span>      <span class="number">0</span>.<span class="number">06</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">00</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">01</span>:<span class="number">04</span> PM         <span class="number">0</span>       <span class="number">512</span>      <span class="number">0</span>.<span class="number">06</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">00</span></span><br><span class="line"><span class="attribute">Average</span>:            <span class="number">0</span>       <span class="number">512</span>      <span class="number">0</span>.<span class="number">06</span>      <span class="number">0</span>.<span class="number">03</span>      <span class="number">0</span>.<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<p>输出项说明：</p>
+<p>　　runq-sz：运行队列的长度（等待运行的进程数，每核的CP不能超过3个）<br>　　plist-sz：进程列表中的进程（processes）和线程数（threads）的数量<br>　　ldavg-1：最近1分钟的CPU平均负载，即将多核CPU过去一分钟的负载相加再除以核心数得出的平均值，以下类似<br>　　ldavg-5：最近5分钟的CPU平均负载<br>　　ldavg-15：最近15分钟的CPU平均负载</p>
+<h2 id="7-23-mpstat命令"><a href="#7-23-mpstat命令" class="headerlink" title="7.23 mpstat命令"></a>7.23 mpstat命令</h2><p>mpstat是MultiProcessor Statistics的缩写，是一个实时系统监控工具，输出CPU的一些统计信息，这些信息存放在&#x2F;proc&#x2F;stat文件中。在多CPU系统里，其不但能查看所有CPU的平均统计信息，而且能够查看特定CPU的信息。</p>
+<ul>
+<li>显示所有CPU整体（平均）使用状况</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mpstat        //不带参数时，输出为从系统启动以来的平均值</span></span><br><span class="line"><span class="attribute">Linux</span> <span class="number">2</span>.<span class="number">6</span>.<span class="number">32</span>-<span class="number">642</span>.<span class="number">13</span>.<span class="number">1</span>.el6.x86_64 (appstore-nginx-test)     <span class="number">01</span>/<span class="number">03</span>/<span class="number">2020</span>     _x86_64_    (<span class="number">8</span> CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">03</span>:<span class="number">14</span>:<span class="number">40</span> PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest   %idle</span><br><span class="line"><span class="attribute">03</span>:<span class="number">14</span>:<span class="number">40</span> PM  <span class="literal">all</span>    <span class="number">1</span>.<span class="number">59</span>    <span class="number">0</span>.<span class="number">05</span>    <span class="number">0</span>.<span class="number">74</span>    <span class="number">0</span>.<span class="number">05</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">04</span>    <span class="number">0</span>.<span class="number">03</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">97</span>.<span class="number">51</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># mpstat 1 5    //每1秒收集一次，共5次</span></span><br><span class="line"><span class="attribute">Linux</span> <span class="number">2</span>.<span class="number">6</span>.<span class="number">32</span>-<span class="number">642</span>.<span class="number">13</span>.<span class="number">1</span>.el6.x86_64 (appstore-nginx-test)     <span class="number">01</span>/<span class="number">03</span>/<span class="number">2020</span>     _x86_64_    (<span class="number">8</span> CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">03</span>:<span class="number">25</span>:<span class="number">58</span> PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest   %idle</span><br><span class="line"><span class="attribute">03</span>:<span class="number">25</span>:<span class="number">59</span> PM  <span class="literal">all</span>    <span class="number">0</span>.<span class="number">13</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">25</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">99</span>.<span class="number">62</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">26</span>:<span class="number">00</span> PM  <span class="literal">all</span>    <span class="number">0</span>.<span class="number">38</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">38</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">13</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">99</span>.<span class="number">12</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">26</span>:<span class="number">01</span> PM  <span class="literal">all</span>    <span class="number">2</span>.<span class="number">01</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">1</span>.<span class="number">01</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">13</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">96</span>.<span class="number">86</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">26</span>:<span class="number">02</span> PM  <span class="literal">all</span>    <span class="number">0</span>.<span class="number">38</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">38</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">99</span>.<span class="number">25</span></span><br><span class="line"><span class="attribute">03</span>:<span class="number">26</span>:<span class="number">03</span> PM  <span class="literal">all</span>    <span class="number">0</span>.<span class="number">25</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">25</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">13</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">99</span>.<span class="number">37</span></span><br><span class="line"><span class="attribute">Average</span>:     <span class="literal">all</span>    <span class="number">0</span>.<span class="number">63</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">45</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">00</span>    <span class="number">0</span>.<span class="number">05</span>    <span class="number">0</span>.<span class="number">03</span>    <span class="number">0</span>.<span class="number">00</span>   <span class="number">98</span>.<span class="number">85</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>显示所有CPU的使用状况</li>
+</ul>
+<figure class="highlight ldif"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mpstat -P ALL 10 20　　//每10秒收集一次数据，共20次</span></span><br><span class="line">Linux 2.6.32-642.13.1.el6.x86_64 (appstore-nginx-test)     01/03/2020     _x86_64_    (8 CPU)</span><br><span class="line"></span><br><span class="line"><span class="attribute">03</span>:12:59 PM  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest   %idle</span><br><span class="line"><span class="attribute">03</span>:13:09 PM  all    0.41    0.00    0.34    0.03    0.00    0.05    0.04    0.00   99.13</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    0    1.01    0.00    0.70    0.20    0.00    0.00    0.00    0.00   98.09</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    1    1.21    0.00    0.71    0.00    0.00    0.40    0.20    0.00   97.47</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    2    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    3    0.10    0.00    0.30    0.00    0.00    0.00    0.00    0.00   99.60</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    4    0.30    0.00    0.30    0.00    0.00    0.00    0.00    0.00   99.40</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    5    0.50    0.00    0.40    0.00    0.00    0.00    0.00    0.00   99.10</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    6    0.10    0.00    0.10    0.00    0.00    0.00    0.00    0.00   99.80</span><br><span class="line"><span class="attribute">03</span>:13:09 PM    7    0.00    0.00    0.20    0.00    0.00    0.00    0.00    0.00   99.80</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>　　输出项说明：</p>
+<p>　　%usr：表示处理用户进程所使用CPU的百分比</p>
+<p>　　%nice：表示使用nice命令对进程进行降级时CPU的百分比</p>
+<p>　　%sys：表示内核进程使用的CPU百分比</p>
+<p>　　%iowait：表示等待进行I&#x2F;O所使用的CPU时间百分比</p>
+<p>　　%irq：表示用于处理系统中断的CPU百分比</p>
+<p>　　%soft：表示用于软件中断的CPU百分比</p>
+<p>　　%steal：显示虚拟机管理器在服务另一个虚拟处理器时虚拟CPU处在非自愿等待下花费时间的百分比</p>
+<p>　　%guest：显示运行虚拟处理器时CPU花费时间的百分比</p>
+<p>　　%idle：显示CPU的空闲时间百分比</p>
+<h2 id="7-24-uptime命令"><a href="#7-24-uptime命令" class="headerlink" title="7.24 uptime命令"></a>7.24 uptime命令</h2><p>uptime命令是一个简单的获取系统总共运行时长，以及最近1分钟、5分钟、15分钟的平均负载的工具。uptime命令输出内容与top命令输出首行内容一样，不再赘述。</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># uptime</span></span><br><span class="line"> <span class="attribute">15</span>:<span class="number">40</span>:<span class="number">19</span> up <span class="number">203</span> days, <span class="number">23</span>:<span class="number">15</span>,  <span class="number">2</span> users,  load average: <span class="number">0</span>.<span class="number">01</span>, <span class="number">0</span>.<span class="number">01</span>, <span class="number">0</span>.<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-25-pidstat命令"><a href="#7-25-pidstat命令" class="headerlink" title="7.25 pidstat命令"></a>7.25 pidstat命令</h2><p>pidstat命令主要用于监控全部或指定进程占用系统资源的情况。</p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pidstat</span></span><br><span class="line">Linux 2.6.32-642.13.1.el6.x86_64 (appstore-nginx-test)     01/03/2020     _x86_64_    (8 CPU)</span><br><span class="line"></span><br><span class="line">03:48:26 PM       PID    %usr %system  %guest    %CPU   CPU  Command</span><br><span class="line">03:48:26 PM        <span class="number"> 1 </span>   0.00    0.01    0.00    0.01    <span class="number"> 5 </span> init</span><br><span class="line">03:48:26 PM        <span class="number"> 2 </span>   0.00    0.00    0.00    0.00    <span class="number"> 1 </span> kthreadd</span><br><span class="line">03:48:26 PM        <span class="number"> 3 </span>   0.00    0.00    0.00    0.00    <span class="number"> 0 </span> migration/0</span><br><span class="line">03:48:26 PM        <span class="number"> 4 </span>   0.00    0.00    0.00    0.00    <span class="number"> 0 </span> ksoftirqd/0</span><br><span class="line">03:48:26 PM        <span class="number"> 6 </span>   0.00    0.00    0.00    0.00    <span class="number"> 0 </span> watchdog/0</span><br><span class="line">03:48:26 PM        <span class="number"> 7 </span>   0.00    0.00    0.00    0.00    <span class="number"> 1 </span> migration/1</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h1 id="八、系统管理"><a href="#八、系统管理" class="headerlink" title="八、系统管理"></a>八、系统管理</h1><h2 id="8-1-防火墙操作"><a href="#8-1-防火墙操作" class="headerlink" title="8.1 防火墙操作"></a>8.1 防火墙操作</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">service iptables status      <span class="regexp">//</span>查看iptables服务的状态</span><br><span class="line">service iptables start       <span class="regexp">//</span>开启iptables服务</span><br><span class="line">service iptables stop        <span class="regexp">//</span>停止iptables服务</span><br><span class="line">service iptables restart     <span class="regexp">//</span>重启iptables服务</span><br><span class="line">chkconfig iptables off       <span class="regexp">//</span>关闭iptables服务的开机自启动</span><br><span class="line">chkconfig iptables on        <span class="regexp">//</span>开启iptables服务的开机自启动</span><br><span class="line"><span class="comment">##centos7 防火墙操作</span></span><br><span class="line">systemctl status firewalld.service     <span class="regexp">//</span>查看防火墙状态</span><br><span class="line">systemctl stop firewalld.service       <span class="regexp">//</span>关闭运行的防火墙</span><br><span class="line">systemctl disable firewalld.service    <span class="regexp">//</span>永久禁止防火墙服务</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-2-修改主机名（CentOS-7）"><a href="#8-2-修改主机名（CentOS-7）" class="headerlink" title="8.2 修改主机名（CentOS 7）"></a>8.2 修改主机名（CentOS 7）</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><span class="line"><span class="string">hostnamectl</span> <span class="built_in">set-hostname</span> 主机名</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-3-查看网络"><a href="#8-3-查看网络" class="headerlink" title="8.3 查看网络"></a>8.3 查看网络</h2><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">ifconfig</span></span><br></pre></td></tr></table></figure>
+
+<p>ifconfig和ip addr这两个命令返回的都是机器的网卡信息，其中包含了网卡的 MAC 地址和 IP 地址，有了这两个地址才能进行网络通信，其中ifconfig命令默认显示当前已启动的网卡信息，而ip addr 会显示当前所有网卡信息，包括已启动和未启动的网卡信息，如果需要显示全部网卡信息需要输入命令ifconfig -a命令。</p>
+<h2 id="8-4-修改IP"><a href="#8-4-修改IP" class="headerlink" title="8.4 修改IP"></a>8.4 修改IP</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">修改网络配置文件，文件地址：<span class="regexp">/etc/</span>sysconfig<span class="regexp">/network-scripts/i</span>fcfg-eth0</span><br><span class="line">------------------------------------------------</span><br><span class="line">主要修改以下配置：  </span><br><span class="line">TYPE=Ethernet               <span class="regexp">//</span>网络类型</span><br><span class="line">BOOTPROTO=static            <span class="regexp">//</span>静态IP</span><br><span class="line">DEVICE=ens00                <span class="regexp">//</span>网卡名</span><br><span class="line">IPADDR=<span class="number">192.168</span>.<span class="number">1.100</span>        <span class="regexp">//</span>设置的IP</span><br><span class="line">NETMASK=<span class="number">255.255</span>.<span class="number">255.0</span>       <span class="regexp">//</span>子网掩码</span><br><span class="line">GATEWAY=<span class="number">192.168</span>.<span class="number">1.1</span>         <span class="regexp">//</span>网关</span><br><span class="line">DNS1=<span class="number">192.168</span>.<span class="number">1.1</span>            <span class="regexp">//</span>DNS</span><br><span class="line">DNS2=<span class="number">8.8</span>.<span class="number">8.8</span>                <span class="regexp">//</span>备用DNS</span><br><span class="line">ONBOOT=yes                  <span class="regexp">//</span>系统启动时启动此设置</span><br><span class="line">-------------------------------------------------</span><br><span class="line">修改保存以后使用命令重启网卡：service network restart</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-5-配置映射"><a href="#8-5-配置映射" class="headerlink" title="8.5 配置映射"></a>8.5 配置映射</h2><figure class="highlight accesslog"><table><tr><td class="code"><pre><span class="line">修改文件： vi /etc/hosts</span><br><span class="line">在文件最后添加映射地址，示例如下：</span><br><span class="line"><span class="number">192.168.1.101</span>  node1</span><br><span class="line"><span class="number">192.168.1.102</span>  node2</span><br><span class="line"><span class="number">192.168.1.103</span>  node3</span><br><span class="line">配置好以后保存退出，输入命令：ping node1 ，可见实际 ping 的是 <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">101</span>。</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-6-查看进程"><a href="#8-6-查看进程" class="headerlink" title="8.6 查看进程"></a>8.6 查看进程</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ps -ef         <span class="regexp">//</span>查看所有正在运行的进程</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-7-结束进程"><a href="#8-7-结束进程" class="headerlink" title="8.7 结束进程"></a>8.7 结束进程</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">kill pid       <span class="regexp">//</span>杀死该pid的进程</span><br><span class="line">kill -<span class="number">9</span> pid    <span class="regexp">//</span>强制杀死该进程   </span><br></pre></td></tr></table></figure>
+
+<h2 id="8-8-查看链接"><a href="#8-8-查看链接" class="headerlink" title="8.8 查看链接"></a>8.8 查看链接</h2><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">命令	           说明</span><br><span class="line">netstat -anp	显示系统端口使用情况</span><br><span class="line">netstat -nupl	UDP类型的端口</span><br><span class="line">netstat -ntpl	TCP类型的端口</span><br><span class="line">netstat -l	    只显示所有监听端口</span><br><span class="line">netstat -<span class="keyword">lt</span>	    只显示所有监听tcp端口</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ping IP        <span class="regexp">//</span>查看与此IP地址的连接情况</span><br><span class="line">netstat -an    <span class="regexp">//</span>查看当前系统端口</span><br><span class="line">netstat -an | grep <span class="number">8080</span>     <span class="regexp">//</span>查看指定端口</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-9-快速清屏"><a href="#8-9-快速清屏" class="headerlink" title="8.9 快速清屏"></a>8.9 快速清屏</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ctrl+l        <span class="regexp">//</span>清屏，往上翻可以查看历史操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-10-远程主机"><a href="#8-10-远程主机" class="headerlink" title="8.10 远程主机"></a>8.10 远程主机</h2><figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">ssh</span> <span class="built_in">IP</span>       <span class="comment">//远程主机，需要输入用户名和密码</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="8-11-软硬链接（ln）"><a href="#8-11-软硬链接（ln）" class="headerlink" title="8.11 软硬链接（ln）"></a>8.11 软硬链接（ln）</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line">ln <span class="selector-attr">[参数]</span><span class="selector-attr">[源文件或目录]</span><span class="selector-attr">[目标文件或目录]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>软链接</strong>：</p>
+<ul>
+<li>1.软链接，以路径的形式存在。类似于Windows操作系统中的快捷方式</li>
+<li>2.软链接可以 跨文件系统 ，硬链接不可以</li>
+<li>3.软链接可以对一个不存在的文件名进行链接</li>
+<li>4.软链接可以对目录进行链接</li>
+</ul>
+<p><strong>硬链接</strong>：</p>
+<ul>
+<li>1.硬链接，以文件副本的形式存在。但不占用实际空间。</li>
+<li>2.不允许给目录创建硬链接</li>
+<li>3.硬链接只有在同一个文件系统中才能创建</li>
+</ul>
+<p>给文件创建软链接，为log2013.log文件创建软链接link2013，如果log2013.log丢失，link2013将失效：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s log2013.<span class="built_in">log</span> link2013</span><br></pre></td></tr></table></figure>
+
+<p>给文件创建硬链接，为log2013.log创建硬链接ln2013，log2013.log与ln2013的各项属性相同</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> log2013.<span class="built_in">log</span> ln2013</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-12-进程优先级（nice）"><a href="#8-12-进程优先级（nice）" class="headerlink" title="8.12 进程优先级（nice）"></a>8.12 进程优先级（nice）</h2><p>Linux nice命令以更改过的优先序来执行程序，如果未指定程序，则会印出目前的排程优先序，内定的 adjustment 为 10，范围为 -20（最高优先序）到 19（最低优先序）。</p>
+<p>使用权限：所有使用者。</p>
+<p>设置程序运行时的优先级</p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line"><span class="comment"># vi &amp; //后台运行</span></span><br><span class="line">[1] 15297</span><br><span class="line"><span class="comment"># nice vi &amp; //设置默认优先级</span></span><br><span class="line">[2] 15298</span><br><span class="line"></span><br><span class="line">[1]+ Stopped         vi</span><br><span class="line"><span class="comment"># nice -n 19 vi &amp; //设置优先级为19</span></span><br><span class="line">[3] 15299</span><br><span class="line"></span><br><span class="line">[2]+ Stopped         nice vi</span><br><span class="line"><span class="comment"># nice -n -20 vi &amp; //设置优先级为 -20</span></span><br><span class="line">[4] 15300</span><br><span class="line"></span><br><span class="line">[3]+ Stopped         nice -n<span class="number"> 19 </span>vi</span><br><span class="line"><span class="comment"># ps -l //显示进程</span></span><br><span class="line">F S  UID  PID PPID C PRI NI ADDR SZ WCHAN TTY     TIME CMD</span><br><span class="line">4 S  <span class="number"> 0 </span>15278<span class="number"> 15212 </span>0<span class="number"> 80 </span><span class="number"> 0 </span>-<span class="number"> 1208 </span>wait  pts/2  00:00:00 bash</span><br><span class="line">0 T  <span class="number"> 0 </span>15297<span class="number"> 15278 </span>0<span class="number"> 80 </span><span class="number"> 0 </span>-<span class="number"> 2687 </span>signal pts/2  00:00:00 vi</span><br><span class="line">0 T  <span class="number"> 0 </span>15298<span class="number"> 15278 </span>0<span class="number"> 90 </span>10 -<span class="number"> 2687 </span>signal pts/2  00:00:00 vi</span><br><span class="line">0 T  <span class="number"> 0 </span>15299<span class="number"> 15278 </span>1<span class="number"> 99 </span>19 -<span class="number"> 2687 </span>signal pts/2  00:00:00 vi</span><br><span class="line">4 T  <span class="number"> 0 </span>15300<span class="number"> 15278 </span>3<span class="number"> 60 </span>-20 -<span class="number"> 2687 </span>signal pts/2  00:00:00 vi</span><br><span class="line">4 R  <span class="number"> 0 </span>15301<span class="number"> 15278 </span>0<span class="number"> 80 </span><span class="number"> 0 </span>- <span class="number"> 625 </span>-   pts/2  00:00:00 ps</span><br><span class="line"></span><br><span class="line">[4]+ Stopped         nice -n -20 vi</span><br></pre></td></tr></table></figure>
+
+<p>将 ls 的优先序加 1 并执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">nice</span> -n 1 <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<p>将 ls 的优先序加 10 并执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">nice</span> <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++实现LRU缓存淘汰算法</title>
     <url>/2023/02/10/C++%E5%AE%9E%E7%8E%B0LRU%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<h1 id="LRU算法简介"><a href="#LRU算法简介" class="headerlink" title="LRU算法简介"></a>LRU算法简介</h1><p>对于web开发而言，缓存必不可少，也是提高性能最常用的方式。无论是浏览器缓存，还是服务端的缓存(通过memcached或者redis等内存数据库)。缓存不仅可以加速用户的访问，同时也可以降低服务器的负载和压力。那么，了解常见的缓存淘汰算法的策略和原理就显得特别重要。</p>
