@@ -456,6 +456,27 @@
       </tags>
   </entry>
   <entry>
+    <title>Centos7 cmake 版本升级</title>
+    <url>/2023/05/22/cmake%E5%8D%87%E7%BA%A7/</url>
+    <content><![CDATA[<h1 id="通过Python压缩pdf"><a href="#通过Python压缩pdf" class="headerlink" title="通过Python压缩pdf"></a>通过Python压缩pdf</h1><p>在centos7 yum源中和系统自带的cmake版本为2.8.12.2；在编译某些文件的时候会提醒cmake版本过低，本文旨在解决cmake的更新问题</p>
+<p>cmake官网：<a href="https://cmake.org/">https://cmake.org/</a><br>cmake下载：<a href="https://cmake.org/files/">https://cmake.org/files/</a></p>
+<span id="more"></span>
+
+<figure class="highlight coffeescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 1. 查看当前cmake版本</span></span><br><span class="line">[root@localhost ~]<span class="comment"># cmake -version</span></span><br><span class="line">cmake version <span class="number">2.8</span><span class="number">.12</span><span class="number">.2</span></span><br><span class="line"><span class="comment">## 2. 进行卸载</span></span><br><span class="line">[root@localhost ~]<span class="comment"># yum remove -y cmake</span></span><br><span class="line"><span class="comment">## 3. 进行安装包的下载，也可以下载好安装包后传至相应的目录</span></span><br><span class="line">[root@localhost ~]<span class="comment"># mkdir /opt/cmake</span></span><br><span class="line">[root@localhost ~]<span class="comment"># cd /opt/cmake/</span></span><br><span class="line"><span class="comment">## 4. 下载或拷贝，解压</span></span><br><span class="line">[root@localhost cmake]<span class="comment"># wget https://cmake.org/files/v3.16/cmake-3.16.6.tar.gz</span></span><br><span class="line">[root@localhost cmake]<span class="comment"># tar -zxvf cmake-3.16.6.tar.gz</span></span><br><span class="line"><span class="comment">## 5. 安装基本工具</span></span><br><span class="line">[root@localhost cmake]<span class="comment"># yum install -y gcc gcc-c++  </span></span><br><span class="line"><span class="comment">## 6. 进行编译连接</span></span><br><span class="line">[root@localhost cmake]<span class="comment"># cd cmake-3.16.6</span></span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># ./configure --prefix=/usr/local/cmake</span></span><br><span class="line"><span class="comment">## 7. 安装</span></span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># make &amp;&amp; make install </span></span><br><span class="line"><span class="comment">## 8. 创建链接</span></span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># ln -s /usr/local/cmake/bin/cmake /usr/bin/cmake </span></span><br><span class="line"><span class="comment">## 9. 查看版本</span></span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># cmake -version</span></span><br><span class="line">cmake version <span class="number">3.16</span><span class="number">.6</span></span><br><span class="line"></span><br><span class="line">CMake suite maintained <span class="keyword">and</span> supported <span class="keyword">by</span> Kitware (kitware.com/cmake).</span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># </span></span><br><span class="line">[root@localhost cmake<span class="number">-3.16</span><span class="number">.6</span>]<span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+<p>如果第9步不想创建链接的话，也可以修改环境变量</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc<span class="built_in">/profile</span></span><br><span class="line"><span class="built_in"></span><span class="built_in">..</span>.</span><br><span class="line"><span class="built_in">export</span> <span class="attribute">CMAKE_HOME</span>=/usr/local/cmake</span><br><span class="line"><span class="built_in">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:$CMAKE_HOME/bin</span><br><span class="line"><span class="comment">## 刷新配置</span></span><br><span class="line">[root@localhost ~]# source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>Centos7 升级 cmake v3.16.6 操作完毕！</p>
+]]></content>
+      <categories>
+        <category>cmake</category>
+      </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++实现LRU缓存淘汰算法</title>
     <url>/2023/02/10/C++%E5%AE%9E%E7%8E%B0LRU%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<h1 id="LRU算法简介"><a href="#LRU算法简介" class="headerlink" title="LRU算法简介"></a>LRU算法简介</h1><p>对于web开发而言，缓存必不可少，也是提高性能最常用的方式。无论是浏览器缓存，还是服务端的缓存(通过memcached或者redis等内存数据库)。缓存不仅可以加速用户的访问，同时也可以降低服务器的负载和压力。那么，了解常见的缓存淘汰算法的策略和原理就显得特别重要。</p>
