@@ -30,7 +30,7 @@
 <meta property="og:description" content="LRU算法简介对于web开发而言，缓存必不可少，也是提高性能最常用的方式。无论是浏览器缓存，还是服务端的缓存(通过memcached或者redis等内存数据库)。缓存不仅可以加速用户的访问，同时也可以降低服务器的负载和压力。那么，了解常见的缓存淘汰算法的策略和原理就显得特别重要。 常见的缓存算法LRU (Least recently used) 最近最少使用，如果数据最近被访问过，那么将来被访问的">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-10T03:52:38.000Z">
-<meta property="article:modified_time" content="2023-02-10T05:08:37.000Z">
+<meta property="article:modified_time" content="2023-07-30T07:05:10.296Z">
 <meta property="article:author" content="郭霖">
 <meta property="article:tag" content="LRU">
 <meta name="twitter:card" content="summary">
@@ -102,7 +102,7 @@
       <h1 class="site-title">郭霖的博客</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">好好学习，天天向上！</p>
+      <p class="site-subtitle" itemprop="description">腾讯音乐实习ing~~~</p>
   </div>
 
   <div class="site-nav-right">
@@ -198,7 +198,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/haon1.jpg">
       <meta itemprop="name" content="郭霖">
-      <meta itemprop="description" content="编程使我快乐">
+      <meta itemprop="description" content="wx: Acwx763">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -215,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-02-10 11:52:38 / 修改时间：13:08:37" itemprop="dateCreated datePublished" datetime="2023-02-10T11:52:38+08:00">2023-02-10</time>
+              <time title="创建时间：2023-02-10 11:52:38" itemprop="dateCreated datePublished" datetime="2023-02-10T11:52:38+08:00">2023-02-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-30 15:05:10" itemprop="dateModified" datetime="2023-07-30T15:05:10+08:00">2023-07-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -257,6 +263,8 @@
 <h2 id="常见的缓存算法"><a href="#常见的缓存算法" class="headerlink" title="常见的缓存算法"></a>常见的缓存算法</h2><p>LRU (Least recently used) 最近最少使用，如果数据最近被访问过，那么将来被访问的几率也更高。</p>
 <p>LFU (Least frequently used) 最不经常使用，如果一个数据在最近一段时间内使用次数很少，那么在将来一段时间内被使用的可能性也很小。</p>
 <p>FIFO (Fist in first out) 先进先出， 如果一个数据最先进入缓存中，则应该最早淘汰掉。</p>
+<span id="more"></span>
+
 <h2 id="时间局部性原理"><a href="#时间局部性原理" class="headerlink" title="时间局部性原理"></a>时间局部性原理</h2><p>它是按照一个非常著名的计算机操作系统基础理论得来的：<strong>最近使用的页面数据会在未来一段时期内仍然被使用,已经很久没有使用的页面很有可能在未来较长的一段时间内仍然不会被使用</strong>。基于这个思想,会存在一种缓存淘汰机制，每次从内存中找到最久未使用的数据然后置换出来，从而存入新的数据！它的主要衡量指标是使用的时间，附加指标是使用的次数。在计算机中大量使用了这个机制，它的合理性在于优先筛选热点数据，所谓热点数据，就是最近最多使用的数据！因为，利用LRU我们可以解决很多实际开发中的问题，并且很符合业务场景。</p>
 <p>像浏览器的缓存策略、memcached的缓存策略都是使用LRU这个算法，LRU算法会将近期最不会访问的数据淘汰掉。LRU如此流行的原因是实现比较简单，而且对于实际问题也很实用，良好的运行时性能，命中率较高。下面谈谈如何实现LRU缓存：</p>
 <ul>
@@ -389,7 +397,7 @@
     <img class="site-author-image" itemprop="image" alt="郭霖"
       src="/images/haon1.jpg">
   <p class="site-author-name" itemprop="name">郭霖</p>
-  <div class="site-description" itemprop="description">编程使我快乐</div>
+  <div class="site-description" itemprop="description">wx: Acwx763</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
