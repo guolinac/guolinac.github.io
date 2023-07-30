@@ -3,8 +3,16 @@
   <entry>
     <title>pdf压缩脚本</title>
     <url>/2023/07/30/pdf%E5%8E%8B%E7%BC%A9%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="一个写pyr"><a href="#一个写pyr" class="headerlink" title="一个写pyr"></a>一个写pyr</h1><p>adsa dsa</p>
+    <content><![CDATA[<h1 id="通过Python压缩pdf"><a href="#通过Python压缩pdf" class="headerlink" title="通过Python压缩pdf"></a>通过Python压缩pdf</h1><p>pdf如果直接经过编辑，可能会有多图层叠加的问题；多次编辑后pdf文件可能会变得非常大，所以提供一种压缩pdf的方式，并且pdf压缩后，仍然可以选定文本和编辑文本。</p>
 <span id="more"></span>
+
+<p>代码如下：</p>
+<p>建议使用anaconda安装python的pypdf2包</p>
+<p>笔者用的python版本是3.6，可能会出现pypdf2版本不兼容的问题</p>
+<p>提供一个命令，直接输入conda命令行，即可让conda推荐合适的插件版本</p>
+<p><code>conda install -c conda-forge &lt;package&gt;</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> PyPDF2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compress_pdf</span>(<span class="params">input_path, output_path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(input_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        pdf = PyPDF2.PdfFileReader(file)</span><br><span class="line">        writer = PyPDF2.PdfFileWriter()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="built_in">range</span>(pdf.getNumPages()):</span><br><span class="line">            page = pdf.getPage(page_num)</span><br><span class="line">            <span class="comment"># 对页面内容进行压缩</span></span><br><span class="line">            page.compressContentStreams()  </span><br><span class="line">            writer.addPage(page)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(output_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> output_file:</span><br><span class="line">            writer.write(output_file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 可以用相对路径或者绝对路径</span></span><br><span class="line">    input_pdf = <span class="string">&quot;input.pdf&quot;</span></span><br><span class="line">    output_pdf = <span class="string">&quot;output_compressed.pdf&quot;</span></span><br><span class="line">    compress_pdf(input_pdf, output_pdf)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>Python</category>
