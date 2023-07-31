@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/haon2.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/haon2.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-mac-osx.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guolinac.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Ai图像风格迁移参考论文：http:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1508.06576 使用vgg16算法实现图片风格迁移 效果展示梵高星夜30次梯度迭代后的结果：  30次迭代过程：  原图：  梵高星夜：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ai图像风格迁移">
+<meta property="og:url" content="https://guolinac.github.io/2023/08/01/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/index.html">
+<meta property="og:site_name" content="郭霖的博客">
+<meta property="og:description" content="Ai图像风格迁移参考论文：http:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1508.06576 使用vgg16算法实现图片风格迁移 效果展示梵高星夜30次梯度迭代后的结果：  30次迭代过程：  原图：  梵高星夜：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/me_t_at_iteration_29.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/diedai.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/landscape.jpg">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/starry_night.jpg">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/beicaile_at_iteration_14.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/1.jpg">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/2.jpg">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/image-20230801003307211.png">
+<meta property="og:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/image-20230801003621431.png">
+<meta property="article:published_time" content="2023-07-31T16:21:00.000Z">
+<meta property="article:modified_time" content="2023-07-31T16:38:59.692Z">
+<meta property="article:author" content="郭霖">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/me_t_at_iteration_29.png">
+
+<link rel="canonical" href="https://guolinac.github.io/2023/08/01/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Ai图像风格迁移 | 郭霖的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">郭霖的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">腾讯音乐实习ing</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://guolinac.github.io/2023/08/01/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/haon1.jpg">
+      <meta itemprop="name" content="郭霖">
+      <meta itemprop="description" content="wx: Acwx763">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="郭霖的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ai图像风格迁移
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-01 00:21:00 / 修改时间：00:38:59" itemprop="dateCreated datePublished" datetime="2023-08-01T00:21:00+08:00">2023-08-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+      
+        <h1 id="Ai图像风格迁移"><a href="#Ai图像风格迁移" class="headerlink" title="Ai图像风格迁移"></a>Ai图像风格迁移</h1><p>参考论文：<a target="_blank" rel="noopener" href="http://arxiv.org/abs/1508.06576">http://arxiv.org/abs/1508.06576</a></p>
+<p>使用vgg16算法实现图片风格迁移</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><h3 id="梵高星夜"><a href="#梵高星夜" class="headerlink" title="梵高星夜"></a>梵高星夜</h3><p>30次梯度迭代后的结果：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/me_t_at_iteration_29.png" alt="me_t_at_iteration_29"></p>
+<p>30次迭代过程：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/diedai.png" alt="diedai"></p>
+<p>原图：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/landscape.jpg" alt="landscape"></p>
+<p>梵高星夜：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/starry_night.jpg" alt="starry_night"></p>
+<span id="more"></span>
+
+<h3 id="路边景色"><a href="#路边景色" class="headerlink" title="路边景色"></a>路边景色</h3><p>风格迁移后：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/beicaile_at_iteration_14.png" alt="beicaile_at_iteration_14"></p>
+<p>原图：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/1.jpg" alt="1"></p>
+<p>学习风格：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/2.jpg" alt="2"></p>
+<h2 id="相关依赖库的安装"><a href="#相关依赖库的安装" class="headerlink" title="相关依赖库的安装"></a>相关依赖库的安装</h2><p>我使用的是anaconda环境下的python3.10</p>
+<p>需要的包根据自己的环境自行下载即可</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="keyword">install </span>keras</span><br><span class="line">conda <span class="keyword">install </span>h5py</span><br><span class="line">conda <span class="keyword">install </span>numpy</span><br><span class="line">conda <span class="keyword">install </span><span class="keyword">scipy</span></span><br><span class="line"><span class="keyword"></span>conda <span class="keyword">install </span>tensorflow</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置运行环境"><a href="#配置运行环境" class="headerlink" title="配置运行环境"></a>配置运行环境</h2><p><strong>下载VGG16模型</strong> <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1i5wYN1z">https://pan.baidu.com/s/1i5wYN1z</a> 放入如下目录当中</p>
+<p>(<strong>注意：每个人的主目录都不一样，如果没有.keras这个文件夹新建就行了</strong>)</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/image-20230801003307211.png" alt="image-20230801003307211"></p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.preprocessing.image <span class="keyword">import</span> load_img, img_to_array</span><br><span class="line"><span class="keyword">import</span> imageio</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> fmin_l_bfgs_b</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.applications <span class="keyword">import</span> vgg16</span><br><span class="line"><span class="keyword">from</span> keras <span class="keyword">import</span> backend <span class="keyword">as</span> K</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;KMP_DUPLICATE_LIB_OK&#x27;</span>]=<span class="string">&#x27;True&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment"># 禁用 Eager Execution</span></span><br><span class="line">tf.compat.v1.disable_eager_execution()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;Neural style transfer with Keras.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;base_image_path&#x27;</span>, metavar=<span class="string">&#x27;base&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">str</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Path to the image to transform.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;style_reference_image_path&#x27;</span>, metavar=<span class="string">&#x27;ref&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">str</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Path to the style reference image.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;result_prefix&#x27;</span>, metavar=<span class="string">&#x27;res_prefix&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">str</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Prefix for the saved results.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--iter&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">int</span>, default=<span class="number">10</span>, required=<span class="literal">False</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Number of iterations to run.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--content_weight&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">0.025</span>, required=<span class="literal">False</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Content weight.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--style_weight&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">1.0</span>, required=<span class="literal">False</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Style weight.&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;--tv_weight&#x27;</span>, <span class="built_in">type</span>=<span class="built_in">float</span>, default=<span class="number">1.0</span>, required=<span class="literal">False</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;Total Variation weight.&#x27;</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">base_image_path = args.base_image_path</span><br><span class="line">style_reference_image_path = args.style_reference_image_path</span><br><span class="line">result_prefix = <span class="string">&#x27;./training/&#x27;</span> + args.result_prefix.split(<span class="string">&#x27;/&#x27;</span>)[<span class="number">1</span>]</span><br><span class="line">iterations = args.<span class="built_in">iter</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># these are the weights of the different loss components</span></span><br><span class="line">total_variation_weight = args.tv_weight</span><br><span class="line">style_weight = args.style_weight</span><br><span class="line">content_weight = args.content_weight</span><br><span class="line"></span><br><span class="line"><span class="comment"># dimensions of the generated picture.</span></span><br><span class="line">width, height = load_img(base_image_path).size</span><br><span class="line">img_nrows = <span class="number">400</span></span><br><span class="line">img_ncols = <span class="built_in">int</span>(width * img_nrows / height)</span><br><span class="line"></span><br><span class="line"><span class="comment"># util function to open, resize and format pictures into appropriate tensors</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">preprocess_image</span>(<span class="params">image_path</span>):</span><br><span class="line">    img = load_img(image_path, target_size=(img_nrows, img_ncols))</span><br><span class="line">    img = img_to_array(img)</span><br><span class="line">    img = np.expand_dims(img, axis=<span class="number">0</span>)</span><br><span class="line">    img = vgg16.preprocess_input(img)</span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="comment"># util function to convert a tensor into a valid image</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deprocess_image</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">        x = x.reshape((<span class="number">3</span>, img_nrows, img_ncols))</span><br><span class="line">        x = x.transpose((<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        x = x.reshape((img_nrows, img_ncols, <span class="number">3</span>))</span><br><span class="line">    <span class="comment"># Remove zero-center by mean pixel</span></span><br><span class="line">    x[:, :, <span class="number">0</span>] += <span class="number">103.939</span></span><br><span class="line">    x[:, :, <span class="number">1</span>] += <span class="number">116.779</span></span><br><span class="line">    x[:, :, <span class="number">2</span>] += <span class="number">123.68</span></span><br><span class="line">    <span class="comment"># &#x27;BGR&#x27;-&gt;&#x27;RGB&#x27;</span></span><br><span class="line">    x = x[:, :, ::-<span class="number">1</span>]</span><br><span class="line">    x = np.clip(x, <span class="number">0</span>, <span class="number">255</span>).astype(<span class="string">&#x27;uint8&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment"># get tensor representations of our images</span></span><br><span class="line">base_image = K.variable(preprocess_image(base_image_path))</span><br><span class="line">style_reference_image = K.variable(preprocess_image(style_reference_image_path))</span><br><span class="line"></span><br><span class="line"><span class="comment"># this will contain our generated image</span></span><br><span class="line"><span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">    combination_image = K.placeholder((<span class="number">1</span>, <span class="number">3</span>, img_nrows, img_ncols))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    combination_image = K.placeholder((<span class="number">1</span>, img_nrows, img_ncols, <span class="number">3</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># combine the 3 images into a single Keras tensor</span></span><br><span class="line">input_tensor = K.concatenate([base_image,</span><br><span class="line">                              style_reference_image,</span><br><span class="line">                              combination_image], axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># build the VGG16 network with our 3 images as input</span></span><br><span class="line"><span class="comment"># the model will be loaded with pre-trained ImageNet weights</span></span><br><span class="line">model = vgg16.VGG16(input_tensor=input_tensor,</span><br><span class="line">                    weights=<span class="string">&#x27;imagenet&#x27;</span>, include_top=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Model loaded.&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get the symbolic outputs of each &quot;key&quot; layer (we gave them unique names).</span></span><br><span class="line">outputs_dict = <span class="built_in">dict</span>([(layer.name, layer.output) <span class="keyword">for</span> layer <span class="keyword">in</span> model.layers])</span><br><span class="line"></span><br><span class="line"><span class="comment"># compute the neural style loss</span></span><br><span class="line"><span class="comment"># first we need to define 4 util functions</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the gram matrix of an image tensor (feature-wise outer product)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gram_matrix</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">assert</span> K.ndim(x) == <span class="number">3</span></span><br><span class="line">    <span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">        features = K.batch_flatten(x)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        features = K.batch_flatten(K.permute_dimensions(x, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)))</span><br><span class="line">    gram = K.dot(features, K.transpose(features))</span><br><span class="line">    <span class="keyword">return</span> gram</span><br><span class="line"></span><br><span class="line"><span class="comment"># the &quot;style loss&quot; is designed to maintain</span></span><br><span class="line"><span class="comment"># the style of the reference image in the generated image.</span></span><br><span class="line"><span class="comment"># It is based on the gram matrices (which capture style) of</span></span><br><span class="line"><span class="comment"># feature maps from the style reference image</span></span><br><span class="line"><span class="comment"># and from the generated image</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">style_loss</span>(<span class="params">style, combination</span>):</span><br><span class="line">    <span class="keyword">assert</span> K.ndim(style) == <span class="number">3</span></span><br><span class="line">    <span class="keyword">assert</span> K.ndim(combination) == <span class="number">3</span></span><br><span class="line">    S = gram_matrix(style)</span><br><span class="line">    C = gram_matrix(combination)</span><br><span class="line">    channels = <span class="number">3</span></span><br><span class="line">    size = img_nrows * img_ncols</span><br><span class="line">    <span class="keyword">return</span> K.<span class="built_in">sum</span>(K.square(S - C)) / (<span class="number">4.</span> * (channels ** <span class="number">2</span>) * (size ** <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># an auxiliary loss function</span></span><br><span class="line"><span class="comment"># designed to maintain the &quot;content&quot; of the</span></span><br><span class="line"><span class="comment"># base image in the generated image</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">content_loss</span>(<span class="params">base, combination</span>):</span><br><span class="line">    <span class="keyword">return</span> K.<span class="built_in">sum</span>(K.square(combination - base))</span><br><span class="line"></span><br><span class="line"><span class="comment"># the 3rd loss function, total variation loss,</span></span><br><span class="line"><span class="comment"># designed to keep the generated image locally coherent</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">total_variation_loss</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">assert</span> K.ndim(x) == <span class="number">4</span></span><br><span class="line">    <span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">        a = K.square(x[:, :, :img_nrows - <span class="number">1</span>, :img_ncols - <span class="number">1</span>] - x[:, :, <span class="number">1</span>:, :img_ncols - <span class="number">1</span>])</span><br><span class="line">        b = K.square(x[:, :, :img_nrows - <span class="number">1</span>, :img_ncols - <span class="number">1</span>] - x[:, :, :img_nrows - <span class="number">1</span>, <span class="number">1</span>:])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        a = K.square(x[:, :img_nrows - <span class="number">1</span>, :img_ncols - <span class="number">1</span>, :] - x[:, <span class="number">1</span>:, :img_ncols - <span class="number">1</span>, :])</span><br><span class="line">        b = K.square(x[:, :img_nrows - <span class="number">1</span>, :img_ncols - <span class="number">1</span>, :] - x[:, :img_nrows - <span class="number">1</span>, <span class="number">1</span>:, :])</span><br><span class="line">    <span class="keyword">return</span> K.<span class="built_in">sum</span>(K.<span class="built_in">pow</span>(a + b, <span class="number">1.25</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># combine these loss functions into a single scalar</span></span><br><span class="line">loss = K.variable(<span class="number">0.</span>)</span><br><span class="line">layer_features = outputs_dict[<span class="string">&#x27;block4_conv2&#x27;</span>]</span><br><span class="line">base_image_features = layer_features[<span class="number">0</span>, :, :, :]</span><br><span class="line">combination_features = layer_features[<span class="number">2</span>, :, :, :]</span><br><span class="line">loss = loss + content_weight * content_loss(base_image_features,</span><br><span class="line">                                      combination_features)</span><br><span class="line"></span><br><span class="line">feature_layers = [<span class="string">&#x27;block1_conv1&#x27;</span>, <span class="string">&#x27;block2_conv1&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;block3_conv1&#x27;</span>, <span class="string">&#x27;block4_conv1&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;block5_conv1&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> layer_name <span class="keyword">in</span> feature_layers:</span><br><span class="line">    layer_features = outputs_dict[layer_name]</span><br><span class="line">    style_reference_features = layer_features[<span class="number">1</span>, :, :, :]</span><br><span class="line">    combination_features = layer_features[<span class="number">2</span>, :, :, :]</span><br><span class="line">    sl = style_loss(style_reference_features, combination_features)</span><br><span class="line">    loss += (style_weight / <span class="built_in">len</span>(feature_layers)) * sl</span><br><span class="line">loss += total_variation_weight * total_variation_loss(combination_image)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get the gradients of the generated image wrt the loss</span></span><br><span class="line">grads = K.gradients(loss, combination_image)</span><br><span class="line"></span><br><span class="line">outputs = [loss]</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">isinstance</span>(grads, (<span class="built_in">list</span>, <span class="built_in">tuple</span>)):</span><br><span class="line">    outputs += grads</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    outputs.append(grads)</span><br><span class="line"></span><br><span class="line">f_outputs = K.function([combination_image], outputs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">eval_loss_and_grads</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">        x = x.reshape((<span class="number">1</span>, <span class="number">3</span>, img_nrows, img_ncols))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        x = x.reshape((<span class="number">1</span>, img_nrows, img_ncols, <span class="number">3</span>))</span><br><span class="line">    outs = f_outputs([x])</span><br><span class="line">    loss_value = outs[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(outs[<span class="number">1</span>:]) == <span class="number">1</span>:</span><br><span class="line">        grad_values = outs[<span class="number">1</span>].flatten().astype(<span class="string">&#x27;float64&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        grad_values = np.array(outs[<span class="number">1</span>:]).flatten().astype(<span class="string">&#x27;float64&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> loss_value, grad_values</span><br><span class="line"></span><br><span class="line"><span class="comment"># this Evaluator class makes it possible</span></span><br><span class="line"><span class="comment"># to compute loss and gradients in one pass</span></span><br><span class="line"><span class="comment"># while retrieving them via two separate functions,</span></span><br><span class="line"><span class="comment"># &quot;loss&quot; and &quot;grads&quot;. This is done because scipy.optimize</span></span><br><span class="line"><span class="comment"># requires separate functions for loss and gradients,</span></span><br><span class="line"><span class="comment"># but computing them separately would be inefficient.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Evaluator</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.loss_value = <span class="literal">None</span></span><br><span class="line">        self.grads_values = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">loss</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">assert</span> self.loss_value <span class="keyword">is</span> <span class="literal">None</span></span><br><span class="line">        loss_value, grad_values = eval_loss_and_grads(x)</span><br><span class="line">        self.loss_value = loss_value</span><br><span class="line">        self.grad_values = grad_values</span><br><span class="line">        <span class="keyword">return</span> self.loss_value</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">grads</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">assert</span> self.loss_value <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span></span><br><span class="line">        grad_values = np.copy(self.grad_values)</span><br><span class="line">        self.loss_value = <span class="literal">None</span></span><br><span class="line">        self.grad_values = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> grad_values</span><br><span class="line"></span><br><span class="line">evaluator = Evaluator()</span><br><span class="line"></span><br><span class="line"><span class="comment"># run scipy-based optimization (L-BFGS) over the pixels of the generated image</span></span><br><span class="line"><span class="comment"># so as to minimize the neural style loss</span></span><br><span class="line"><span class="keyword">if</span> K.image_data_format() == <span class="string">&#x27;channels_first&#x27;</span>:</span><br><span class="line">    x = np.random.uniform(<span class="number">0</span>, <span class="number">255</span>, (<span class="number">1</span>, <span class="number">3</span>, img_nrows, img_ncols)) - <span class="number">128.</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    x = np.random.uniform(<span class="number">0</span>, <span class="number">255</span>, (<span class="number">1</span>, img_nrows, img_ncols, <span class="number">3</span>)) - <span class="number">128.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(iterations):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Start of iteration&#x27;</span>, i)</span><br><span class="line">    start_time = time.time()</span><br><span class="line">    x, min_val, info = fmin_l_bfgs_b(evaluator.loss, x.flatten(),</span><br><span class="line">                                     fprime=evaluator.grads, maxfun=<span class="number">20</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Current loss value:&#x27;</span>, min_val)</span><br><span class="line">    <span class="comment"># save current generated image</span></span><br><span class="line">    img = deprocess_image(x.copy())</span><br><span class="line">    fname = result_prefix + <span class="string">&#x27;_at_iteration_%d.png&#x27;</span> % i</span><br><span class="line">    imageio.imwrite(fname, img)</span><br><span class="line">    end_time = time.time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Image saved as&#x27;</span>, fname)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Iteration %d completed in %ds&#x27;</span> % (i, end_time - start_time))</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>新建一个空文件夹，把上一步骤的文件neural_style_transfer.py放入这个空文件夹中。然后把相应的模板图片，待转化图片放入该文件当中。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">python</span> neural_style_transfer.<span class="keyword">py</span>   你的待转化图片路径    模板图片路径   保存的生产图片路径加名称</span><br><span class="line"></span><br><span class="line"># 例如</span><br><span class="line"><span class="keyword">python</span> neural_style_transfer.<span class="keyword">py</span> ./<span class="keyword">me</span>.jpg ./starry_night.jpg ./me_t</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意:图片路径需要去掉引号，自定义迭代次数请在末尾指定–iter n。</strong></p>
+<p>迭代结果截图：</p>
+<p><img src="https://typora1321.oss-cn-beijing.aliyuncs.com/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB.assets/image-20230801003621431.png" alt="image-20230801003621431"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>郭霖
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://guolinac.github.io/2023/08/01/%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/" title="Ai图像风格迁移">https://guolinac.github.io/2023/08/01/风格迁移/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/31/gcc%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90.out%EF%BC%8C.o%EF%BC%8C.a%EF%BC%8C.so%E6%96%87%E4%BB%B6/" rel="prev" title="linux下gcc编译生成.out，.o，.a，.so文件">
+      <i class="fa fa-chevron-left"></i> linux下gcc编译生成.out，.o，.a，.so文件
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ai%E5%9B%BE%E5%83%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB"><span class="nav-text">Ai图像风格迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-text">效果展示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%B5%E9%AB%98%E6%98%9F%E5%A4%9C"><span class="nav-text">梵高星夜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E8%BE%B9%E6%99%AF%E8%89%B2"><span class="nav-text">路边景色</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E4%BE%9D%E8%B5%96%E5%BA%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-text">相关依赖库的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="nav-text">配置运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-text">源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-text">运行</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="郭霖"
+      src="/images/haon1.jpg">
+  <p class="site-author-name" itemprop="name">郭霖</p>
+  <div class="site-description" itemprop="description">wx: Acwx763</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/guolinac" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;guolinac" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fab fa-google"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">郭霖</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">641k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">9:42</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
